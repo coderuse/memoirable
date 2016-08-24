@@ -20,5 +20,9 @@
     "./build/vendor",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "react": "15.2.1",
+    "jquery": "3.1.0"
+  }
 }

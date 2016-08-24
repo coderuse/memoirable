@@ -1,0 +1,29 @@
+@import "bourbon/bourbon";
+@import "susy";
+@import "normalize/import-now";
+
+$susy: (
+  columns: 8,
+  gutters: .25,
+  container: 360px,
+  global-box-sizing: border-box
+);
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+body{
+  font-family: Arimo,"Helvetica Neue",Helvetica,Arial,Verdana,"Trebuchet MS";
+  min-width: 360.25px;
+  font-size: .9em;
+  line-height: 1.5em;
+  color: #333;
+  min-height: 520px;
+  background-color: #e3e3e3;
+  word-break: break-word;
+}
+
+.row {
+  @include span(8);
+}
