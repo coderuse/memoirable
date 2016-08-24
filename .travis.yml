@@ -5,8 +5,6 @@ before_install:
   - gem update --system
   - gem install sass susy normalize-scss
   - npm install -g typings bower grunt-cli
-before_script:
-  - npm install
 script:
   - grunt build
 notifications:
