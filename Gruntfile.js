@@ -112,6 +112,5 @@ module.exports = function (grunt) {
 
   grunt.registerTask('styles', ['sass', 'watch:styles']);
 
-  //// TODO
-  grunt.registerTask('build', ['clean', 'copy']);
+  grunt.registerTask('build', ['clean', 'copy', 'sass', 'webpack']);
 }
