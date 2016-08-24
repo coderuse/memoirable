@@ -1,4 +1,6 @@
 # Memoirable
+
+[![Join the chat at https://gitter.im/coderuse/memoirable](https://badges.gitter.im/coderuse/memoirable.svg)](https://gitter.im/coderuse/memoirable?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 We believe that, everyone should keep their experiences to meet new friends, starting new relations, having a bad day, having the most memorable day in a written format. In one's own language and with own feelings. And this written notes should not be lost. One of the problems in preserving paper diaries.
 
 For this reason, we are building this. For you, for us. We can also pass these journals to future generations.
