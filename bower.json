@@ -1,0 +1,24 @@
+{
+  "name": "memoirable",
+  "description": "A simple diary for your own",
+  "main": "index.html",
+  "authors": [
+    "Arnab Das <arnab@coderuse.com>"
+  ],
+  "license": "Apache-2.0",
+  "keywords": [
+    "journal",
+    "diary",
+    "personal-diary"
+  ],
+  "homepage": "https://coderuse.github.io/memoirable",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "./build/vendor",
+    "test",
+    "tests"
+  ]
+}

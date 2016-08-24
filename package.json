@@ -1,0 +1,24 @@
+{
+  "name": "memoirable",
+  "version": "0.1.0",
+  "description": "A simple diary for your own",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arnabdas/memoirable.git"
+  },
+  "keywords": [
+    "journal",
+    "diary",
+    "personal-diary"
+  ],
+  "author": "Arnab Das <arnab@coderuse.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/arnabdas/memoirable/issues"
+  },
+  "homepage": "https://github.com/arnabdas/memoirable#readme"
+}
