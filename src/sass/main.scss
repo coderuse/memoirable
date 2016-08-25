@@ -27,3 +27,20 @@ body{
 .row {
   @include span(8);
 }
+
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: .2;
+  z-index: 1050;
+  display: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+  display: block;
+  background-color: #555;
+}

@@ -48,7 +48,7 @@ git config user.name "Arnab Das"
 git config user.email "arnab@coderuse.com"
 
 # If there are no changes (e.g. this is a README update) then just bail.
-if [ -z `git diff --exit-code` ]; then
+if [ $(git status --porcelain | wc -l) -lt 1 ]; then
     echo "No changes to the spec on this push; exiting."
     exit 0
 fi
