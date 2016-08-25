@@ -24,6 +24,11 @@ REPO=`git config remote.origin.url`
 SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
 SHA=`git rev-parse --verify HEAD`
 
+# Attaching deploy key to SSH
+chmod 600 id_rsa
+eval `ssh-agent -s`
+ssh-add id_rsa
+
 # Clone the existing gh-pages for this repo into out/
 # Create a new empty branch if gh-pages doesn't exist yet (should only happen on first deply)
 git clone $REPO build
@@ -50,13 +55,8 @@ fi
 
 # Commit the "changes", i.e. the new version.
 # The delta will show diffs between new and old versions.
-git add .
+git add --all .
 git commit -m "Deploy to GitHub Pages: ${SHA}"
-
-# Using deploy key
-chmod 600 id_rsa
-eval `ssh-agent -s`
-ssh-add id_rsa
 
 # Now that we're all set up, we can push.
 git push $SSH_REPO $TARGET_BRANCH

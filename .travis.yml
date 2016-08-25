@@ -4,6 +4,7 @@ node_js:
 before_install:
   - openssl aes-256-cbc -K $encrypted_442fce917811_key -iv $encrypted_442fce917811_iv
     -in id_rsa.enc -out id_rsa -d
+  - ls
   - gem update --system
   - gem install sass susy normalize-scss
   - npm install -g typings bower grunt-cli
