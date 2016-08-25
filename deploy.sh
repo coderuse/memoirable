@@ -8,6 +8,7 @@ TARGET_BRANCH="gh-pages"
 TARGET_FOLDER="build"
 
 function doBuild {
+  bower install
   grunt build
 }
 
