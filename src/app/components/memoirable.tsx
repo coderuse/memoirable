@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { hashHistory, IndexLink, Link } from 'react-router';
+import { browserHistory, IndexLink, Link } from 'react-router';
 
 export class MemoirableApp extends React.Component<{}, {}> {
   constructor() {
@@ -10,7 +10,7 @@ export class MemoirableApp extends React.Component<{}, {}> {
   }
 
   _navigateBack() {
-    hashHistory.goBack();
+    browserHistory.goBack();
   }
 
   render() {

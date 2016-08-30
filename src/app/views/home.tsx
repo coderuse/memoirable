@@ -3,6 +3,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
+import { browserHistory } from 'react-router';
+
 import { AuthActionTypes, ProviderTypes } from '../actions/types';
 import * as AuthActions from '../actions/authActions';
 
@@ -15,8 +17,8 @@ export class Home extends React.Component<{}, {}> {
   }
 
   componentDidMount() {
-    this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.AUTHENTICATE_INITIALIZE, () => { 
-      console.log('Successfully Executed!!!');      
+    this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.AUTH_INITIALIZE, () => { 
+      browserHistory.push('/dashboard');     
     });
   }
 

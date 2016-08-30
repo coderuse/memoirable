@@ -8,7 +8,8 @@ export const LoadEntriesActionTypes = {
 }
 
 export const AuthActionTypes = {
-  AUTHENTICATE_INITIALIZE: 'authenticate.initialize'
+  AUTH_INITIALIZE: 'auth.initialize',
+  AUTH_GET_PROFILE: 'auth.getProfile'
 }
 
 export const ProviderTypes = {
