@@ -1,3 +1,136 @@
+/* https://github.com/negomi/sassy-inputs */
+@font-face {
+  font-family: 'memoirable';
+  src: url("fonts/memoirable.ttf?6kpsl7") format("truetype"), url("fonts/memoirable.woff?6kpsl7") format("woff"), url("fonts/memoirable.svg?6kpsl7#memoirable") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+[class^="memocon-"], [class*=" memocon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'memoirable' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.memocon-add:before {
+  content: "\e145";
+}
+
+.memocon-cached:before {
+  content: "\e86a";
+}
+
+.memocon-chrome_reader_mode:before {
+  content: "\e86d";
+}
+
+.memocon-date_range:before {
+  content: "\e916";
+}
+
+.memocon-markunread:before {
+  content: "\e159";
+}
+
+.memocon-home:before {
+  content: "\e88a";
+}
+
+.memocon-info:before {
+  content: "\e88e";
+}
+
+.memocon-back-arrow:before {
+  content: "\e317";
+}
+
+.memocon-more_horiz:before {
+  content: "\e5d3";
+}
+
+.memocon-more_vert:before {
+  content: "\e5d4";
+}
+
+.memocon-notifications:before {
+  content: "\e7f4";
+}
+
+.memocon-reply:before {
+  content: "\e15e";
+}
+
+.memocon-search:before {
+  content: "\e8b6";
+}
+
+.memocon-sentiment_dissatisfied:before {
+  content: "\e811";
+}
+
+.memocon-sentiment_neutral:before {
+  content: "\e812";
+}
+
+.memocon-sentiment_satisfied:before {
+  content: "\e813";
+}
+
+.memocon-sentiment_very_dissatisfied:before {
+  content: "\e814";
+}
+
+.memocon-sentiment_very_satisfied:before {
+  content: "\e815";
+}
+
+.memocon-settings:before {
+  content: "\e8b8";
+}
+
+.memocon-share:before {
+  content: "\e80d";
+}
+
+.memocon-thumb_down:before {
+  content: "\e8db";
+}
+
+.memocon-thumb_up:before {
+  content: "\e8dc";
+}
+
+.memocon-view_headline:before {
+  content: "\e8ee";
+}
+
+.memocon-wifi:before {
+  content: "\e63e";
+}
+
+.memocon-zoom_in:before {
+  content: "\e8ff";
+}
+
+.memocon-zoom_out:before {
+  content: "\e900";
+}
+
+.memocon-zoom_out_map:before {
+  content: "\e56b";
+}
+
+.memocon-google-drive:before {
+  content: "\ea8f";
+}
+
 /*! normalize-scss | MIT/GPLv2 License | bit.ly/normalize-scss */
 /**
  * 1. Change the default font family in all browsers (opinionated).
@@ -446,10 +579,58 @@ body {
   min-width: 360.25px;
   font-size: .9em;
   line-height: 1.5em;
-  color: #333;
+  color: #333333;
   min-height: 520px;
-  background-color: #e3e3e3;
   word-break: break-word;
+}
+
+input[type=submit],
+input[type=button],
+button {
+  box-sizing: border-box;
+  cursor: pointer;
+  min-height: 2.4375rem;
+  padding: 0.75rem 1.5rem;
+  margin-bottom: 0.625rem;
+  font-family: inherit;
+  font-size: 0.875rem;
+  border: none;
+  border-radius: 0.1875rem;
+  outline: none;
+  text-decoration: none;
+  background-color: coral;
+}
+input[type=submit]::-moz-focus-inner,
+input[type=button]::-moz-focus-inner,
+button::-moz-focus-inner {
+  border: 0;
+  /* Removes dotted line in Firefox */
+}
+input[type=submit]:hover, input[type=submit]:focus,
+input[type=button]:hover,
+input[type=button]:focus,
+button:hover,
+button:focus {
+  box-shadow: 0 0.125rem 0 #777;
+}
+input[type=submit]:active,
+input[type=button]:active,
+button:active {
+  box-shadow: inset 0 0.125rem 0 #ff5a1d;
+}
+input[type=submit]:disabled,
+input[type=button]:disabled,
+button:disabled {
+  color: #a2a2a2;
+  background-color: #eee;
+  cursor: not-allowed;
+}
+input[type=submit]:disabled:hover, input[type=submit]:disabled:focus,
+input[type=button]:disabled:hover,
+input[type=button]:disabled:focus,
+button:disabled:hover,
+button:disabled:focus {
+  box-shadow: none;
 }
 
 .row {
@@ -459,19 +640,49 @@ body {
   margin-right: 0;
 }
 
-.modal {
+.backdrop {
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   opacity: .2;
-  z-index: 1050;
+  z-index: 100;
   display: none;
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   outline: 0;
   display: block;
-  background-color: #555;
+  background-color: #555555;
+}
+
+.auth-modal {
+  z-index: 200;
+  width: 25%;
+  position: relative;
+  top: 50vh;
+  transform: translateY(-50%);
+  margin: 0 auto;
+  text-align: center;
+  padding: 50px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+.auth-modal p {
+  font-size: 16pt;
+  padding: 4px 0px 20px;
+  margin: 0px;
+  color: gray;
+}
+.auth-modal .button-groups {
+  padding: 15px;
+  border-width: 1px 0;
+  border-style: solid;
+  border-color: lightgray;
+}
+.auth-modal .button-groups button {
+  margin: 0;
+  font-size: 4em;
 }
