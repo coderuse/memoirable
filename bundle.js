@@ -49,9 +49,10 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(2);
 	var react_router_1 = __webpack_require__(3);
-	var home_1 = __webpack_require__(67);
-	var memoirable_1 = __webpack_require__(84);
-	ReactDOM.render((React.createElement(react_router_1.Router, {history: react_router_1.hashHistory}, React.createElement(react_router_1.Route, {path: "/", component: memoirable_1.MemoirableApp}, React.createElement(react_router_1.IndexRoute, {component: home_1.Home})))), document.getElementById('memoirable'));
+	var memoirable_1 = __webpack_require__(67);
+	var home_1 = __webpack_require__(68);
+	var dashboard_1 = __webpack_require__(85);
+	ReactDOM.render((React.createElement(react_router_1.Router, {history: react_router_1.browserHistory}, React.createElement(react_router_1.Route, {path: "/", component: memoirable_1.MemoirableApp}, React.createElement(react_router_1.IndexRoute, {component: home_1.Home}), React.createElement(react_router_1.Route, {path: "/dashboard", component: dashboard_1.Dashboard})))), document.getElementById('memoirable'));
 
 
 /***/ },
@@ -5862,17 +5863,47 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(1);
-	var types_1 = __webpack_require__(68);
-	var AuthActions = __webpack_require__(69);
-	var gAuthStore_1 = __webpack_require__(82);
+	var react_router_1 = __webpack_require__(3);
+	var MemoirableApp = (function (_super) {
+	    __extends(MemoirableApp, _super);
+	    function MemoirableApp() {
+	        _super.call(this);
+	    }
+	    MemoirableApp.prototype._navigateBack = function () {
+	        react_router_1.browserHistory.goBack();
+	    };
+	    MemoirableApp.prototype.render = function () {
+	        return (React.createElement("div", {className: "row"}, React.createElement("div", {id: "header"}), React.createElement("div", {id: "content"}, this.props.children), React.createElement("div", {id: "footer"})));
+	    };
+	    return MemoirableApp;
+	}(React.Component));
+	exports.MemoirableApp = MemoirableApp;
+
+
+/***/ },
+/* 68 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/// <reference path="../../../typings/index.d.ts" />
+	"use strict";
+	var __extends = (this && this.__extends) || function (d, b) {
+	    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+	    function __() { this.constructor = d; }
+	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+	};
+	var React = __webpack_require__(1);
+	var react_router_1 = __webpack_require__(3);
+	var types_1 = __webpack_require__(69);
+	var AuthActions = __webpack_require__(70);
+	var gAuthStore_1 = __webpack_require__(83);
 	var Home = (function (_super) {
 	    __extends(Home, _super);
 	    function Home() {
 	        _super.call(this);
 	    }
 	    Home.prototype.componentDidMount = function () {
-	        this._listenerToken = gAuthStore_1.default.addChangeListener(types_1.AuthActionTypes.AUTHENTICATE_INITIALIZE, function () {
-	            console.log('Successfully Executed!!!');
+	        this._listenerToken = gAuthStore_1.default.addChangeListener(types_1.AuthActionTypes.AUTH_INITIALIZE, function () {
+	            react_router_1.browserHistory.push('/dashboard');
 	        });
 	    };
 	    Home.prototype.componentWillUnmount = function () {
@@ -5890,7 +5921,7 @@
 
 
 /***/ },
-/* 68 */
+/* 69 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -5902,7 +5933,8 @@
 	    GET_ENTRIES: 'entries.get'
 	};
 	exports.AuthActionTypes = {
-	    AUTHENTICATE_INITIALIZE: 'authenticate.initialize'
+	    AUTH_INITIALIZE: 'auth.initialize',
+	    AUTH_GET_PROFILE: 'auth.getProfile'
 	};
 	exports.ProviderTypes = {
 	    GOOGLE: 'google',
@@ -5913,27 +5945,31 @@
 
 
 /***/ },
-/* 69 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/// <reference path="../../../typings/index.d.ts" />
-	"use strict";
-	var types_1 = __webpack_require__(68);
-	var appEvent_1 = __webpack_require__(70);
-	var appDispatcher_1 = __webpack_require__(78);
-	function authorize(payload) {
-	    appDispatcher_1.default.dispatch(new appEvent_1.AppEvent(types_1.AuthActionTypes.AUTHENTICATE_INITIALIZE, payload));
-	}
-	exports.authorize = authorize;
-
-
-/***/ },
 /* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/// <reference path="../../../typings/index.d.ts" />
 	"use strict";
-	var fbemitter_1 = __webpack_require__(71);
+	var types_1 = __webpack_require__(69);
+	var appEvent_1 = __webpack_require__(71);
+	var appDispatcher_1 = __webpack_require__(79);
+	function authorize(payload) {
+	    appDispatcher_1.default.dispatch(new appEvent_1.AppEvent(types_1.AuthActionTypes.AUTH_INITIALIZE, payload));
+	}
+	exports.authorize = authorize;
+	function updateProfileInfo(payload) {
+	    appDispatcher_1.default.dispatch(new appEvent_1.AppEvent(types_1.AuthActionTypes.AUTH_GET_PROFILE, payload));
+	}
+	exports.updateProfileInfo = updateProfileInfo;
+
+
+/***/ },
+/* 71 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/// <reference path="../../../typings/index.d.ts" />
+	"use strict";
+	var fbemitter_1 = __webpack_require__(72);
 	var AppEvent = (function () {
 	    function AppEvent(type, payLoad) {
 	        this.type = type;
@@ -5948,7 +5984,7 @@
 
 
 /***/ },
-/* 71 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -5961,14 +5997,14 @@
 	 */
 	
 	var fbemitter = {
-	  EventEmitter: __webpack_require__(72)
+	  EventEmitter: __webpack_require__(73)
 	};
 	
 	module.exports = fbemitter;
 
 
 /***/ },
-/* 72 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -5987,11 +6023,11 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var EmitterSubscription = __webpack_require__(73);
-	var EventSubscriptionVendor = __webpack_require__(75);
+	var EmitterSubscription = __webpack_require__(74);
+	var EventSubscriptionVendor = __webpack_require__(76);
 	
-	var emptyFunction = __webpack_require__(77);
-	var invariant = __webpack_require__(76);
+	var emptyFunction = __webpack_require__(78);
+	var invariant = __webpack_require__(77);
 	
 	/**
 	 * @class BaseEventEmitter
@@ -6165,7 +6201,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6186,7 +6222,7 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var EventSubscription = __webpack_require__(74);
+	var EventSubscription = __webpack_require__(75);
 	
 	/**
 	 * EmitterSubscription represents a subscription with listener and context data.
@@ -6218,7 +6254,7 @@
 	module.exports = EmitterSubscription;
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports) {
 
 	/**
@@ -6272,7 +6308,7 @@
 	module.exports = EventSubscription;
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -6291,7 +6327,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(76);
+	var invariant = __webpack_require__(77);
 	
 	/**
 	 * EventSubscriptionVendor stores a set of EventSubscriptions that are
@@ -6381,7 +6417,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 76 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -6436,7 +6472,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 77 */
+/* 78 */
 /***/ function(module, exports) {
 
 	/**
@@ -6478,19 +6514,19 @@
 	module.exports = emptyFunction;
 
 /***/ },
-/* 78 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/// <reference path="../../../typings/index.d.ts" />
 	"use strict";
-	var flux_1 = __webpack_require__(79);
+	var flux_1 = __webpack_require__(80);
 	var AppDispatcher = new flux_1.Dispatcher();
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = AppDispatcher;
 
 
 /***/ },
-/* 79 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -6502,11 +6538,11 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 	
-	module.exports.Dispatcher = __webpack_require__(80);
+	module.exports.Dispatcher = __webpack_require__(81);
 
 
 /***/ },
-/* 80 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -6528,7 +6564,7 @@
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	var invariant = __webpack_require__(81);
+	var invariant = __webpack_require__(82);
 	
 	var _prefix = 'ID_';
 	
@@ -6743,7 +6779,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 81 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -6798,7 +6834,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ },
-/* 82 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/// <reference path="../../../typings/index.d.ts" />
@@ -6809,9 +6845,9 @@
 	    function __() { this.constructor = d; }
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
-	var appDispatcher_1 = __webpack_require__(78);
-	var types_1 = __webpack_require__(68);
-	var baseStore_1 = __webpack_require__(83);
+	var appDispatcher_1 = __webpack_require__(79);
+	var types_1 = __webpack_require__(69);
+	var baseStore_1 = __webpack_require__(84);
 	// https://developers.google.com/drive/v3/web/appdata
 	// https://console.developers.google.com/apis/credentials?project=memoirable
 	// https://security.google.com/settings/security/permissions
@@ -6820,16 +6856,26 @@
 	    function GoogleAuthStore(dispatcher) {
 	        var _this = this;
 	        _super.call(this, dispatcher, function (event) {
-	            if (event.type !== types_1.AuthActionTypes.AUTHENTICATE_INITIALIZE ||
-	                event.payLoad.provider !== types_1.ProviderTypes.GOOGLE) {
+	            if (event.payLoad.provider !== types_1.ProviderTypes.GOOGLE) {
 	                return;
 	            }
-	            _this._authorize.bind(_this, true, event)();
+	            switch (event.type) {
+	                case types_1.AuthActionTypes.AUTH_INITIALIZE:
+	                    _this._authorize.bind(_this, true, event)();
+	                    break;
+	                case types_1.AuthActionTypes.AUTH_GET_PROFILE:
+	                    _this._getProfileInfo.bind(_this, event)();
+	                    break;
+	                default:
+	                    break;
+	            }
 	        }, function () {
-	            return {};
+	            return {
+	                displayName: ''
+	            };
 	        });
 	        this._clientId = '732661329249-n46fvmeaa0mq1n7l8ks93r5kvmivqumi.apps.googleusercontent.com';
-	        this._scopes = ['https://www.googleapis.com/auth/drive.appfolder'];
+	        this._scopes = ['https://www.googleapis.com/auth/drive.appfolder', 'https://www.googleapis.com/auth/plus.me'];
 	    }
 	    GoogleAuthStore.prototype._authorize = function (immediate, event) {
 	        gapi.auth.authorize({
@@ -6845,6 +6891,20 @@
 	            this.emitChange();
 	        }.bind(this));
 	    };
+	    GoogleAuthStore.prototype._getProfileInfo = function (event) {
+	        gapi.client.load('plus', 'v1', function () {
+	            var request = gapi.client.plus.people.get({
+	                'userId': 'me'
+	            });
+	            request.execute(function (resp) {
+	                this._state = {
+	                    displayName: resp.displayName
+	                };
+	                this._changeToken = event.type;
+	                this.emitChange();
+	            }.bind(this));
+	        }.bind(this));
+	    };
 	    return GoogleAuthStore;
 	}(baseStore_1.BaseStore));
 	var GoogleAuthStoreInstance = new GoogleAuthStore(appDispatcher_1.default);
@@ -6853,12 +6913,12 @@
 
 
 /***/ },
-/* 83 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/// <reference path="../../../typings/index.d.ts" />
 	"use strict";
-	var FBEmitter = __webpack_require__(71);
+	var FBEmitter = __webpack_require__(72);
 	var BaseStore = (function () {
 	    function BaseStore(dispatcher, _onDispatch, _cleanStateFn) {
 	        var _this = this;
@@ -6898,7 +6958,7 @@
 
 
 /***/ },
-/* 84 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/// <reference path="../../../typings/index.d.ts" />
@@ -6909,21 +6969,32 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(1);
-	var react_router_1 = __webpack_require__(3);
-	var MemoirableApp = (function (_super) {
-	    __extends(MemoirableApp, _super);
-	    function MemoirableApp() {
+	var types_1 = __webpack_require__(69);
+	var AuthActions = __webpack_require__(70);
+	var gAuthStore_1 = __webpack_require__(83);
+	var Dashboard = (function (_super) {
+	    __extends(Dashboard, _super);
+	    function Dashboard() {
 	        _super.call(this);
+	        gAuthStore_1.default.cleanState();
+	        this.state = gAuthStore_1.default.getState();
 	    }
-	    MemoirableApp.prototype._navigateBack = function () {
-	        react_router_1.hashHistory.goBack();
+	    Dashboard.prototype.componentDidMount = function () {
+	        this._listenerToken = gAuthStore_1.default.addChangeListener(types_1.AuthActionTypes.AUTH_GET_PROFILE, this._setStateFromStores.bind(this));
+	        AuthActions.updateProfileInfo({ provider: types_1.ProviderTypes.GOOGLE });
 	    };
-	    MemoirableApp.prototype.render = function () {
-	        return (React.createElement("div", {className: "row"}, React.createElement("div", {id: "header"}), React.createElement("div", {id: "content"}, this.props.children), React.createElement("div", {id: "footer"})));
+	    Dashboard.prototype.componentWillUnmount = function () {
+	        gAuthStore_1.default.removeChangeListener(this._listenerToken);
 	    };
-	    return MemoirableApp;
+	    Dashboard.prototype._setStateFromStores = function () {
+	        this.setState(gAuthStore_1.default.getState());
+	    };
+	    Dashboard.prototype.render = function () {
+	        return (React.createElement("div", {className: "row"}, React.createElement("h1", null, "Logged in as ", this.state.displayName)));
+	    };
+	    return Dashboard;
 	}(React.Component));
-	exports.MemoirableApp = MemoirableApp;
+	exports.Dashboard = Dashboard;
 
 
 /***/ }
