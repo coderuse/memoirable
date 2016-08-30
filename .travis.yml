@@ -6,7 +6,7 @@ before_install:
     -in id_rsa.enc -out id_rsa -d
   - gem update --system
   - gem install sass susy normalize-scss
-  - npm install -g typings bower grunt-cli
+  - npm install -g typings@1.3.2 bower@1.7.9 grunt-cli@1.2.0
 script:
   - bash ./deploy.sh
 notifications:

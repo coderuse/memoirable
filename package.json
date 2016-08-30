@@ -23,12 +23,12 @@
   },
   "homepage": "https://github.com/arnabdas/memoirable#readme",
   "dependencies": {
-    "fbemitter": "^2.0.2",
+    "fbemitter": "2.0.2",
     "flux": "2.1.1",
-    "immutable": "^3.8.1",
+    "immutable": "3.8.1",
     "react": "15.2.1",
     "react-dom": "15.2.1",
-    "react-router": "^2.6.1"
+    "react-router": "2.6.1"
   },
   "devDependencies": {
     "config": "1.21.0",

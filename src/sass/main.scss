@@ -1,6 +1,12 @@
-@import "bourbon/bourbon";
 @import "susy";
+@import "bourbon/bourbon";
+/* https://github.com/negomi/sassy-inputs */
+@import "sassy-inputs/main";
+@import "_fonts";
+@import "_mixins";
+
 @import "normalize/import-now";
+
 
 $susy: (
   columns: 8,
@@ -18,29 +24,60 @@ body{
   min-width: 360.25px;
   font-size: .9em;
   line-height: 1.5em;
-  color: #333;
+  color: rgb(51,51,51);
   min-height: 520px;
-  background-color: #e3e3e3;
   word-break: break-word;
+}
+
+input[type=submit],
+input[type=button],
+button {
+  @include sassy-button;
 }
 
 .row {
   @include span(8);
 }
 
-.modal {
+.backdrop {
   position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
   opacity: .2;
-  z-index: 1050;
+  z-index: 100;
   display: none;
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   outline: 0;
   display: block;
-  background-color: #555;
+  background-color: rgb(85,85,85);
+}
+
+.auth-modal {
+  z-index: 200;
+  width: 25%;
+  position: relative;
+  top: 50vh;
+  transform: translateY(-50%);
+  margin:0 auto;
+  text-align: center;
+  padding: 50px;
+  @include item-background;
+  p {
+    font-size: 16pt;
+    padding: 4px 0px 20px;
+    margin: 0px;
+    color: rgb(128, 128, 128);
+  }
+  .button-groups {
+    padding: 15px;
+    @include set-border(1px 0, solid, rgb(211, 211, 211));
+    button {
+      margin: 0;
+      font-size: 4em;
+    }
+  }
 }
