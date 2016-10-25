@@ -5,7 +5,7 @@
   "main": "Gruntfile.js",
   "scripts": {
     "test": "grunt test",
-    "postinstall": "typings install --global"
+    "postinstall": "typings install --global && bower install"
   },
   "repository": {
     "type": "git",
@@ -26,6 +26,7 @@
     "fbemitter": "2.0.2",
     "flux": "2.1.1",
     "immutable": "3.8.1",
+    "marked": "^0.3.6",
     "react": "15.2.1",
     "react-dom": "15.2.1",
     "react-router": "2.6.1"

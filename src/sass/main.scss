@@ -37,6 +37,22 @@ button {
 
 .row {
   @include span(8);
+  .markdown-left{
+    @include span(4);
+    margin-right: 0px;
+    textarea.mardown-textarea{
+      @include span(8);
+      height: 100vh;
+    }
+  }
+
+  .markdown-right{
+    @include span(4);
+    .markdown-output-wrapper{
+      @include span(8);
+      height: 100vh;
+    }
+  }
 }
 
 .backdrop {
