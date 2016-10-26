@@ -3,7 +3,8 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { browserHistory, IndexLink, Link } from 'react-router';
-import * as Marked from 'marked';
+declare function require(name:string);
+var ReactMarkdown = require('react-markdown');
 
 export class Markdown extends React.Component<{}, any> {
   outputHTML: any;
@@ -17,8 +18,8 @@ export class Markdown extends React.Component<{}, any> {
 
   handleChange(event) {
     this.inputText = event.target.value;
-    this.outputHTML = Marked(this.inputText);
-    document.getElementById("markdown-output").innerHTML = this.outputHTML;
+    //this.outputHTML = Marked(this.inputText);
+    //document.getElementById("markdown-output").innerHTML = this.outputHTML;
     this.setState({value: event.target.value});
   }
 
@@ -33,7 +34,9 @@ export class Markdown extends React.Component<{}, any> {
           <textarea className="mardown-textarea" type="text" value={this.state.value} onChange={this.handleChange}></textarea>
         </div>
         <div className="markdown-right">
-          <div id="markdown-output" className="markdown-output-wrapper"></div>
+          <div id="markdown-output" className="markdown-output-wrapper">
+            <ReactMarkdown source={this.inputText} />
+          </div>
         </div>
       </div>
     );

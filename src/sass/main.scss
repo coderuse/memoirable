@@ -10,7 +10,7 @@
 
 $susy: (
   columns: 8,
-  gutters: .25,
+  gutters: .05,
   container: 360px,
   global-box-sizing: border-box
 );
@@ -37,21 +37,25 @@ button {
 
 .row {
   @include span(8);
-  overflow: hidden;
   .markdown-left{
     @include span(4);
-    margin-right: 0px;
+    border-right: 1px solid grey;
     textarea.mardown-textarea{
       @include span(8);
       height: 100vh;
       resize: none;
       overflow: auto;
+      border: none;
+      outline: none;
+      -webkit-box-shadow: none;
+      -moz-box-shadow: none;
+      box-shadow: none;
     }
   }
 
   .markdown-right{
     @include span(4);
-    padding: 20px;
+    padding-left: 20px;
     margin-right: 0px;
     .markdown-output-wrapper{
       @include span(8);
