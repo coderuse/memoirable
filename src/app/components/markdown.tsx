@@ -18,8 +18,6 @@ export class Markdown extends React.Component<{}, any> {
 
   handleChange(event) {
     this.inputText = event.target.value;
-    //this.outputHTML = Marked(this.inputText);
-    //document.getElementById("markdown-output").innerHTML = this.outputHTML;
     this.setState({value: event.target.value});
   }
 
@@ -32,6 +30,8 @@ export class Markdown extends React.Component<{}, any> {
       <div className="row">
         <div className="markdown-left">
           <textarea className="mardown-textarea" type="text" value={this.state.value} onChange={this.handleChange}></textarea>
+
+          <div id="editor"></div>
         </div>
         <div className="markdown-right">
           <div id="markdown-output" className="markdown-output-wrapper">
