@@ -15,7 +15,7 @@ export class MemoirableApp extends React.Component<{}, {}> {
 
   render() {
     return (
-      <div className="row">
+      <div className="container">
         <div id="header" />
         <div id="content">
           {this.props.children}
