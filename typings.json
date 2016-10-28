@@ -1,12 +1,10 @@
 {
   "globalDependencies": {
-    "commonmark": "registry:dt/commonmark#0.22.1+20160316171810",
     "fbemitter": "registry:dt/fbemitter#2.0.0+20160618175531",
     "fbsdk": "registry:dt/fbsdk#0.0.0+20160524084205",
     "flux": "registry:dt/flux#0.0.0+20160618175531",
     "immutable": "registry:dt/immutable#3.8.1+20160608070634",
     "jquery": "registry:dt/jquery#1.10.0+20160704162008",
-    "marked": "registry:dt/marked#0.0.0+20160325085301",
     "react": "registry:dt/react#0.14.0+20160802191555",
     "react-dom": "registry:dt/react-dom#0.14.0+20160412154040",
     "react-router": "registry:dt/react-router#2.0.0+20160621215300",

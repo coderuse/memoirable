@@ -23,7 +23,6 @@
   ],
   "dependencies": {
     "react": "15.2.1",
-    "jquery": "3.1.0",
-    "ace-builds": "~1.2.5"
+    "jquery": "3.1.0"
   }
 }

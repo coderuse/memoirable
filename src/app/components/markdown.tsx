@@ -5,6 +5,13 @@ import * as ReactDOM from 'react-dom';
 import { browserHistory, IndexLink, Link } from 'react-router';
 declare function require(name:string);
 var ReactMarkdown = require('react-markdown');
+import * as ace from 'brace';
+import 'brace/mode/javascript';
+import 'brace/theme/monokai';
+
+function onChange(newValue) {
+  console.log('change',newValue);
+}
 
 export class Markdown extends React.Component<{}, any> {
   outputHTML: any;
@@ -13,25 +20,41 @@ export class Markdown extends React.Component<{}, any> {
   constructor(props) {
     super(props);
     this.state = {value: ""};
+    this.inputText = "";
     this.handleChange = this.handleChange.bind(this);
+
+
   }
 
   handleChange(event) {
     this.inputText = event.target.value;
     this.setState({value: event.target.value});
+
+
   }
 
   _navigateBack() {
     browserHistory.goBack();
   }
 
+  componentDidMount() {
+    const editor = ace.edit('editor');
+    editor.getSession().setMode('ace/mode/javascript');
+    editor.setTheme('ace/theme/monokai');
+    //var that = this;
+    editor.on('change',function(e){
+      this.inputText = editor.getValue();
+
+      console.log(editor.getValue());
+      this.setState({value: this.inputText});
+    }.bind(this));
+  }
+
   render() {
     return (
       <div className="row">
         <div className="markdown-left">
-          <textarea className="mardown-textarea" type="text" value={this.state.value} onChange={this.handleChange}></textarea>
-
-          <div id="editor"></div>
+          <div id="editor"> </div>
         </div>
         <div className="markdown-right">
           <div id="markdown-output" className="markdown-output-wrapper">
@@ -42,3 +65,4 @@ export class Markdown extends React.Component<{}, any> {
     );
   }
 }
+

@@ -62,10 +62,7 @@ module.exports = function (grunt) {
           loaders: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
             { test: /\.tsx?$/, loader: 'ts-loader' },
-            {
-            test: /\.json$/,
-            loader: 'json'
-        }
+            {test: /\.json$/, loader: "json-loader"}
           ],
 
 
