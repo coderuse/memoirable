@@ -22,9 +22,7 @@ export class Markdown extends React.Component<{}, any> {
     this.state = {value: ""};
     this.inputText = "";
     this.handleChange = this.handleChange.bind(this);
-
-
-  }
+ }
 
   handleChange(event) {
     this.inputText = event.target.value;
@@ -41,11 +39,8 @@ export class Markdown extends React.Component<{}, any> {
     const editor = ace.edit('editor');
     editor.getSession().setMode('ace/mode/javascript');
     editor.setTheme('ace/theme/monokai');
-    //var that = this;
     editor.on('change',function(e){
       this.inputText = editor.getValue();
-
-      console.log(editor.getValue());
       this.setState({value: this.inputText});
     }.bind(this));
   }
