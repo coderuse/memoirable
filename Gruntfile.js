@@ -61,8 +61,10 @@ module.exports = function (grunt) {
         module: {
           loaders: [
             // All files with a '.ts' or '.tsx' extension will be handled by 'ts-loader'.
-            { test: /\.tsx?$/, loader: 'ts-loader' }
+            { test: /\.tsx?$/, loader: 'ts-loader' },
+            {test: /\.json$/, loader: "json-loader"}
           ],
+
 
           preLoaders: [
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
@@ -89,7 +91,7 @@ module.exports = function (grunt) {
           port: portConfig.build,
           base: buildPaths.buildLocation,
           open: {
-            target: 'http://127.0.0.1:<%= connect.build.options.port %>/index.html'
+            target: 'http://127.0.0.1:<%= connect.build.options.port %>'
           }
         }
       }
