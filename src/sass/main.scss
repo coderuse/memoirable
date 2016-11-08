@@ -114,10 +114,46 @@ button {
   }
 }
 
-.hide-header-menu {
-  display: none;
-}
+.auth-header{
+  background-color: #eee;
+  color: #666;
+  height: 45px; 
+  
+  .hide-header-menu {
+    visibility: hidden;
+  }
 
-.show-header-menu {
-  display: block;
+  .show-header-menu {
+    visibility: visible;
+  }
+
+  .header-title{
+    font-size: 30px;
+    font-weight: bold;
+    padding-top: 10px;
+    text-align: center;
+  }
+
+  .header-logo{
+    float: left;
+    img{
+      height: 40px;
+    }
+  } 
+
+  .auth-header-right{
+    height: 45px;
+    padding-top: 10px;
+    background-color: #abcdef;
+    text-align: center;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    cursor: pointer;
+
+    .dropdown-wrapper{
+      margin-top: 10px;
+      margin-right: 10px;
+    }
+  }
 }

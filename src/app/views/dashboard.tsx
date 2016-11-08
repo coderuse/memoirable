@@ -35,7 +35,7 @@ export class Dashboard extends React.Component<{}, IAuth> {
 
   render() {
     return (
-      <div className="row">
+      <div>
         <AuthHeader></AuthHeader>
         <MarkDown></MarkDown>
       </div>

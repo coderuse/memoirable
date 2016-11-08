@@ -41,13 +41,16 @@ export default class AuthHeader extends React.Component<{}, any> {
 
   render() {
     return (
-      <header>
-        <nav>
-          <div>{this.state.displayName}</div>
-          <div onClick={this.toggleClass.bind(this)}> Save
+      <header className="auth-header">
+        <div className="auth-header-left">
+          <div className="header-logo"><a href="/"><img src="/logo.png"></img></a></div>
+          <div className="header-title">Memoirable</div>
+        </div>
+        <div className="auth-header-right" onClick={this.toggleClass.bind(this)}> {this.state.displayName}
+          <div className="dropdown-wrapper">
             <button id="savetodrive" className={this.toggledClass} type="button" onClick={this.saveToDrive.bind(this,'google')}>Save to google Drive</button>
           </div>
-        </nav>
+        </div>
       </header>
     );
   }
