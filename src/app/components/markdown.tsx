@@ -3,8 +3,13 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { browserHistory, IndexLink, Link } from 'react-router';
+import { AuthActionTypes, ProviderTypes } from '../actions/types';
+import * as AuthActions from '../actions/authActions';
+import GAuthStore from '../stores/gAuthStore';
+
 declare function require(name:string);
 var ReactMarkdown = require('react-markdown');
+
 import * as ace from 'brace';
 import 'brace/mode/javascript';
 import 'brace/theme/monokai';
@@ -13,7 +18,8 @@ function onChange(newValue) {
   console.log('change',newValue);
 }
 
-export class Markdown extends React.Component<{}, any> {
+export default class Markdown extends React.Component<{}, any> {
+  _listenerToken : FBEmitter.EventSubscription;
   outputHTML: any;
   inputText: string;
 
@@ -27,8 +33,6 @@ export class Markdown extends React.Component<{}, any> {
   handleChange(event) {
     this.inputText = event.target.value;
     this.setState({value: event.target.value});
-
-
   }
 
   _navigateBack() {
@@ -43,6 +47,10 @@ export class Markdown extends React.Component<{}, any> {
       this.inputText = editor.getValue();
       this.setState({value: this.inputText});
     }.bind(this));
+  }
+
+  saveToDrive(drive){
+   GAuthStore._saveToGoogleDrive(this.inputText);
   }
 
   render() {

@@ -17,9 +17,9 @@ declare module gapi {
 
 		interface IAuthorizeParams {
 			client_id:string;
+			immediate:boolean;
+			response_type: string;
 			scope: any; // string (space-delimited) or string[]
-			immediate?:boolean;
-			response_type?: string;
 		}
 
 		interface ITokenObject {
@@ -43,7 +43,7 @@ declare module gapi {
 			params: any;
 			headers:any;
 			body:any;
-			callback: Function;
+			callback?: Function;
 		}
 
 		interface IErrorResponse {

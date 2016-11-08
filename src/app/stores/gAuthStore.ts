@@ -13,22 +13,23 @@ import { IAuth } from '../interfaces/auth';
 // https://console.developers.google.com/apis/credentials?project=memoirable
 // https://security.google.com/settings/security/permissions
 class GoogleAuthStore extends BaseStore<IAuth>{
-  _clientId = '732661329249-n46fvmeaa0mq1n7l8ks93r5kvmivqumi.apps.googleusercontent.com';
-  _scopes = ['https://www.googleapis.com/auth/drive.appfolder', 'https://www.googleapis.com/auth/plus.me'];
+  _clientId = '185002064279-5b927uofmib8o4q7cch7ae9n0stu9369.apps.googleusercontent.com';
+  _scopes = ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/plus.me'];
   callback: () => void;
   _authorize(immediate: boolean, event: AppEvent) {
 
     gapi.auth.authorize(
       {
         'client_id': this._clientId,
-        'scope': this._scopes.join(' '),
-        'immediate': immediate
+        'scope':this._scopes.join(' '),
+        'immediate': true,
+        'response_type': 'token'
       }, function (authResult) {
         if (!authResult || authResult.error) {
           this._authorize.bind(this, false, event)();
           return;
         }
-
+        console.log(authResult);
         this._changeToken = event.type;
         this.emitChange();
       }.bind(this));
@@ -40,13 +41,33 @@ class GoogleAuthStore extends BaseStore<IAuth>{
       });
       request.execute(function (resp) {
         this._state = {
-          displayName: resp.displayName
+          displayName: resp.result.displayName
         };       
         this._changeToken = event.type;
         this.emitChange();
-      }.bind(this));
+      }.bind(this))
     }.bind(this));
   }
+
+  _saveToGoogleDrive(data:string){
+    console.log(data);
+    gapi.client.load('drive', 'v3', function(){
+      var createRequest = gapi.client.drive.files.create({'uploadType':'media'});
+      createRequest.then(function(res){
+        console.log(res);
+        gapi.client.request({'path': ('/upload/drive/v3/files/'+res.result.id).toString(), 'method':'PATCH', 'body':data, 'headers':'',  'params': ''}).then(function(response) {
+          console.log(response);
+        }, function(reason) {
+          console.log(reason);
+        });
+
+      },function(err){
+        console.log(err);
+      });
+
+   });
+  }
+
   constructor(dispatcher: Flux.Dispatcher<AppEvent>) {
     super(dispatcher, (event: AppEvent) => {
       if (event.payLoad.provider !== ProviderTypes.GOOGLE) {

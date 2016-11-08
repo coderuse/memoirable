@@ -30,10 +30,6 @@ export class Home extends React.Component<{}, {}> {
     AuthActions.authorize({ provider: provider });
   } 
 
-  _goToMarkdown(){
-    browserHistory.push('/markdown');
-  }
-
   render() {
     return (
       <div className="row">
@@ -43,9 +39,6 @@ export class Home extends React.Component<{}, {}> {
           <div className="button-groups">
             <button className="auth-buttons memocon-google-drive"
               onClick={this._authenticate.bind(this, ProviderTypes.GOOGLE) } />
-          </div>
-          <div className="markdown">
-            <a onClick={this._goToMarkdown}>Go To Markdown</a>
           </div>
         </div>
       </div>
