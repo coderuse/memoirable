@@ -356,6 +356,7 @@ declare module gapi.client {
                 pageSize?: number;
                 pageToken?: string;
                 q?: string;
+                fields?: string,
                 spaces?: string;
             }) => {
                 execute(callback: (data: IResponse<IFileList>, original: string) => void):void;

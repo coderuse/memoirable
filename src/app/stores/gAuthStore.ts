@@ -102,6 +102,24 @@ class GoogleAuthStore extends BaseStore<IAuth>{
     })
   }
 
+  _isInitialStructureSetup (){
+    let params = {
+      q:"mimeType='application/vnd.google-apps.folder' and name='Memoirable'",
+      fields: 'nextPageToken, files(id, name)',
+      spaces: 'drive',
+    };
+
+    gapi.client.request({
+      'path': '/drive/v3/files',
+      'method' : 'GET',
+      'params' : Object.keys(params).map((i) => i+'='+params[i]).join('&')
+    }).then( function(response){
+      console.log(response.result);
+    }, function(reason){
+
+    })
+  }
+
   constructor(dispatcher: Flux.Dispatcher<AppEvent>) {
     super(dispatcher, (event: AppEvent) => {
       if (event.payLoad.provider !== ProviderTypes.GOOGLE) {

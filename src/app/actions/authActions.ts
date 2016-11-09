@@ -13,7 +13,5 @@ export function updateProfileInfo(payload?: { provider: string }) {
 }
 
 export function createInitialFolderStructure(payload?: any) {
-  console.log('inside the createInitialFolderStructure dispathcher');
-  console.log(payload);
   AppDispatcher.dispatch(new AppEvent(AuthActionTypes.GOOGLE_CREATE_INITIAL_FOLDERS, payload));
 }
