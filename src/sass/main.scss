@@ -42,9 +42,10 @@ button {
     border-right: 1px solid grey;
     position:relative;
     display: inline-block;
+    height: 60vh;
     textarea.mardown-textarea{
       @include span(8);
-      height: 100vh;
+      height: 60vh;
       resize: none;
       overflow: auto;
       border: none;
@@ -62,13 +63,22 @@ button {
     display: inline-block;
     .markdown-output-wrapper{
       @include span(8);
-      height: 100vh;
+      height: 60vh;
       overflow: auto;
     }
   }
+
+  .main-content-left{
+    @include span(0.8);
+    height: 60vh;
+  }
+
+  .main-content-right{
+    @include span(7);
+  }
 }
 #editor {
-  height: 100vh;
+  height: 60vh;
 }
 
 .backdrop {

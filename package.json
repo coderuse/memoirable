@@ -29,6 +29,7 @@
     "flux": "2.1.1",
     "immutable": "3.8.1",
     "json-loader": "^0.5.4",
+    "rc-calendar": "^7.4.3",
     "react": "15.2.1",
     "react-dom": "15.2.1",
     "react-markdown": "^2.4.2",

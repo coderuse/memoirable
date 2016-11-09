@@ -21,15 +21,15 @@ class GoogleAuthStore extends BaseStore<IAuth>{
     gapi.auth.authorize(
       {
         'client_id': this._clientId,
-        'scope':this._scopes.join(' '),
-        'immediate': true,
-        'response_type': 'token'
+        'scope': this._scopes.join(' '),
+        'immediate': immediate,
+        response_type: 'token'
       }, function (authResult) {
         if (!authResult || authResult.error) {
           this._authorize.bind(this, false, event)();
           return;
         }
-        console.log(authResult);
+
         this._changeToken = event.type;
         this.emitChange();
       }.bind(this));
@@ -41,11 +41,11 @@ class GoogleAuthStore extends BaseStore<IAuth>{
       });
       request.execute(function (resp) {
         this._state = {
-          displayName: resp.result.displayName
+          displayName: resp.displayName
         };       
         this._changeToken = event.type;
         this.emitChange();
-      }.bind(this))
+      }.bind(this));
     }.bind(this));
   }
 
@@ -68,6 +68,40 @@ class GoogleAuthStore extends BaseStore<IAuth>{
    });
   }
 
+  _createInitialFolderStructure(event: AppEvent){
+    console.log('meow');
+    let data = {
+        name : 'Memoirable',
+        mimeType: 'application/vnd.google-apps.folder',
+        parents: ['root']
+    };
+
+    this._requestForFolderGoogleDrive(data).then(function(response) {
+          console.log(response.result);
+          let data = {
+            name : 'Entries',
+            mimeType: 'application/vnd.google-apps.folder',
+            parents: [response.result.id]
+          };
+          this._requestForFolderGoogleDrive(data).then(function(response) {
+            console.log(response);
+          },function(reason){
+
+          });
+    }.bind(this), function(reason) {
+      console.log(reason);
+    });
+
+  }
+
+  _requestForFolderGoogleDrive(data){
+    return gapi.client.request({
+      'path': '/drive/v3/files',
+      'method' : 'POST',
+      'body': data
+    })
+  }
+
   constructor(dispatcher: Flux.Dispatcher<AppEvent>) {
     super(dispatcher, (event: AppEvent) => {
       if (event.payLoad.provider !== ProviderTypes.GOOGLE) {
@@ -79,6 +113,9 @@ class GoogleAuthStore extends BaseStore<IAuth>{
           break;
         case AuthActionTypes.AUTH_GET_PROFILE:
           this._getProfileInfo.bind(this, event)();
+          break;
+        case AuthActionTypes.GOOGLE_CREATE_INITIAL_FOLDERS:
+          this._createInitialFolderStructure.bind(this, event)();
           break;
         default:
           break;

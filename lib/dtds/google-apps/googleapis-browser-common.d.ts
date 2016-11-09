@@ -39,10 +39,10 @@ declare module gapi {
 
 		interface IRequestArgs {
 			path:string;
-			method:string;
-			params: any;
-			headers:any;
-			body:any;
+			method?:string;
+			params?: any;
+			headers?:any;
+			body?:any;
 			callback?: Function;
 		}
 

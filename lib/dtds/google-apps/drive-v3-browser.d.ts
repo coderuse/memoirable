@@ -910,13 +910,13 @@ declare module gapi.client {
              * A collection of arbitrary key-value pairs which are private to the requesting app.
              * Entries with null values are cleared in update and copy requests.
              */
-            appProperties: {
+            appProperties?: {
                 [name:string]: string;
             };
             /**
              * Capabilities the current user has on the file.
              */
-            capabilities: {
+            capabilities?: {
                 canComment: boolean;
                 canCopy: boolean;
                 canEdit: boolean;
@@ -926,7 +926,7 @@ declare module gapi.client {
             /**
              * Additional information about the content of the file. These fields are never populated in responses.
              */
-            contentHints: {
+            contentHints?: {
                 indexableText: string;
                 thumbnail: {
                     image: string; // byte
@@ -936,45 +936,45 @@ declare module gapi.client {
             /**
              * The time at which the file was created (RFC 3339 date-time).
              */
-            createdTime: string; // date-time
+            createdTime?: string; // date-time
             /**
              * A short description of the file.
              */
-            description: string;
+            description?: string;
             /**
              * Whether the file has been explicitly trashed, as opposed to recursively trashed from a parent folder.
              */
-            explicitlyTrashed: boolean;
+            explicitlyTrashed?: boolean;
             /**
              * The final component of fullFileExtension. This is only available for files with binary content in Drive.
              */
-            fileExtension: string;
+            fileExtension?: string;
             /**
              * The color for a folder as an RGB hex string. The supported colors are published in the folderColorPalette field of the About resource.
              * If an unsupported color is specified, the closest color in the palette will be used instead.
              */
-            folderColorRgb: string;
+            folderColorRgb?: string;
             /**
              * The full file extension extracted from the name field. May contain multiple concatenated extensions, such as "tar.gz". This is only available for files with binary content in Drive.
              * This is automatically updated when the name field changes, however it is not cleared if the new name does not contain a valid extension.
              */
-            fullFileExtension: string;
+            fullFileExtension?: string;
             /**
              * The ID of the file's head revision. This is currently only available for files with binary content in Drive.
              */
-            headRevisionId: string;
+            headRevisionId?: string;
             /**
              * A static, unauthenticated link to the file's icon.
              */
-            iconLink: string;
+            iconLink?: string;
             /**
              * The ID of the file.
              */
-            id: string;
+            id?: string;
             /**
              * Additional metadata about image media, if available.
              */
-            imageMediaMetadata: {
+            imageMediaMetadata?: {
                 aperture: number; // float
                 cameraMake: string;
                 cameraModel: string;
@@ -1004,114 +1004,114 @@ declare module gapi.client {
             /**
              * Whether the file was created or opened by the requesting app.
              */
-            isAppAuthorized: boolean;
+            isAppAuthorized?: boolean;
             /**
              * Identifies what kind of resource this is. Value: the fixed string "drive#file".
              */
-            kind: string;
+            kind?: string;
             /**
              * The last user to modify the file.
              */
-            lastModifyingUser: IUser;
+            lastModifyingUser?: IUser;
             /**
              * The MD5 checksum for the content of the file. This is only applicable to files with binary content in Drive.
              */
-            md5Checksum: string;
+            md5Checksum?: string;
             /**
              * The MIME type of the file.
              * Drive will attempt to automatically detect an appropriate value from uploaded content if no value is provided. The value cannot be changed unless a new revision is uploaded.
              * If a file is created with a Google Doc MIME type, the uploaded content will be imported if possible. The supported import formats are published in the About resource.
              */
-            mimeType: string;
+            mimeType?: string;
             /**
              * Whether the file has been modified by this user.
              */
-            modifiedByMe: boolean;
+            modifiedByMe?: boolean;
             /**
              * The last time the file was modified by the user (RFC 3339 date-time).
              */
-            modifiedByMeTime: string; // date-time
+            modifiedByMeTime?: string; // date-time
             /**
              * The last time the file was modified by anyone (RFC 3339 date-time).
              * Note that setting modifiedTime will also update modifiedByMeTime for the user.
              */
-            modifiedTime: string; // date-time
+            modifiedTime?: string; // date-time
             /**
              * The name of the file. This is not necessarily unique within a folder.
              */
-            name: string;
+            name?: string;
             /**
              * The original filename of the uploaded content if available, or else the original value of the name field. This is only available for files with binary content in Drive.
              */
-            originalFilename: string;
+            originalFilename?: string;
             /**
              * Whether the user owns the file.
              */
-            ownedByMe: boolean;
+            ownedByMe?: boolean;
             /**
              * The owners of the file. Currently, only certain legacy files may have more than one owner.
              */
-            owners: IUser[];
+            owners?: IUser[];
             /**
              * The IDs of the parent folders which contain the file.
              * If not specified as part of a create request, the file will be placed directly in the My Drive folder. Update requests must use the addParents and removeParents parameters to modify the values.
              */
-            parents: string[];
+            parents?: string[];
             /**
              * The full list of permissions for the file. This is only available if the requesting user can share the file.
              */
-            permissions: IPermission[];
+            permissions?: IPermission[];
             /**
              * A collection of arbitrary key-value pairs which are visible to all apps.
              * Entries with null values are cleared in update and copy requests.
              */
-            properties: {
+            properties?: {
                 [name:string]: string;
             };
             /**
              * The number of storage quota bytes used by the file. This includes the head revision as well as previous revisions with keepForever enabled.
              */
-            quotaBytesUsed: string; // int64
+            quotaBytesUsed?: string; // int64
             /**
              * Whether the file has been shared.
              */
-            shared: boolean;
+            shared?: boolean;
             /**
              * The time at which the file was shared with the user, if applicable (RFC 3339 date-time).
              */
-            sharedWithMeTime: string; // date-time
+            sharedWithMeTime?: string; // date-time
             /**
              * The user who shared the file with the requesting user, if applicable.
              */
-            sharingUser: IUser;
+            sharingUser?: IUser;
             /**
              * The size of the file's content in bytes. This is only applicable to files with binary content in Drive.
              */
-            size: string; // int64
+            size?: string; // int64
             /**
              * The list of spaces which contain the file. The currently supported values are 'drive', 'appDataFolder' and 'photos'.
              */
-            spaces: string[];
+            spaces?: string[];
             /**
              * Whether the user has starred the file.
              */
-            starred: boolean;
+            starred?: boolean;
             /**
              * A short-lived link to the file's thumbnail, if available. Typically lasts on the order of hours.
              */
-            thumbnailLink: string;
+            thumbnailLink?: string;
             /**
              * Whether the file has been trashed, either explicitly or from a trashed parent folder. Only the owner may trash a file, and other users cannot see files in the owner's trash.
              */
-            trashed: boolean;
+            trashed?: boolean;
             /**
              * A monotonically increasing version number for the file. This reflects every change made to the file on the server, even those not visible to the user.
              */
-            version: string; // int64
+            version?: string; // int64
             /**
              * Additional metadata about video media. This may not be available immediately upon upload.
              */
-            videoMediaMetadata: {
+            videoMediaMetadata?: {
                 durationMillis: string; // int64
                 height: number; // int32
                 width: number; // int32
@@ -1119,27 +1119,27 @@ declare module gapi.client {
             /**
              * Whether the file has been viewed by this user.
              */
-            viewedByMe: boolean;
+            viewedByMe?: boolean;
             /**
              * The last time the file was viewed by the user (RFC 3339 date-time).
              */
-            viewedByMeTime: string; // date-time
+            viewedByMeTime?: string; // date-time
             /**
              * Whether users with only reader or commenter permission can copy the file's content. This affects copy, download, and print operations.
              */
-            viewersCanCopyContent: boolean;
+            viewersCanCopyContent?: boolean;
             /**
              * A link for downloading the content of the file in a browser. This is only available for files with binary content in Drive.
              */
-            webContentLink: string;
+            webContentLink?: string;
             /**
              * A link for opening the file in a relevant Google editor or viewer in a browser.
              */
-            webViewLink: string;
+            webViewLink?: string;
             /**
              * Whether users with only writer permission can modify the file's permissions.
              */
-            writersCanShare: boolean;
+            writersCanShare?: boolean;
         }
         /**
          * A list of files.

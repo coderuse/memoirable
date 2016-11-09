@@ -31,7 +31,7 @@ export default class AuthHeader extends React.Component<{}, any> {
   }
 
   saveToDrive(drive){
-   GAuthStore._saveToGoogleDrive("");
+    AuthActions.createInitialFolderStructure({ provider: ProviderTypes.GOOGLE});
   }
 
   toggleClass(){
@@ -48,7 +48,7 @@ export default class AuthHeader extends React.Component<{}, any> {
         </div>
         <div className="auth-header-right" onClick={this.toggleClass.bind(this)}> {this.state.displayName}
           <div className="dropdown-wrapper">
-            <button id="savetodrive" className={this.toggledClass} type="button" onClick={this.saveToDrive.bind(this,'google')}>Save to google Drive</button>
+            <button id="savetodrive" className={this.toggledClass} type="button" onClick={this.saveToDrive.bind(this,'google')}>Create Initial Structure</button>
           </div>
         </div>
       </header>
