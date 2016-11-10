@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /* https://github.com/negomi/sassy-inputs */
 @font-face {
   font-family: 'memoirable';
@@ -129,6 +130,14 @@
 
 .memocon-google-drive:before {
   content: "\ea8f";
+}
+
+.memocon-left-arrow:before {
+  content: "\e904";
+}
+
+.memocon-right-arrow:before {
+  content: "";
 }
 
 /*! normalize-scss | MIT/GPLv2 License | bit.ly/normalize-scss */
@@ -672,13 +681,14 @@ button:disabled:focus {
   border-right: 1px solid grey;
   position: relative;
   display: inline-block;
+  height: 60vh;
 }
 .row .markdown-left textarea.mardown-textarea {
   width: 100%;
   float: left;
   margin-left: 0;
   margin-right: 0;
-  height: 100vh;
+  height: 60vh;
   resize: none;
   overflow: auto;
   border: none;
@@ -700,12 +710,23 @@ button:disabled:focus {
   float: left;
   margin-left: 0;
   margin-right: 0;
-  height: 100vh;
+  height: 60vh;
   overflow: auto;
+}
+.row .main-content-left {
+  width: 9.46108%;
+  float: left;
+  margin-right: 0.5988%;
+  height: 60vh;
+}
+.row .main-content-right {
+  width: 87.42515%;
+  float: left;
+  margin-right: 0.5988%;
 }
 
 #editor {
-  height: 100vh;
+  height: 60vh;
 }
 
 .backdrop {
@@ -753,4 +774,99 @@ button:disabled:focus {
 .auth-modal .button-groups button {
   margin: 0;
   font-size: 4em;
+}
+
+.auth-header {
+  background-color: #eee;
+  color: #666;
+  height: 45px;
+  margin-bottom: 15px;
+}
+.auth-header .hide-header-menu {
+  visibility: hidden;
+}
+.auth-header .show-header-menu {
+  visibility: visible;
+}
+.auth-header .header-title {
+  font-size: 30px;
+  font-weight: bold;
+  padding-top: 10px;
+  text-align: center;
+}
+.auth-header .header-logo {
+  float: left;
+  margin-left: 20px;
+}
+.auth-header .header-logo img {
+  height: 40px;
+}
+.auth-header .auth-header-right {
+  height: 45px;
+  padding-top: 10px;
+  background-color: #abcdef;
+  text-align: center;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  cursor: pointer;
+  font-size: 20px;
+}
+.auth-header .auth-header-right .dropdown-wrapper {
+  margin-top: 10px;
+  margin-right: 10px;
+}
+
+.calendar-wrapper {
+  margin: 10px;
+  float: left;
+}
+.calendar-wrapper .weekdays {
+  width: 370px;
+  overflow: hidden;
+  padding: 5px 5px 0px 15px;
+  border-bottom: 3px solid gray;
+}
+.calendar-wrapper .weekdays div {
+  position: relative;
+  float: left;
+  width: 50px;
+  height: 40px;
+  text-align: center;
+  padding-top: 10px;
+}
+.calendar-wrapper .weekvalues {
+  width: 370px;
+  overflow: hidden;
+  padding: 5px 5px 0px 15px;
+}
+.calendar-wrapper .weekvalues div {
+  position: relative;
+  float: left;
+  width: 50px;
+  height: 40px;
+  text-align: center;
+}
+.calendar-wrapper .weekvalues .selected-date {
+  background-color: blue;
+}
+.calendar-wrapper .calendar-value {
+  text-align: center;
+  padding: 10px;
+  border-bottom: 3px solid gray;
+}
+
+.wrapper {
+  overflow: hidden;
+  width: 100%;
+  padding: 0 8%;
+}
+.wrapper .memocon-left-arrow {
+  float: left;
+  padding-top: 18%;
+}
+.wrapper .memocon-right-arrow {
+  float: left;
+  padding-top: 18%;
+  margin-left: 1%;
 }
