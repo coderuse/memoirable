@@ -156,4 +156,18 @@ export class Utils {
     return { msg: msg, relatedObj: relatedObj };
   }
 
+  public static daysInMonth(month: number, year: number) {
+    var isLeap = ((year % 4) == 0 && ((year % 100) != 0 || (year % 400) == 0));
+    return [31, (isLeap ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+  }
+
+  public static getMonth(month:number){
+    return ['January','February','March','April','May','June','July','August','September','October','November','December'][month];
+  }
+
+  public static compareDate(a,b){
+    return a.getFullYear() === b.getFullYear()
+    && a.getDate() === b.getDate()
+    && a.getMonth() === b.getMonth();
+  }
 }

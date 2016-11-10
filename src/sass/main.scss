@@ -6,7 +6,8 @@
 @import "_mixins";
 
 @import "normalize/import-now";
-
+$markdown-height: 60vh;
+$header-margin-bottom : 15px;
 
 $susy: (
   columns: 8,
@@ -42,9 +43,10 @@ button {
     border-right: 1px solid grey;
     position:relative;
     display: inline-block;
+    height: $markdown-height;
     textarea.mardown-textarea{
       @include span(8);
-      height: 100vh;
+      height: $markdown-height;
       resize: none;
       overflow: auto;
       border: none;
@@ -62,13 +64,22 @@ button {
     display: inline-block;
     .markdown-output-wrapper{
       @include span(8);
-      height: 100vh;
+      height: $markdown-height;
       overflow: auto;
     }
   }
+
+  .main-content-left{
+    @include span(0.8);
+    height: $markdown-height;
+  }
+
+  .main-content-right{
+    @include span(7);
+  }
 }
 #editor {
-  height: 100vh;
+  height: $markdown-height;
 }
 
 .backdrop {
@@ -111,5 +122,109 @@ button {
       margin: 0;
       font-size: 4em;
     }
+  }
+}
+
+.auth-header{
+  background-color: #eee;
+  color: #666;
+  height: 45px; 
+  margin-bottom: $header-margin-bottom;
+  .hide-header-menu {
+    visibility: hidden;
+  }
+
+  .show-header-menu {
+    visibility: visible;
+  }
+
+  .header-title{
+    font-size: 30px;
+    font-weight: bold;
+    padding-top: 10px;
+    text-align: center;
+  }
+
+  .header-logo{
+    float: left;
+    margin-left: 20px; 
+    img{
+      height: 40px;
+    }
+  } 
+
+  .auth-header-right{
+    height: 45px;
+    padding-top: 10px;
+    background-color: #abcdef;
+    text-align: center;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    cursor: pointer;
+    font-size: 20px;
+    .dropdown-wrapper{
+      margin-top: 10px;
+      margin-right: 10px;
+    }
+  }
+}
+.calendar-wrapper{
+  margin: 10px;
+  float: left;
+  .weekdays{
+    width: 370px;
+    overflow: hidden;
+    padding: 5px 5px 0px 15px;
+    border-bottom: 3px solid gray;
+    div{
+      position: relative;
+      float: left;
+      width: 50px;
+      height: 40px;
+      text-align: center;
+      padding-top: 10px;
+    }
+  } 
+
+  .weekvalues{
+    width: 370px;
+    overflow: hidden;
+    padding: 5px 5px 0px 15px;
+    div{
+      position: relative;
+      float: left;
+      width: 50px;
+      height: 40px;
+      text-align: center;
+    }
+
+    .selected-date {
+      background-color: blue;
+    }
+
+  }
+
+  .calendar-value{
+    text-align: center;
+    padding: 10px;
+    border-bottom: 3px solid gray;
+  }
+}
+
+.wrapper{
+  overflow: hidden;
+  width: 100%;
+  padding: 0 8%;
+  
+  .memocon-left-arrow {
+    float: left;
+    padding-top: 18%;
+  }
+
+  .memocon-right-arrow {
+    float: left;
+    padding-top: 18%;
+    margin-left: 1%;
   }
 }
