@@ -8,30 +8,38 @@ import * as AuthActions from '../actions/authActions';
 import GAuthStore from '../stores/gAuthStore';
 import { Utils } from '../helpers';
 
-export default class Calender extends React.Component<{month: number, year: number}, any> {
+export interface ICalendarDate {date: any, month: number, year: number};
+
+export default class Calendar extends React.Component<ICalendarDate, {}> {
   _listenerToken: FBEmitter.EventSubscription;
   toggledClass: string = 'hide-header-menu';
-  month: any ;
+  monthArray: any ;
   rowArray =  ['row1','row2','row3','row4','row5','row6'];
+  selectedDate: any;
+  count : number = 0;
+
   constructor(props) {
     super();
-    GAuthStore.cleanState();
-    this.state = GAuthStore.getState();
-    this.month = this.populateValuesByMonth(props.month, props.year);
+    this.selectedDate = GAuthStore._getSelectedDate();
+  }
+
+  componentWillMount() {
+    this.monthArray = this.populateValuesByMonth(this.props.month, this.props.year);
   }
 
   componentDidMount() {
-    this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.AUTH_GET_PROFILE, this._setStateFromStores.bind(this));
-    AuthActions.updateProfileInfo({ provider: ProviderTypes.GOOGLE });
-    this.setState({value:'changed'});
+    
   }
 
   componentWillUnmount() {
-    GAuthStore.removeChangeListener(this._listenerToken);
+   GAuthStore.removeChangeListener(this._listenerToken);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    
   }
 
   _setStateFromStores() {
-    this.setState(GAuthStore.getState());
   }
 
   saveToDrive(drive){
@@ -40,7 +48,6 @@ export default class Calender extends React.Component<{month: number, year: numb
 
   populateValuesByMonth(monthNum, year){
     let firstDate = new Date(year, monthNum);
-    console.log(firstDate);
     let firstDay = firstDate.getDay();
     let count = 0;
 
@@ -79,10 +86,20 @@ export default class Calender extends React.Component<{month: number, year: numb
     this.setState({'name':'button-state-changed'});
   }
 
+  handleClick(date){
+    AuthActions.calendarDateChanged({ provider: ProviderTypes.GOOGLE, date: date});
+  }
+
   render() {
-    var month = this.month;
+    var month = this.monthArray;
+    var year = this.props.year;
+    var givenMonth = this.props.month;
+    var givenMonthValue = Utils.getMonth(this.props.month);
+    var key = this.count;
+    var selectedDate = this.props.date;
     return (
-      <div className="calendar-wrapper">
+      <div className="calendar-wrapper" key={key}>
+        <div className="calendar-value">{givenMonthValue+' '+year}</div>
         <div className="weekdays">
           <div>SUN</div>
           <div>MON</div>
@@ -95,13 +112,14 @@ export default class Calender extends React.Component<{month: number, year: numb
         {this.rowArray.map(function(rowNum,index){
           return <div key={rowNum+index} className="weekvalues">
               { month ? month[rowNum].map(function(val,index){
+                let date = new Date(year,givenMonth, val);
                 if(val === ''){
-                  return <div key={'empty'+index}>{val}</div>
+                  return <div key={'empty'+index} ></div>
                 }
                 else{
-                  return <div key={'value'+index}>{val}</div>
+                  return <div className={Utils.compareDate(date ,selectedDate) ? 'selected-date'  : '' } key={'value'+index} onClick={() => {this.handleClick(date)}}>{val}</div>
                 }
-              }) : <div></div>}
+              }.bind(this)) : <div></div>}
             </div>
           }.bind(this))
         }

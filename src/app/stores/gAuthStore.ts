@@ -16,6 +16,7 @@ class GoogleAuthStore extends BaseStore<IAuth>{
   _clientId = '185002064279-5b927uofmib8o4q7cch7ae9n0stu9369.apps.googleusercontent.com';
   _scopes = ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/plus.me'];
   callback: () => void;
+  selectedDate = new Date();
   _authorize(immediate: boolean, event: AppEvent) {
 
     gapi.auth.authorize(
@@ -102,6 +103,16 @@ class GoogleAuthStore extends BaseStore<IAuth>{
     })
   }
 
+  _getSelectedDate(){
+    return this.selectedDate;
+  }
+
+  _setSelectedDate(event){
+    this.selectedDate = event.payLoad.date;
+    this._changeToken = event.type;
+    this.emitChange();
+  }
+
   _isInitialStructureSetup (){
     let params = {
       q:"mimeType='application/vnd.google-apps.folder' and name='Memoirable'",
@@ -134,6 +145,9 @@ class GoogleAuthStore extends BaseStore<IAuth>{
           break;
         case AuthActionTypes.GOOGLE_CREATE_INITIAL_FOLDERS:
           this._createInitialFolderStructure.bind(this, event)();
+          break;
+        case AuthActionTypes.CALENDAR_DATE_CHANGED:
+          this._setSelectedDate.bind(this, event)();
           break;
         default:
           break;

@@ -10,7 +10,8 @@ export const LoadEntriesActionTypes = {
 export const AuthActionTypes = {
   AUTH_INITIALIZE: 'auth.initialize',
   AUTH_GET_PROFILE: 'auth.getProfile',
-  GOOGLE_CREATE_INITIAL_FOLDERS: 'google.initialFolders'
+  GOOGLE_CREATE_INITIAL_FOLDERS: 'google.initialFolders',
+  CALENDAR_DATE_CHANGED: 'calendar.changedDate'
 }
 
 export const ProviderTypes = {

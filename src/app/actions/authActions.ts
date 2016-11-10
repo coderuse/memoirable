@@ -15,3 +15,7 @@ export function updateProfileInfo(payload?: { provider: string }) {
 export function createInitialFolderStructure(payload?: any) {
   AppDispatcher.dispatch(new AppEvent(AuthActionTypes.GOOGLE_CREATE_INITIAL_FOLDERS, payload));
 }
+
+export function calendarDateChanged(payload?: any){
+  AppDispatcher.dispatch(new AppEvent(AuthActionTypes.CALENDAR_DATE_CHANGED, payload));
+}
