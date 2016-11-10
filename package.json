@@ -5,7 +5,7 @@
   "main": "Gruntfile.js",
   "scripts": {
     "test": "grunt test",
-    "postinstall": "typings install --global && bower install && grunt"
+    "postinstall": "typings install --global && bower install"
   },
   "repository": {
     "type": "git",
