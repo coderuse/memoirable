@@ -7,7 +7,6 @@ import { AuthActionTypes, ProviderTypes } from '../actions/types';
 import * as AuthActions from '../actions/authActions';
 import MarkDown from '../components/markdown';
 import AuthHeader from '../components/authheader';
-import CalendarWrapper from '../components/calendarwrapper';
 import GAuthStore from '../stores/gAuthStore';
 
 import { IAuth } from '../interfaces/auth';
@@ -37,16 +36,15 @@ export class Dashboard extends React.Component<{}, IAuth> {
 
   render() {
     return (
-      <div className="row">
-        <AuthHeader></AuthHeader>
+      <div>
+        <div className="row">
+          <AuthHeader></AuthHeader>
+        </div>
         <div className="row">
           <div className="main-content-left">&nbsp;</div>
           <div className="main-content-right">
             <MarkDown></MarkDown>
           </div>
-        </div>
-        <div className="row">
-          <CalendarWrapper></CalendarWrapper>
         </div>
       </div>
     );

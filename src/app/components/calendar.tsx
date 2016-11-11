@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { browserHistory, IndexLink, Link } from 'react-router';
-import { AuthActionTypes, ProviderTypes } from '../actions/types';
+import { ProviderTypes } from '../actions/types';
 import * as AuthActions from '../actions/authActions';
 import GAuthStore from '../stores/gAuthStore';
 import { Utils } from '../helpers';
@@ -13,45 +13,10 @@ export interface ICalendarDate {date: any, month: number, year: number};
 export default class Calendar extends React.Component<ICalendarDate, {}> {
   _listenerToken: FBEmitter.EventSubscription;
   toggledClass: string = 'hide-header-menu';
-  monthArray: any ;
   rowArray =  ['row1','row2','row3','row4','row5','row6'];
   selectedDate: any;
   count : number = 0;
-
-  constructor(props) {
-    super();
-    this.selectedDate = GAuthStore._getSelectedDate();
-  }
-
-  componentWillMount() {
-    this.monthArray = this.populateValuesByMonth(this.props.month, this.props.year);
-  }
-
-  componentDidMount() {
-    
-  }
-
-  componentWillUnmount() {
-   GAuthStore.removeChangeListener(this._listenerToken);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    
-  }
-
-  _setStateFromStores() {
-  }
-
-  saveToDrive(drive){
-   GAuthStore._saveToGoogleDrive("");
-  }
-
-  populateValuesByMonth(monthNum, year){
-    let firstDate = new Date(year, monthNum);
-    let firstDay = firstDate.getDay();
-    let count = 0;
-
-    let month: any = {
+  monthArray: any = {
       row1: [],
       row2: [],
       row3: [],
@@ -59,6 +24,40 @@ export default class Calendar extends React.Component<ICalendarDate, {}> {
       row5: [],
       row6: []
     };
+  constructor(props) {
+    super();
+    this.selectedDate = GAuthStore._getSelectedDate();
+  }
+
+  componentWillMount() {
+    this.populateValuesByMonth(this.props.month, this.props.year, this.monthArray);
+  }
+
+  shouldComponentUpdate(nextProps: any, nextState: any) {
+    if(this.props.month !== nextProps.month || this.props.year !== nextProps.year ){
+      this.resetMonthArray(this.monthArray);
+      this.populateValuesByMonth(nextProps.month, nextProps.year, this.monthArray);
+      return true;
+    }
+    else if(!Utils.compareDate(this.props.date, nextProps.date)){
+      return true;
+    } 
+    else {
+      return false;
+    }
+  }
+
+  resetMonthArray(month){
+    for(var i=1;i<=6;i++){
+      month['row'+i] = [];
+    }
+  }
+
+  populateValuesByMonth(monthNum, year, month){
+    let firstDate = new Date(year, monthNum);
+    let firstDay = firstDate.getDay();
+    let count = 0;
+    
     let rowArray =  ['row1','row2','row3','row4','row5','row6'];
     for(var i=0; i < rowArray.length; i++){
       for(var j=0; j < 7 ; j++){
@@ -78,7 +77,6 @@ export default class Calendar extends React.Component<ICalendarDate, {}> {
         
       }
     }
-    return month;
   }
 
   toggleClass(){
@@ -91,15 +89,10 @@ export default class Calendar extends React.Component<ICalendarDate, {}> {
   }
 
   render() {
-    var month = this.monthArray;
-    var year = this.props.year;
-    var givenMonth = this.props.month;
-    var givenMonthValue = Utils.getMonth(this.props.month);
-    var key = this.count;
-    var selectedDate = this.props.date;
+    var monthArray = this.monthArray;
     return (
-      <div className="calendar-wrapper" key={key}>
-        <div className="calendar-value">{givenMonthValue+' '+year}</div>
+      <div className="calendar-wrapper">
+        <div className="calendar-value">{ Utils.getMonth(this.props.month)+' '+this.props.year}</div>
         <div className="weekdays">
           <div>SUN</div>
           <div>MON</div>
@@ -111,13 +104,13 @@ export default class Calendar extends React.Component<ICalendarDate, {}> {
         </div>
         {this.rowArray.map(function(rowNum,index){
           return <div key={rowNum+index} className="weekvalues">
-              { month ? month[rowNum].map(function(val,index){
-                let date = new Date(year,givenMonth, val);
+              { monthArray ? monthArray[rowNum].map(function(val,index){
+                let date = new Date(this.props.year, this.props.month, val);
                 if(val === ''){
                   return <div key={'empty'+index} ></div>
                 }
                 else{
-                  return <div className={Utils.compareDate(date ,selectedDate) ? 'selected-date'  : '' } key={'value'+index} onClick={() => {this.handleClick(date)}}>{val}</div>
+                  return <div className={Utils.compareDate(date ,this.props.date) ? 'selected-date'  : '' } key={'value'+index} onClick={() => {this.handleClick(date)}}>{val}</div>
                 }
               }.bind(this)) : <div></div>}
             </div>
