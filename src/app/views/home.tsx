@@ -2,10 +2,11 @@
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { browserHistory } from 'react-router';
 import { AuthActionTypes, ProviderTypes } from '../actions/types';
 import * as AuthActions from '../actions/authActions';
-import GAuthStore from '../stores/gAuthStore'; 
+import GAuthStore from '../stores/gAuthStore';
+
+import browserHistory from '../browserHistory';
 
 export class Home extends React.Component<{}, {}> {
   _listenerToken: FBEmitter.EventSubscription;
