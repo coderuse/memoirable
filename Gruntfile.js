@@ -84,19 +84,28 @@ module.exports = function (grunt) {
         }
       }
     },
+    concat: {
+      options: {
+        separator: ';',
+      },
+      dist: {
+        src: ['./build/vendor/react/react.min.js', './build/vendor/react/react-dom.min.js', './build/bundle.js'],
+        dest: './build/app.js',
+      },
+    },
     connect: {
       options: {
         hostname: '127.0.0.1'
       },
       rules: [
         //Load App under context-root of 'myappcontext/secured'
-        {from: '^/memoirable(.*)$', to: '/$1'},
+        { from: '^/memoirable(.*)$', to: '/$1' },
 
         //Redirect slash to myappcontext/secured as convenience
-        {from: '^/$', to: '/memoirable', redirect: 'permanent'},
+        { from: '^/$', to: '/memoirable', redirect: 'permanent' },
 
         //Send a 404 for anything else
-        {from: '^/.+$', to: '/404'}
+        { from: '^/.+$', to: '/404' }
       ],
       build: {
         options: {
@@ -138,14 +147,14 @@ module.exports = function (grunt) {
       },
       jsChanges: {
         files: ['src/**/*.ts', 'src/**/*.tsx'],
-        tasks: ['webpack']
+        tasks: ['webpack', 'concat']
       }
     }
   });
 
-  grunt.registerTask('default', ['clean', 'copy', 'sass', 'webpack', 'configureRewriteRules', 'connect', 'watch']);
+  grunt.registerTask('default', ['clean', 'copy', 'sass', 'webpack', 'concat', 'configureRewriteRules', 'connect', 'watch']);
 
   grunt.registerTask('styles', ['sass', 'watch:styles']);
 
-  grunt.registerTask('build', ['clean', 'copy', 'sass', 'webpack']);
+  grunt.registerTask('build', ['clean', 'copy', 'sass', 'webpack', 'concat']);
 }
