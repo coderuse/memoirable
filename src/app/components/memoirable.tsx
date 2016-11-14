@@ -2,7 +2,9 @@
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { browserHistory, IndexLink, Link } from 'react-router';
+import { IndexLink, Link } from 'react-router';
+
+import browserHistory from '../browserHistory';
 
 export class MemoirableApp extends React.Component<{}, {}> {
   constructor() {
