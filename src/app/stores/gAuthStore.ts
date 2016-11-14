@@ -13,7 +13,7 @@ import { IAuth } from '../interfaces/auth';
 // https://console.developers.google.com/apis/credentials?project=memoirable
 // https://security.google.com/settings/security/permissions
 class GoogleAuthStore extends BaseStore<IAuth>{
-  _clientId = '185002064279-5b927uofmib8o4q7cch7ae9n0stu9369.apps.googleusercontent.com';
+  _clientId = '797749045300-48asg0koqf5aa9npc40kmch9r754dl87.apps.googleusercontent.com';
   _scopes = ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/plus.me'];
   callback: () => void;
   selectedDate = new Date();

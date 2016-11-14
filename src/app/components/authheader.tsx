@@ -43,7 +43,7 @@ export default class AuthHeader extends React.Component<{}, any> {
     return (
       <header className="auth-header">
         <div className="auth-header-left">
-          <div className="header-logo"><Link to="/"><img src="/logo.png"></img></Link></div>
+          <div className="header-logo"><Link to="/"><img src="/memoirable/logo.png"></img></Link></div>
           <div className="header-title">Memoirable</div>
         </div>
         <div className="auth-header-right" onClick={this.toggleClass.bind(this)}> {this.state.displayName}

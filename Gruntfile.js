@@ -96,12 +96,43 @@ module.exports = function (grunt) {
       options: {
         hostname: '127.0.0.1'
       },
+      rules: [
+        //Load App under context-root of 'myappcontext/secured'
+        {from: '^/memoirable(.*)$', to: '/$1'},
+
+        //Redirect slash to myappcontext/secured as convenience
+        {from: '^/$', to: '/memoirable', redirect: 'permanent'},
+
+        //Send a 404 for anything else
+        {from: '^/.+$', to: '/404'}
+      ],
       build: {
         options: {
           port: portConfig.build,
           base: buildPaths.buildLocation,
           open: {
             target: 'http://127.0.0.1:<%= connect.build.options.port %>'
+          },
+          middleware: function (connect, options) {
+            var middlewares = [];
+
+            // RewriteRules support
+            middlewares.push(rewriteRulesSnippet);
+
+            if (!Array.isArray(options.base)) {
+              options.base = [options.base];
+            }
+
+            var directory = options.directory || options.base[options.base.length - 1];
+            options.base.forEach(function (base) {
+              // Serve static files.
+              middlewares.push(serveStatic(base));
+            });
+
+            // Make directory browse-able.
+            middlewares.push(serveIndex(directory));
+
+            return middlewares;
           }
         }
       }
@@ -120,7 +151,7 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('default', ['clean', 'copy', 'sass', 'webpack', 'concat', 'connect', 'watch']);
+  grunt.registerTask('default', ['clean', 'copy', 'sass', 'webpack', 'concat', 'configureRewriteRules', 'connect', 'watch']);
 
   grunt.registerTask('styles', ['sass', 'watch:styles']);
 
