@@ -45,7 +45,6 @@ export default class AuthHeader extends React.Component<{}, any> {
       <header className="auth-header">
         <div className="auth-header-left">
           <CalendarWrapper></CalendarWrapper>
-          <div className="header-title">Memoirable</div>
         </div>
         <div className="auth-header-right" onClick={this.toggleClass.bind(this)}> {this.state.displayName}
           <div className="dropdown-wrapper">

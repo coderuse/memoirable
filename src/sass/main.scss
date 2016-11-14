@@ -8,7 +8,7 @@
 @import "normalize/import-now";
 $markdown-height: 80vh;
 $header-margin-bottom : 15px;
-
+$calendar-normalizer : 0.8;
 $susy: (
   columns: 8,
   gutters: .05,
@@ -138,12 +138,12 @@ button {
     visibility: visible;
   }
 
-  .header-title{
-    font-size: 30px;
-    font-weight: bold;
-    padding-top: 10px;
-    text-align: center;
-  }
+  // .header-title{
+  //   font-size: 30px;
+  //   font-weight: bold;
+  //   padding-top: 10px;
+  //   text-align: center;
+  // }
 
   .header-logo{
     float: left;
@@ -171,34 +171,34 @@ button {
 }
 .calendar-wrapper{
   float: left;
+  width: 30%;
+  padding: 2px;
   .weekdays{
-    width: 370px;
+    width: 100%;
     overflow: hidden;
-    padding: 5px 5px 0px 15px;
     border-bottom: 3px solid gray;
     div{
       position: relative;
       float: left;
-      width: 50px;
-      height: 50px;
+      width: 14%;
+      height: 14%;
       text-align: center;
-      padding-top: 10px;
-      font-size:18px;
+      padding-top: 0.5emx;
+      font-size:0.8em;
     }
   } 
 
   .weekvalues{
-    width: 370px;
+    width: 100%;
     overflow: hidden;
-    padding: 5px 5px 0px 15px;
     div{
       position: relative;
       float: left;
-      width: 50px;
-      height: 50px;
+      width: 14%;
+      height: 14%;
       text-align: center;
-      padding: 14px;
-      font-size: 18px;
+      padding: 0.6em;
+      font-size: 0.8em;
     }
 
     .selected-date {
@@ -218,9 +218,9 @@ button {
   }
 }
 
-.calendar-wrapper{
+.calendar-wrapper-head{
   position: relative;
-
+  
   div.selected-date-div {
     font-size: 20px;
     font-weight: bold;
@@ -230,21 +230,26 @@ button {
   .wrapper{
     z-index: 1000;
     position: absolute;
-    overflow: hidden;
-    width: 85vw;
-    padding: 0 8%;
-    left: 50%;
+    width: 85%;
+    left: 7%;
     background: wheat;
-    
+    min-width: 740px;
+    overflow: auto;
+    padding: 10px;
+
     .memocon-left-arrow {
       float: left;
-      padding-top: 18%;
+      padding-top: 135px;
+      height: 276px;
+      padding-left: 10px;
+      width: 5%;
     }
 
     .memocon-right-arrow {
       float: left;
-      padding-top: 18%;
-      margin-left: 1%;
+      padding-top: 135px;
+      height: 276px;
+      width:5%;
     }
   }
 
