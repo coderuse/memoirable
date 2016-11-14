@@ -5907,7 +5907,7 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	var history_1 = __webpack_require__(68);
 	var react_router_1 = __webpack_require__(3);
 	var browserHistory = react_router_1.useRouterHistory(history_1.createHistory)({
-	    basename: '/'
+	    basename: '/memoirable'
 	});
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.default = browserHistory;
@@ -7187,7 +7187,7 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	                displayName: ''
 	            };
 	        });
-	        this._clientId = '185002064279-5b927uofmib8o4q7cch7ae9n0stu9369.apps.googleusercontent.com';
+	        this._clientId = '797749045300-48asg0koqf5aa9npc40kmch9r754dl87.apps.googleusercontent.com';
 	        this._scopes = ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/plus.me'];
 	        this.selectedDate = new Date();
 	    }
@@ -35493,7 +35493,7 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	        this.setState({ 'name': 'button-state-changed' });
 	    };
 	    AuthHeader.prototype.render = function () {
-	        return (React.createElement("header", {className: "auth-header"}, React.createElement("div", {className: "auth-header-left"}, React.createElement("div", {className: "header-logo"}, React.createElement(react_router_1.Link, {to: "/"}, React.createElement("img", {src: "/logo.png"}))), React.createElement("div", {className: "header-title"}, "Memoirable")), React.createElement("div", {className: "auth-header-right", onClick: this.toggleClass.bind(this)}, " ", this.state.displayName, React.createElement("div", {className: "dropdown-wrapper"}, React.createElement("button", {id: "savetodrive", className: this.toggledClass, type: "button", onClick: this.saveToDrive.bind(this, 'google')}, "Create Initial Structure")))));
+	        return (React.createElement("header", {className: "auth-header"}, React.createElement("div", {className: "auth-header-left"}, React.createElement("div", {className: "header-logo"}, React.createElement(react_router_1.Link, {to: "/"}, React.createElement("img", {src: "/memoirable/logo.png"}))), React.createElement("div", {className: "header-title"}, "Memoirable")), React.createElement("div", {className: "auth-header-right", onClick: this.toggleClass.bind(this)}, " ", this.state.displayName, React.createElement("div", {className: "dropdown-wrapper"}, React.createElement("button", {id: "savetodrive", className: this.toggledClass, type: "button", onClick: this.saveToDrive.bind(this, 'google')}, "Create Initial Structure")))));
 	    };
 	    return AuthHeader;
 	}(React.Component));
