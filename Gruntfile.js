@@ -111,7 +111,7 @@ module.exports = function (grunt) {
           port: portConfig.build,
           base: buildPaths.buildLocation,
           open: {
-            target: 'http://127.0.0.1:<%= connect.build.options.port %>'
+            target: 'http://127.0.0.1:<%= connect.build.options.port %>/memoirable'
           },
           middleware: function (connect, options) {
             var middlewares = [];
