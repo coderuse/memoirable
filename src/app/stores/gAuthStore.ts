@@ -14,13 +14,16 @@ import { IAuth } from '../interfaces/auth';
 // https://security.google.com/settings/security/permissions
 class GoogleAuthStore extends BaseStore<IAuth>{
   _clientId = '797749045300-48asg0koqf5aa9npc40kmch9r754dl87.apps.googleusercontent.com';
-  _scopes = ['https://www.googleapis.com/auth/drive.appdata', 'https://www.googleapis.com/auth/plus.me'];
+  _scopes = ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/plus.me'];
   callback: () => void;
   selectedDate = new Date();
   folderIds = {
     'Memoirable': '',
-    'Entries': ''
+    'Entries': '',
+    'currentFolderId': ''
   }
+  currentFolderIdInUse: string;
+
   _authorize(immediate: boolean, event: AppEvent) {
 
     gapi.auth.authorize(
@@ -76,12 +79,14 @@ class GoogleAuthStore extends BaseStore<IAuth>{
   _createInitialFolderStructure(event: AppEvent, folderIds){
     var that = this;
     gapi.client.load('drive','v3', function(){
+
       gapi.client.drive.files.list({
         q: "mimeType='application/vnd.google-apps.folder' and name='Memoirable' or name='Entries'",
         fields: 'files(id, name)',
         spaces: 'appDataFolder'
       }).then( function (response) {
-        console.log(response.result.files);
+
+        // check whether the initial structure is present or not 
         if(response.result.files.length !== 0){
           response.result.files.forEach( function( item, index){
             if(item.name === 'Memoirable'){
@@ -91,15 +96,18 @@ class GoogleAuthStore extends BaseStore<IAuth>{
               folderIds['Entries'] = item.id;
             }
           });
+
+          // create a folder for the current date in the format (yyyy/mm/dd) if it does not exists
           let date = new Date();
-          console.log("meow");
           that._createFolderIfNotExistent({
-            name : date.getFullYear(),
-            parent : folderIds['Entries'],
-            next : date.getMonth()
-          })
+            name : date.getFullYear()+"."+date.getMonth()+"."+date.getDate(),
+            parent : folderIds['Entries']
+          });
+
         }
         else {
+
+          // Initial Structure not present , create Memoirable and Entries Inside Memoirable folder
           let data = {
               name : 'Memoirable',
               mimeType: 'application/vnd.google-apps.folder',
@@ -145,40 +153,21 @@ class GoogleAuthStore extends BaseStore<IAuth>{
         fields: 'files(id, name)',
         spaces: 'appDataFolder'
       }).then( function (response) {
-        let next = new Date().getDate();
         if(response.result.files.length === 0){
           that._createFolder(data).then( function(response){
-            if(data.next){
-              if( data.next === next) {
-                that._createFolderIfNotExistent({
-                  name: data.next,
-                  parent: response.result.id,
-                  next: ''
-                });
-              }
-              else {
-                that._createFolderIfNotExistent({
-                  name: data.next,
-                  parent: response.result.id,
-                  next: next
-                });
-              }
-              
-            }
-            
+            this.currentFolderIdInUse = response.result.id;
+            this.folderIds['currentFolderId'] = response.result.id;
           }, function(reason){
 
           })
         }
         else{
-          that._createFolderIfNotExistent({
-            name: next,
-            parent: response.result.files[0].id,
-            next: ''
-          });
+          console.log("folder exists");
+          this.currentFolderIdInUse = response.result.files[0].id;
+          this.folderIds['currentFolderId'] = response.result.files[0].id;
         }
-      });
-    });
+      }.bind(this));
+    }.bind(this));
   }
 
   _requestForFolderGoogleDrive(data){
@@ -187,6 +176,102 @@ class GoogleAuthStore extends BaseStore<IAuth>{
       'method' : 'POST',
       'body': data
     })
+  }
+
+  _createFileUsingParentId(data){
+    
+    var that = this;
+    //let currentFolderID = this.currentFolderIdInUse;
+    gapi.client.load('drive','v3', function(){
+      // gapi.client.drive.files.list({
+      //   q: "mimeType='text/plain' and "+"'"+ currentFolderID +"'"+ " in parents",
+      //   fields: 'files(id, name)',
+      //   spaces: 'appDataFolder'
+      // }).then( function (response) {
+      //    console.log(response);
+        
+      //   gapi.client.drive.files.create({
+      //     uploadType: 'media',
+      //     resource: {
+      //       mimeType: 'text/plain',
+      //       spaces: ['appDataFolder'],
+      //       parents: [ that.currentFolderIdInUse],
+      //       name: '1_',
+      //       appProperties : {
+      //         data: JSON.stringify(data)
+      //       }
+      //     }
+      //   }).then(function(response){
+      //     console.log(response);
+      //   } ,  function(reason) {
+
+      //   });
+      // });
+
+
+      gapi.client.request({
+        'path': 'upload/drive/v3/files',
+        'method' : 'POST',
+        'params' : {
+          uploadType: 'multipart'
+        },
+        'body':
+        {
+                  name : 'Chabaskardaraye',
+                  parents: [this.folderIds['currentFolderId']],
+                  spaces: ['appDataFolder'],
+                  appProperties: {
+                    'data': JSON.stringify(data)
+                  }
+                }
+      }).then(function(res){
+        console.log(res);
+      },function(r){})
+
+      this._getCurrentFile(data)
+
+
+    }.bind(this));
+
+    
+
+    
+
+  }
+
+  _getCurrentFile(data){
+    var date = new Date();
+    var folderIds =  this.folderIds;
+    console.log(folderIds);
+    var dateVal = date.getFullYear()+"."+date.getMonth()+"."+date.getDate();
+      gapi.client.drive.files.list({
+        q: "'"+this.folderIds['currentFolderId']+"'"+" in parents",
+        fields: 'files(id, name, parents)',
+        spaces: 'appDataFolder'
+      }).then( function (response) {
+         console.log(response);
+
+
+        
+
+        // gapi.client.drive.files.create({
+        //   uploadType: 'media',
+        //   resource: {
+        //     mimeType: 'text/plain',
+        //     spaces: ['appDataFolder'],
+        //     parents: [folderIds['currentFolderId']],
+        //     name: '1_',
+        //     appProperties : {
+        //       data: JSON.stringify(data)
+        //     }
+        //   }
+        // }).then(function(response){
+        //   console.log(response);
+        // } ,  function(reason) {
+
+        // });
+      
+      })
   }
 
   _getSelectedDate(){

@@ -46,6 +46,8 @@ export default class Markdown extends React.Component<{}, any> {
     editor.on('change',function(e){
       this.inputText = editor.getValue();
       this.setState({value: this.inputText});
+
+      GAuthStore._createFileUsingParentId(this.inputText);
     }.bind(this));
   }
 
