@@ -5,6 +5,7 @@ import * as ReactDOM from 'react-dom';
 import { browserHistory, IndexLink, Link } from 'react-router';
 import { AuthActionTypes, ProviderTypes } from '../actions/types';
 import * as AuthActions from '../actions/authActions';
+import CalendarWrapper from '../components/calendarwrapper';
 import GAuthStore from '../stores/gAuthStore';
 
 
@@ -43,8 +44,7 @@ export default class AuthHeader extends React.Component<{}, any> {
     return (
       <header className="auth-header">
         <div className="auth-header-left">
-          <div className="header-logo"><Link to="/"><img src="./logo.png"></img></Link></div>
-          <div className="header-title">Memoirable</div>
+          <CalendarWrapper></CalendarWrapper>
         </div>
         <div className="auth-header-right" onClick={this.toggleClass.bind(this)}> {this.state.displayName}
           <div className="dropdown-wrapper">
@@ -55,4 +55,3 @@ export default class AuthHeader extends React.Component<{}, any> {
     );
   }
 }
-
