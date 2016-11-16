@@ -2,7 +2,9 @@
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Router, Route, browserHistory, IndexRoute, Link } from 'react-router';
+import { Router, Route, IndexRoute } from 'react-router';
+
+import browserHistory from './browserHistory';
 
 import { MemoirableApp } from './components/memoirable';
 import { Home } from './views/home';
