@@ -6,9 +6,9 @@
 @import "_mixins";
 
 @import "normalize/import-now";
-$markdown-height: 60vh;
+$markdown-height: 80vh;
 $header-margin-bottom : 15px;
-
+$calendar-normalizer : 0.8;
 $susy: (
   columns: 8,
   gutters: .05,
@@ -138,12 +138,12 @@ button {
     visibility: visible;
   }
 
-  .header-title{
-    font-size: 30px;
-    font-weight: bold;
-    padding-top: 10px;
-    text-align: center;
-  }
+  // .header-title{
+  //   font-size: 30px;
+  //   font-weight: bold;
+  //   padding-top: 10px;
+  //   text-align: center;
+  // }
 
   .header-logo{
     float: left;
@@ -170,37 +170,41 @@ button {
   }
 }
 .calendar-wrapper{
-  margin: 10px;
   float: left;
+  width: 30%;
+  padding: 2px;
   .weekdays{
-    width: 370px;
+    width: 100%;
     overflow: hidden;
-    padding: 5px 5px 0px 15px;
     border-bottom: 3px solid gray;
     div{
       position: relative;
       float: left;
-      width: 50px;
-      height: 40px;
+      width: 14%;
+      height: 14%;
       text-align: center;
-      padding-top: 10px;
+      padding-top: 0.5emx;
+      font-size:0.8em;
     }
   } 
 
   .weekvalues{
-    width: 370px;
+    width: 100%;
     overflow: hidden;
-    padding: 5px 5px 0px 15px;
     div{
       position: relative;
       float: left;
-      width: 50px;
-      height: 40px;
+      width: 14%;
+      height: 14%;
       text-align: center;
+      padding: 0.6em;
+      font-size: 0.8em;
     }
 
     .selected-date {
-      background-color: blue;
+      background-color: #124680;
+      color: white;
+      border-radius: 50%;
     }
 
   }
@@ -209,22 +213,47 @@ button {
     text-align: center;
     padding: 10px;
     border-bottom: 3px solid gray;
+    font-weight: bold;
+    font-size: 20px;
   }
 }
 
-.wrapper{
-  overflow: hidden;
-  width: 100%;
-  padding: 0 8%;
+.calendar-wrapper-head{
+  position: relative;
   
-  .memocon-left-arrow {
-    float: left;
-    padding-top: 18%;
+  div.selected-date-div {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 12px;
   }
 
-  .memocon-right-arrow {
-    float: left;
-    padding-top: 18%;
-    margin-left: 1%;
+  .wrapper{
+    z-index: 1000;
+    position: absolute;
+    width: 85%;
+    left: 7%;
+    background: wheat;
+    min-width: 740px;
+    overflow: auto;
+    padding: 10px;
+
+    .memocon-left-arrow {
+      float: left;
+      padding-top: 135px;
+      height: 276px;
+      padding-left: 10px;
+      width: 5%;
+    }
+
+    .memocon-right-arrow {
+      float: left;
+      padding-top: 135px;
+      height: 276px;
+      width:5%;
+    }
+  }
+
+  .hide-wrapper{
+    display: none;
   }
 }
