@@ -681,14 +681,14 @@ button:disabled:focus {
   border-right: 1px solid grey;
   position: relative;
   display: inline-block;
-  height: 60vh;
+  height: 80vh;
 }
 .row .markdown-left textarea.mardown-textarea {
   width: 100%;
   float: left;
   margin-left: 0;
   margin-right: 0;
-  height: 60vh;
+  height: 80vh;
   resize: none;
   overflow: auto;
   border: none;
@@ -710,14 +710,14 @@ button:disabled:focus {
   float: left;
   margin-left: 0;
   margin-right: 0;
-  height: 60vh;
+  height: 80vh;
   overflow: auto;
 }
 .row .main-content-left {
   width: 9.46108%;
   float: left;
   margin-right: 0.5988%;
-  height: 60vh;
+  height: 80vh;
 }
 .row .main-content-right {
   width: 87.42515%;
@@ -726,7 +726,7 @@ button:disabled:focus {
 }
 
 #editor {
-  height: 60vh;
+  height: 80vh;
 }
 
 .backdrop {
@@ -788,12 +788,6 @@ button:disabled:focus {
 .auth-header .show-header-menu {
   visibility: visible;
 }
-.auth-header .header-title {
-  font-size: 30px;
-  font-weight: bold;
-  padding-top: 10px;
-  text-align: center;
-}
 .auth-header .header-logo {
   float: left;
   margin-left: 20px;
@@ -818,55 +812,81 @@ button:disabled:focus {
 }
 
 .calendar-wrapper {
-  margin: 10px;
   float: left;
+  width: 30%;
+  padding: 2px;
 }
 .calendar-wrapper .weekdays {
-  width: 370px;
+  width: 100%;
   overflow: hidden;
-  padding: 5px 5px 0px 15px;
   border-bottom: 3px solid gray;
 }
 .calendar-wrapper .weekdays div {
   position: relative;
   float: left;
-  width: 50px;
-  height: 40px;
+  width: 14%;
+  height: 14%;
   text-align: center;
-  padding-top: 10px;
+  padding-top: 0.5emx;
+  font-size: 0.8em;
 }
 .calendar-wrapper .weekvalues {
-  width: 370px;
+  width: 100%;
   overflow: hidden;
-  padding: 5px 5px 0px 15px;
 }
 .calendar-wrapper .weekvalues div {
   position: relative;
   float: left;
-  width: 50px;
-  height: 40px;
+  width: 14%;
+  height: 14%;
   text-align: center;
+  padding: 0.6em;
+  font-size: 0.8em;
 }
 .calendar-wrapper .weekvalues .selected-date {
-  background-color: blue;
+  background-color: #124680;
+  color: white;
+  border-radius: 50%;
 }
 .calendar-wrapper .calendar-value {
   text-align: center;
   padding: 10px;
   border-bottom: 3px solid gray;
+  font-weight: bold;
+  font-size: 20px;
 }
 
-.wrapper {
-  overflow: hidden;
-  width: 100%;
-  padding: 0 8%;
+.calendar-wrapper-head {
+  position: relative;
 }
-.wrapper .memocon-left-arrow {
-  float: left;
-  padding-top: 18%;
+.calendar-wrapper-head div.selected-date-div {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 12px;
 }
-.wrapper .memocon-right-arrow {
+.calendar-wrapper-head .wrapper {
+  z-index: 1000;
+  position: absolute;
+  width: 85%;
+  left: 7%;
+  background: wheat;
+  min-width: 740px;
+  overflow: auto;
+  padding: 10px;
+}
+.calendar-wrapper-head .wrapper .memocon-left-arrow {
   float: left;
-  padding-top: 18%;
-  margin-left: 1%;
+  padding-top: 135px;
+  height: 276px;
+  padding-left: 10px;
+  width: 5%;
+}
+.calendar-wrapper-head .wrapper .memocon-right-arrow {
+  float: left;
+  padding-top: 135px;
+  height: 276px;
+  width: 5%;
+}
+.calendar-wrapper-head .hide-wrapper {
+  display: none;
 }

@@ -6163,10 +6163,10 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(1);
+	var browserHistory_1 = __webpack_require__(67);
 	var types_1 = __webpack_require__(74);
 	var AuthActions = __webpack_require__(75);
 	var gAuthStore_1 = __webpack_require__(88);
-	var browserHistory_1 = __webpack_require__(67);
 	var Home = (function (_super) {
 	    __extends(Home, _super);
 	    function Home() {
@@ -7330,7 +7330,6 @@
 	var AuthActions = __webpack_require__(75);
 	var markdown_1 = __webpack_require__(91);
 	var authheader_1 = __webpack_require__(124);
-	var calendarwrapper_1 = __webpack_require__(125);
 	var gAuthStore_1 = __webpack_require__(88);
 	var Dashboard = (function (_super) {
 	    __extends(Dashboard, _super);
@@ -7350,7 +7349,7 @@
 	        this.setState(gAuthStore_1.default.getState());
 	    };
 	    Dashboard.prototype.render = function () {
-	        return (React.createElement("div", {className: "row"}, React.createElement(authheader_1.default, null), React.createElement("div", {className: "row"}, React.createElement("div", {className: "main-content-left"}, " "), React.createElement("div", {className: "main-content-right"}, React.createElement(markdown_1.default, null))), React.createElement("div", {className: "row"}, React.createElement(calendarwrapper_1.default, null))));
+	        return (React.createElement("div", null, React.createElement("div", {className: "row"}, React.createElement(authheader_1.default, null)), React.createElement("div", {className: "row"}, React.createElement("div", {className: "main-content-right"}, React.createElement(markdown_1.default, null)))));
 	    };
 	    return Dashboard;
 	}(React.Component));
@@ -35437,9 +35436,9 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(1);
-	var react_router_1 = __webpack_require__(3);
 	var types_1 = __webpack_require__(74);
 	var AuthActions = __webpack_require__(75);
+	var calendarwrapper_1 = __webpack_require__(125);
 	var gAuthStore_1 = __webpack_require__(88);
 	var AuthHeader = (function (_super) {
 	    __extends(AuthHeader, _super);
@@ -35467,7 +35466,7 @@
 	        this.setState({ 'name': 'button-state-changed' });
 	    };
 	    AuthHeader.prototype.render = function () {
-	        return (React.createElement("header", {className: "auth-header"}, React.createElement("div", {className: "auth-header-left"}, React.createElement("div", {className: "header-logo"}, React.createElement(react_router_1.Link, {to: "/"}, React.createElement("img", {src: "./logo.png"}))), React.createElement("div", {className: "header-title"}, "Memoirable")), React.createElement("div", {className: "auth-header-right", onClick: this.toggleClass.bind(this)}, " ", this.state.displayName, React.createElement("div", {className: "dropdown-wrapper"}, React.createElement("button", {id: "savetodrive", className: this.toggledClass, type: "button", onClick: this.saveToDrive.bind(this, 'google')}, "Create Initial Structure")))));
+	        return (React.createElement("header", {className: "auth-header"}, React.createElement("div", {className: "auth-header-left"}, React.createElement(calendarwrapper_1.default, null)), React.createElement("div", {className: "auth-header-right", onClick: this.toggleClass.bind(this)}, " ", this.state.displayName, React.createElement("div", {className: "dropdown-wrapper"}, React.createElement("button", {id: "savetodrive", className: this.toggledClass, type: "button", onClick: this.saveToDrive.bind(this, 'google')}, "Create Initial Structure")))));
 	    };
 	    return AuthHeader;
 	}(React.Component));
@@ -35495,6 +35494,7 @@
 	    function CalendarWrapper() {
 	        _super.call(this);
 	        this.count = 1;
+	        this.wrapperToggledClass = 'hide-wrapper';
 	        var dateFromStore = gAuthStore_1.default._getSelectedDate();
 	        this.state = { date: dateFromStore, month: dateFromStore.getMonth(), year: dateFromStore.getFullYear() };
 	    }
@@ -35502,7 +35502,7 @@
 	        this._listenerToken = gAuthStore_1.default.addChangeListener(types_1.AuthActionTypes.CALENDAR_DATE_CHANGED, function () {
 	            this.setState({ date: gAuthStore_1.default._getSelectedDate() });
 	        }.bind(this));
-	        this.monthsArray = this.get3MonthsArray();
+	        this.monthsArray = this.get3MonthsArray(this.state.date.getMonth(), this.state.date.getFullYear());
 	    };
 	    CalendarWrapper.prototype.componentWillUnmount = function () {
 	        gAuthStore_1.default.removeChangeListener(this._listenerToken);
@@ -35512,6 +35512,9 @@
 	            return true;
 	        }
 	        else if (this.state.month !== nextState.month || this.state.year !== nextState.year) {
+	            return true;
+	        }
+	        else if (nextState.wrapperstate && nextState.wrapperstate === 'wrapper-toggled') {
 	            return true;
 	        }
 	        else {
@@ -35539,14 +35542,11 @@
 	                month = month + 1;
 	            }
 	        }
-	        console.log('testing');
+	        this.monthsArray = this.get3MonthsArray(month, year);
 	        this.setState({ month: month, year: year });
-	        this.monthsArray = this.get3MonthsArray();
 	    };
-	    CalendarWrapper.prototype.get3MonthsArray = function () {
+	    CalendarWrapper.prototype.get3MonthsArray = function (month, year) {
 	        var monthsArray = [];
-	        var month = this.state.month;
-	        var year = this.state.year;
 	        if (month === 0) {
 	            monthsArray.push({ month: 11, year: year - 1 });
 	            monthsArray.push({ month: 0, year: year });
@@ -35564,9 +35564,20 @@
 	        }
 	        return monthsArray;
 	    };
+	    CalendarWrapper.prototype.toggleCalendar = function () {
+	        console.log("toggle called");
+	        if (this.wrapperToggledClass === 'hide-wrapper') {
+	            this.wrapperToggledClass = 'wrapper';
+	        }
+	        else {
+	            this.wrapperToggledClass = 'hide-wrapper';
+	        }
+	        this.setState({
+	            wrapperstate: 'wrapper-toggled'
+	        });
+	    };
 	    CalendarWrapper.prototype.render = function () {
-	        console.log("render called");
-	        return (React.createElement("div", {className: "wrapper"}, React.createElement("div", {className: "memocon-left-arrow", onClick: this.arrowClickHandler.bind(this, 'left')}), React.createElement("div", {className: "selected-date"}), React.createElement(calendar_1.default, {date: this.state.date, month: this.monthsArray[0].month, year: this.monthsArray[0].year}), React.createElement(calendar_1.default, {date: this.state.date, month: this.monthsArray[1].month, year: this.monthsArray[1].year}), React.createElement(calendar_1.default, {date: this.state.date, month: this.monthsArray[2].month, year: this.monthsArray[2].year}), React.createElement("div", {className: "memocon-right-arrow", onClick: this.arrowClickHandler.bind(this, 'right')})));
+	        return (React.createElement("div", {className: "calendar-wrapper-head"}, React.createElement("div", {className: "selected-date-div", onClick: this.toggleCalendar.bind(this)}, this.state.date.toDateString(), " "), React.createElement("div", {className: this.wrapperToggledClass}, React.createElement("div", {className: "memocon-left-arrow", onClick: this.arrowClickHandler.bind(this, 'left')}), React.createElement("div", {className: "selected-date"}), React.createElement(calendar_1.default, {date: this.state.date, month: this.monthsArray[0].month, year: this.monthsArray[0].year}), React.createElement(calendar_1.default, {date: this.state.date, month: this.monthsArray[1].month, year: this.monthsArray[1].year}), React.createElement(calendar_1.default, {date: this.state.date, month: this.monthsArray[2].month, year: this.monthsArray[2].year}), React.createElement("div", {className: "memocon-right-arrow", onClick: this.arrowClickHandler.bind(this, 'right')}))));
 	    };
 	    return CalendarWrapper;
 	}(React.Component));
@@ -35598,28 +35609,7 @@
 	        this.toggledClass = 'hide-header-menu';
 	        this.rowArray = ['row1', 'row2', 'row3', 'row4', 'row5', 'row6'];
 	        this.count = 0;
-	        this.selectedDate = gAuthStore_1.default._getSelectedDate();
-	    }
-	    Calendar.prototype.componentWillMount = function () {
-	        this.monthArray = this.populateValuesByMonth(this.props.month, this.props.year);
-	    };
-	    Calendar.prototype.componentDidMount = function () {
-	    };
-	    Calendar.prototype.componentWillUnmount = function () {
-	        gAuthStore_1.default.removeChangeListener(this._listenerToken);
-	    };
-	    Calendar.prototype.componentWillReceiveProps = function (nextProps) {
-	    };
-	    Calendar.prototype._setStateFromStores = function () {
-	    };
-	    Calendar.prototype.saveToDrive = function (drive) {
-	        gAuthStore_1.default._saveToGoogleDrive("");
-	    };
-	    Calendar.prototype.populateValuesByMonth = function (monthNum, year) {
-	        var firstDate = new Date(year, monthNum);
-	        var firstDay = firstDate.getDay();
-	        var count = 0;
-	        var month = {
+	        this.monthArray = {
 	            row1: [],
 	            row2: [],
 	            row3: [],
@@ -35627,6 +35617,33 @@
 	            row5: [],
 	            row6: []
 	        };
+	        this.selectedDate = gAuthStore_1.default._getSelectedDate();
+	    }
+	    Calendar.prototype.componentWillMount = function () {
+	        this.populateValuesByMonth(this.props.month, this.props.year, this.monthArray);
+	    };
+	    Calendar.prototype.shouldComponentUpdate = function (nextProps, nextState) {
+	        if (this.props.month !== nextProps.month || this.props.year !== nextProps.year) {
+	            this.resetMonthArray(this.monthArray);
+	            this.populateValuesByMonth(nextProps.month, nextProps.year, this.monthArray);
+	            return true;
+	        }
+	        else if (!helpers_1.Utils.compareDate(this.props.date, nextProps.date)) {
+	            return true;
+	        }
+	        else {
+	            return false;
+	        }
+	    };
+	    Calendar.prototype.resetMonthArray = function (month) {
+	        for (var i = 1; i <= 6; i++) {
+	            month['row' + i] = [];
+	        }
+	    };
+	    Calendar.prototype.populateValuesByMonth = function (monthNum, year, month) {
+	        var firstDate = new Date(year, monthNum);
+	        var firstDay = firstDate.getDay();
+	        var count = 0;
 	        var rowArray = ['row1', 'row2', 'row3', 'row4', 'row5', 'row6'];
 	        for (var i = 0; i < rowArray.length; i++) {
 	            for (var j = 0; j < 7; j++) {
@@ -35644,7 +35661,6 @@
 	                }
 	            }
 	        }
-	        return month;
 	    };
 	    Calendar.prototype.toggleClass = function () {
 	        this.toggledClass = this.toggledClass === 'hide-header-menu' ? 'show-header-menu' : 'hide-header-menu';
@@ -35654,21 +35670,16 @@
 	        AuthActions.calendarDateChanged({ provider: types_1.ProviderTypes.GOOGLE, date: date });
 	    };
 	    Calendar.prototype.render = function () {
-	        var month = this.monthArray;
-	        var year = this.props.year;
-	        var givenMonth = this.props.month;
-	        var givenMonthValue = helpers_1.Utils.getMonth(this.props.month);
-	        var key = this.count;
-	        var selectedDate = this.props.date;
-	        return (React.createElement("div", {className: "calendar-wrapper", key: key}, React.createElement("div", {className: "calendar-value"}, givenMonthValue + ' ' + year), React.createElement("div", {className: "weekdays"}, React.createElement("div", null, "SUN"), React.createElement("div", null, "MON"), React.createElement("div", null, "TUE"), React.createElement("div", null, "WED"), React.createElement("div", null, "THU"), React.createElement("div", null, "FRI"), React.createElement("div", null, "SAT")), this.rowArray.map(function (rowNum, index) {
-	            return React.createElement("div", {key: rowNum + index, className: "weekvalues"}, month ? month[rowNum].map(function (val, index) {
+	        var monthArray = this.monthArray;
+	        return (React.createElement("div", {className: "calendar-wrapper"}, React.createElement("div", {className: "calendar-value"}, helpers_1.Utils.getMonth(this.props.month) + ' ' + this.props.year), React.createElement("div", {className: "weekdays"}, React.createElement("div", null, "SUN"), React.createElement("div", null, "MON"), React.createElement("div", null, "TUE"), React.createElement("div", null, "WED"), React.createElement("div", null, "THU"), React.createElement("div", null, "FRI"), React.createElement("div", null, "SAT")), this.rowArray.map(function (rowNum, index) {
+	            return React.createElement("div", {key: rowNum + index, className: "weekvalues"}, monthArray ? monthArray[rowNum].map(function (val, index) {
 	                var _this = this;
-	                var date = new Date(year, givenMonth, val);
+	                var date = new Date(this.props.year, this.props.month, val);
 	                if (val === '') {
 	                    return React.createElement("div", {key: 'empty' + index});
 	                }
 	                else {
-	                    return React.createElement("div", {className: helpers_1.Utils.compareDate(date, selectedDate) ? 'selected-date' : '', key: 'value' + index, onClick: function () { _this.handleClick(date); }}, val);
+	                    return React.createElement("div", {className: helpers_1.Utils.compareDate(date, this.props.date) ? 'selected-date' : '', key: 'value' + index, onClick: function () { _this.handleClick(date); }}, val);
 	                }
 	            }.bind(this)) : React.createElement("div", null));
 	        }.bind(this))));
