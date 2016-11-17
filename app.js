@@ -7551,7 +7551,7 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	            vScrollBarAlwaysVisible: true
 	        });
 	        //editor.getSession().setMode('ace/mode/markdown');
-	        //editor.setTheme('ace/theme/textmate');
+	        //editor.setTheme('ace/theme/chaos');
 	        editor.setValue(this.state.inputText);
 	        editor.on('change', function (e) {
 	            this.setState({ inputText: editor.getValue() });

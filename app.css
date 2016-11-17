@@ -700,6 +700,14 @@ button:disabled:focus {
   height: 100%;
 }
 
+.ace-tm {
+  color: #545454 !important;
+}
+
+.ace-tm .ace_cursor {
+  color: #545454 !important;
+}
+
 .markdown {
   width: 49.7006%;
   float: left;
@@ -708,7 +716,7 @@ button:disabled:focus {
   position: absolute;
   bottom: 0;
   top: 45px;
-  color: #444444;
+  color: #545454;
   display: inline-block;
   background-color: #fcfcfc;
 }
