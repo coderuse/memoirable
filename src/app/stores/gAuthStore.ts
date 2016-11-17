@@ -14,7 +14,7 @@ import { IAuth } from '../interfaces/auth';
 // https://security.google.com/settings/security/permissions
 class GoogleAuthStore extends BaseStore<IAuth>{
   _clientId = '797749045300-48asg0koqf5aa9npc40kmch9r754dl87.apps.googleusercontent.com';
-  _scopes = ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/plus.me'];
+  _scopes = ['https://www.googleapis.com/auth/drive.appdata', 'https://www.googleapis.com/auth/plus.me'];
   callback: () => void;
   selectedDate = new Date();
   folderIds = {
@@ -22,6 +22,7 @@ class GoogleAuthStore extends BaseStore<IAuth>{
     'Entries': '',
     'currentFolderId': ''
   }
+  currentFileId: string;
   currentFolderIdInUse: string;
 
   _authorize(immediate: boolean, event: AppEvent) {
@@ -157,12 +158,16 @@ class GoogleAuthStore extends BaseStore<IAuth>{
           that._createFolder(data).then( function(response){
             this.currentFolderIdInUse = response.result.id;
             this.folderIds['currentFolderId'] = response.result.id;
+
+
+            //this._createOrUpdateFile()
           }, function(reason){
 
           })
         }
         else{
-          console.log("folder exists");
+          
+          this._createOrUpdateFile(response.result.files[0].id,response.result.files[0].name, "");
           this.currentFolderIdInUse = response.result.files[0].id;
           this.folderIds['currentFolderId'] = response.result.files[0].id;
         }
@@ -178,102 +183,73 @@ class GoogleAuthStore extends BaseStore<IAuth>{
     })
   }
 
-  _createFileUsingParentId(data){
-    
-    var that = this;
-    //let currentFolderID = this.currentFolderIdInUse;
-    gapi.client.load('drive','v3', function(){
-      // gapi.client.drive.files.list({
-      //   q: "mimeType='text/plain' and "+"'"+ currentFolderID +"'"+ " in parents",
-      //   fields: 'files(id, name)',
-      //   spaces: 'appDataFolder'
-      // }).then( function (response) {
-      //    console.log(response);
-        
-      //   gapi.client.drive.files.create({
-      //     uploadType: 'media',
-      //     resource: {
-      //       mimeType: 'text/plain',
-      //       spaces: ['appDataFolder'],
-      //       parents: [ that.currentFolderIdInUse],
-      //       name: '1_',
-      //       appProperties : {
-      //         data: JSON.stringify(data)
-      //       }
-      //     }
-      //   }).then(function(response){
-      //     console.log(response);
-      //   } ,  function(reason) {
-
-      //   });
-      // });
-
-
-      gapi.client.request({
-        'path': 'upload/drive/v3/files',
-        'method' : 'POST',
-        'params' : {
-          uploadType: 'multipart'
-        },
-        'body':
-        {
-                  name : 'Chabaskardaraye',
-                  parents: [this.folderIds['currentFolderId']],
-                  spaces: ['appDataFolder'],
-                  appProperties: {
-                    'data': JSON.stringify(data)
-                  }
-                }
-      }).then(function(res){
-        console.log(res);
-      },function(r){})
-
-      this._getCurrentFile(data)
-
-
-    }.bind(this));
-
-    
-
-    
-
-  }
-
-  _getCurrentFile(data){
+  _createOrUpdateFile(parentId, parentName, data) {
+    var parentId = parentId.length > 0 ? parentId : this.currentFolderIdInUse;
     var date = new Date();
-    var folderIds =  this.folderIds;
-    console.log(folderIds);
-    var dateVal = date.getFullYear()+"."+date.getMonth()+"."+date.getDate();
-      gapi.client.drive.files.list({
-        q: "'"+this.folderIds['currentFolderId']+"'"+" in parents",
-        fields: 'files(id, name, parents)',
-        spaces: 'appDataFolder'
-      }).then( function (response) {
-         console.log(response);
+    var parentName = parentName.length > 0 ? parentName :  date.getFullYear()+"."+date.getMonth()+"."+date.getDate();
 
+    var filename = parentName+".1"+".md";
+    var file = new File([data.toString()], filename, {type: "text/markdown",})
+    var fileId = this.currentFileId ? this.currentFileId : '';
+    this._insertOrUpdateFile(file, parentId, filename, fileId);
+  } 
 
-        
+  _insertOrUpdateFile(fileData, folderId?, filename?, fileId?){
 
-        // gapi.client.drive.files.create({
-        //   uploadType: 'media',
-        //   resource: {
-        //     mimeType: 'text/plain',
-        //     spaces: ['appDataFolder'],
-        //     parents: [folderIds['currentFolderId']],
-        //     name: '1_',
-        //     appProperties : {
-        //       data: JSON.stringify(data)
-        //     }
-        //   }
-        // }).then(function(response){
-        //   console.log(response);
-        // } ,  function(reason) {
+    const boundary = '-------314159265358979323846';
+    const delimiter = "\r\n--" + boundary + "\r\n";
+    const close_delim = "\r\n--" + boundary + "--";
+    var that = this;
+    var reader = new FileReader();
+    reader.readAsBinaryString(fileData);
+    reader.onload = function(e) {
+      var contentType = fileData.type || 'application/octet-stream';
+      var metadata = {
+        'title': filename,
+        'mimeType': contentType
+      };
 
-        // });
-      
+      var base64Data = btoa(reader.result);
+      var multipartRequestBody =
+          delimiter +
+          'Content-Type: application/json\r\n\r\n' +
+          JSON.stringify(metadata) +
+          delimiter +
+          'Content-Type: ' + contentType + '\r\n' +
+          'Content-Transfer-Encoding: base64\r\n' +
+          '\r\n' +
+          base64Data +
+          close_delim;
+
+      var path, method;
+      if(fileId && fileId.length>0){
+        path = '/upload/drive/v2/files/'+ fileId;
+        method = 'PUT'
+      }
+      else{
+        path = '/upload/drive/v2/files';
+        method = 'POST'
+      }
+
+      var request = gapi.client.request({
+          'path': path,
+          'method': method,
+          'params': {'uploadType': 'multipart'},
+          'headers': {
+            'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
+          },
+          'body': multipartRequestBody});
+      request.then(function(response){
+        if(!fileId){
+          that.currentFileId = response.result.id;
+        }
+        console.log(response);
+      }, function(){
+
       })
+    }
   }
-
+  
   _getSelectedDate(){
     return this.selectedDate;
   }
