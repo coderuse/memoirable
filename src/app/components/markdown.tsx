@@ -51,6 +51,7 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
     editor.setValue(this.state.inputText);
     editor.on('change',function(e){
       this.setState({inputText: editor.getValue()});
+      GAuthStore._createOrUpdateFile('','',this.state.inputText);
     }.bind(this));
   }
 
@@ -73,4 +74,3 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
     );
   }
 }
-
