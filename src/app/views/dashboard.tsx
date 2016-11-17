@@ -40,11 +40,7 @@ export class Dashboard extends React.Component<{}, IAuth> {
         <div className="row">
           <AuthHeader></AuthHeader>
         </div>
-        <div className="row">
-          <div className="main-content-right">
-            <MarkDown></MarkDown>
-          </div>
-        </div>
+        <MarkDown></MarkDown>
       </div>
     );
   }

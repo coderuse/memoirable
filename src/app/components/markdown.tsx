@@ -44,10 +44,11 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
       showGutter: false,
       showLineNumbers: false,
       highlightActiveLine: false,
-      wrap: true
+      wrap: true,
+      vScrollBarAlwaysVisible: true
     });
     //editor.getSession().setMode('ace/mode/markdown');
-    editor.setTheme('ace/theme/textmate');
+    //editor.setTheme('ace/theme/textmate');
     editor.setValue(this.state.inputText);
     editor.on('change',function(e){
       this.setState({inputText: editor.getValue()});
@@ -62,10 +63,10 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
   render() {
     return (
       <div className="row">
-        <div className="markdown-left">
+        <div className="markdown markdown-left">
           <div id="editor"></div>
         </div>
-        <div className="markdown-right">
+        <div className="markdown markdown-right">
           <div id="markdown-output" className="markdown-output-wrapper">
             <ReactMarkdown source={this.state.inputText} />
           </div>

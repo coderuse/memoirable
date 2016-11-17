@@ -1,4 +1,16 @@
 $default-font-family: 'Roboto', sans-serif;
+$default-viewer-font-family: 'Open Sans', sans-serif;
+
+$default-strip-color: rgb(74, 74, 74);
+$default-strip-font-color: rgb(221, 221, 221);
+
+$default-calendar-font-color: rgb(57, 66, 117);
+$default-calendar-back-color: rgb(247, 247, 247);
+
+$default-editor-color: rgb(68, 68, 68);
+$default-editor-back-color: rgb(252, 252, 252);
+$default-viewer-back-color: rgb(249, 249, 249);
+
 
 
 $markdown-height: 80vh;
@@ -10,3 +22,10 @@ $susy: (
   container: 360px,
   global-box-sizing: border-box
 );
+
+@mixin strip-properties {
+    color: $default-strip-font-color;    
+    font-size: 14pt;
+    font-weight: 300;
+    background-color: $default-strip-color;
+}
