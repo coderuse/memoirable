@@ -1,0 +1,23 @@
+.footer-to-diary {
+  height: 60px;
+  background-color: rgb(74, 74, 74);
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+  input[type=submit], input[type=button], button {
+    margin: 12px 0;
+    background-color: rgb(74, 74, 74);
+    color: rgb(221, 221, 221);    
+    padding: 8px 11px;
+    font-size: 14pt;
+    font-weight: 300;
+    -webkit-transition: background-color ease-in-out .15s, color ease-in-out .15s, border-color ease-in-out .15s;
+    transition: background-color ease-in-out .15s, color ease-in-out .15s, border-color ease-in-out .15s;
+    &:hover, &:focus {
+      box-shadow: none;
+      background-color: rgb(56, 56, 56);
+    }
+  }
+}
