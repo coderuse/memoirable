@@ -605,18 +605,14 @@ template {
   display: none;
 }
 
-*, *:before, *:after {
-  box-sizing: border-box;
+* {
+  outline: none !important;
 }
 
-body {
-  font-family: Arimo,"Helvetica Neue",Helvetica,Arial,Verdana,"Trebuchet MS";
-  min-width: 360.25px;
-  font-size: .9em;
-  line-height: 1.5em;
-  color: #333333;
-  min-height: 520px;
-  word-break: break-word;
+*, *:before, *:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 input[type=submit],
@@ -666,6 +662,59 @@ input[type=button]:disabled:focus,
 button:disabled:hover,
 button:disabled:focus {
   box-shadow: none;
+}
+
+.logo {
+  font-family: 'Satisfy', cursive;
+  font-size: 72pt;
+  color: #ff665e;
+  margin: 0 auto;
+  width: 430px;
+  z-index: 200;
+  position: relative;
+  padding-top: 50px;
+}
+.logo:after {
+  content: "Memoirable";
+}
+
+#editor {
+  font-size: 18pt;
+  line-height: 1.5em;
+}
+
+.footer-to-diary {
+  height: 60px;
+  background-color: #4a4a4a;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  vertical-align: middle;
+}
+.footer-to-diary input[type=submit], .footer-to-diary input[type=button], .footer-to-diary button {
+  margin: 12px 0;
+  background-color: #4a4a4a;
+  color: #dddddd;
+  padding: 8px 11px;
+  font-size: 14pt;
+  font-weight: 300;
+  -webkit-transition: background-color ease-in-out .15s, color ease-in-out .15s, border-color ease-in-out .15s;
+  transition: background-color ease-in-out .15s, color ease-in-out .15s, border-color ease-in-out .15s;
+}
+.footer-to-diary input[type=submit]:hover, .footer-to-diary input[type=submit]:focus, .footer-to-diary input[type=button]:hover, .footer-to-diary input[type=button]:focus, .footer-to-diary button:hover, .footer-to-diary button:focus {
+  box-shadow: none;
+  background-color: #383838;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  min-width: 360.25px;
+  font-size: .9em;
+  line-height: 1.5em;
+  color: #333333;
+  min-height: 520px;
+  word-break: break-word;
 }
 
 .row {
@@ -750,7 +799,7 @@ button:disabled:focus {
   z-index: 200;
   width: 25%;
   position: relative;
-  top: 50vh;
+  top: 45vh;
   transform: translateY(-50%);
   margin: 0 auto;
   text-align: center;
