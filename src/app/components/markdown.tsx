@@ -48,7 +48,7 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
       vScrollBarAlwaysVisible: true
     });
     //editor.getSession().setMode('ace/mode/markdown');
-    //editor.setTheme('ace/theme/textmate');
+    //editor.setTheme('ace/theme/chaos');
     editor.setValue(this.state.inputText);
     editor.on('change',function(e){
       this.setState({inputText: editor.getValue()});

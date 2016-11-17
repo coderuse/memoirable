@@ -3,6 +3,14 @@
   height: 100%;
 }
 
+.ace-tm {
+  color: $default-editor-color !important;
+}
+
+.ace-tm .ace_cursor {
+  color: $default-editor-color !important;
+}
+
 .markdown {
   @include span(4);
   padding-left: 20px;

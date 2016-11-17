@@ -16,7 +16,6 @@ module.exports = function (grunt) {
 
   var styleBuildDest = {};
   styleBuildDest[buildPaths.buildLocation + 'app.css'] = 'src/sass/main.scss';
-  styleBuildDest[buildPaths.buildLocation + 'ace.css'] = 'src/sass/ace.scss';
 
   var appBuildDest = buildPaths.buildLocation + 'bundle.js';
 
