@@ -24,7 +24,7 @@ export interface IMarkdowState { inputText: string };
 
 export default class Markdown extends React.Component<{}, IMarkdowState> {
   _listenerToken : FBEmitter.EventSubscription;
-
+  _valueBefore: string;
   constructor(props) {
     super(props);
     this.state = { inputText: `# Diary, O' Diary!!!`};
@@ -51,12 +51,32 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
     editor.setValue(this.state.inputText);
     editor.on('change',function(e){
       this.setState({inputText: editor.getValue()});
-      GAuthStore._createOrUpdateFile('','',this.state.inputText);
+      this._valueBefore = editor.getValue();
+      var timeout;
+      let val = editor.getValue();
+      if(typeof timeout !== 'function'){
+        timeout = setTimeout(function(val) {
+                    this._checkTriggerShouldHappenOrNot(val)
+                  }.bind(this, val ), 2000);
+      }
+      
+      
     }.bind(this));
   }
 
-  saveToDrive(drive){
-   //GAuthStore._saveToGoogleDrive(this.state.inputText);
+  _checkTriggerShouldHappenOrNot(val){
+    if(this.state.inputText === val){
+      GAuthStore._createOrUpdateFile('','',this.state.inputText,0,function(){
+        console.log("yup");
+      });
+    }
+  }
+
+  newEntry(){
+    var that = this;
+    GAuthStore._addNewEntry(function(){
+      that.setState({inputText: ""});
+    });
   }
 
   render() {
@@ -68,6 +88,9 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
         <div className="markdown-right">
           <div id="markdown-output" className="markdown-output-wrapper">
             <ReactMarkdown source={this.state.inputText} />
+          </div>
+          <div className="new-entry" onClick={this.newEntry}>
+            <i className="memocon memocon-add"></i>
           </div>
         </div>
       </div>

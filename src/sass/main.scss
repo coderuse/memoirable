@@ -70,6 +70,19 @@ body{
       height: $markdown-height;
       overflow: auto;
     }
+
+    .new-entry{
+      position: fixed;
+      bottom: 5vh;
+      right: 5vw;
+      background: orange;
+      padding: 10px;
+      border-radius: 50%;
+      font-size: 30px;
+      z-index: 10;
+      box-shadow: 2px 5px 2px #888888;
+      cursor: pointer;
+    }
   }
 
   .main-content-left{

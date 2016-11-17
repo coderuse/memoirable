@@ -122,7 +122,14 @@ class GoogleAuthStore extends BaseStore<IAuth>{
                   parents: [response.result.id]
                 };
                 that._requestForFolderGoogleDrive(data).then(function(response) {
-                  
+                  // create a folder for the current date in the format (yyyy/mm/dd) if it does not exists
+
+                  console.log(response);
+                  let date = new Date();
+                  that._createFolderIfNotExistent({
+                    name : date.getFullYear()+"."+date.getMonth()+"."+date.getDate(),
+                    parent : [response.result.id]
+                  });
                 },function(reason){
 
                 });
@@ -146,7 +153,6 @@ class GoogleAuthStore extends BaseStore<IAuth>{
   }
 
   _createFolderIfNotExistent(data){
-    console.log(data);
     var that = this;
     gapi.client.load('drive','v3', function(){
       gapi.client.drive.files.list({
@@ -158,16 +164,15 @@ class GoogleAuthStore extends BaseStore<IAuth>{
           that._createFolder(data).then( function(response){
             this.currentFolderIdInUse = response.result.id;
             this.folderIds['currentFolderId'] = response.result.id;
-
-
-            //this._createOrUpdateFile()
           }, function(reason){
 
           })
         }
         else{
           
-          this._createOrUpdateFile(response.result.files[0].id,response.result.files[0].name, "");
+          this._createOrUpdateFile(response.result.files[0].id,response.result.files[0].name, "", 0, function(){
+            console.log("folder for current day existed created an empty file with name "+data.name);
+          });
           this.currentFolderIdInUse = response.result.files[0].id;
           this.folderIds['currentFolderId'] = response.result.files[0].id;
         }
@@ -183,18 +188,36 @@ class GoogleAuthStore extends BaseStore<IAuth>{
     })
   }
 
-  _createOrUpdateFile(parentId, parentName, data) {
+  _createOrUpdateFile(parentId, parentName, data, count, callback) {
     var parentId = parentId.length > 0 ? parentId : this.currentFolderIdInUse;
     var date = new Date();
     var parentName = parentName.length > 0 ? parentName :  date.getFullYear()+"."+date.getMonth()+"."+date.getDate();
-
-    var filename = parentName+".1"+".md";
+    var count = count != 0 ? count : 1;
+    var filename = parentName+"."+count+".md";
     var file = new File([data.toString()], filename, {type: "text/markdown",})
     var fileId = this.currentFileId ? this.currentFileId : '';
-    this._insertOrUpdateFile(file, parentId, filename, fileId);
+
+    this._isFileExistent(filename,this._insertOrUpdateFile(file, parentId, filename, fileId, callback));
+    
   } 
 
-  _insertOrUpdateFile(fileData, folderId?, filename?, fileId?){
+  _isFileExistent(name, callback){
+    gapi.client.drive.files.list({
+        q: "mimeType='text/markdown' and name contains "+"'"+name+"'",
+        fields: 'files(id, name)',
+        spaces: 'appDataFolder'
+      }).then( function (response) {
+        if(response.result.files.length === 0){
+          if(callback){
+            callback();
+          }
+        }
+      }, function(reason) {
+
+      });
+  }
+
+  _insertOrUpdateFile(fileData, folderId?, filename?, fileId?, callback?){
 
     const boundary = '-------314159265358979323846';
     const delimiter = "\r\n--" + boundary + "\r\n";
@@ -206,7 +229,8 @@ class GoogleAuthStore extends BaseStore<IAuth>{
       var contentType = fileData.type || 'application/octet-stream';
       var metadata = {
         'title': filename,
-        'mimeType': contentType
+        'mimeType': contentType,
+        'parents': [{'id': 'appfolder'}]
       };
 
       var base64Data = btoa(reader.result);
@@ -244,6 +268,12 @@ class GoogleAuthStore extends BaseStore<IAuth>{
           that.currentFileId = response.result.id;
         }
         console.log(response);
+
+        if(callback){
+          callback();
+        }
+        
+        
       }, function(){
 
       })
@@ -276,6 +306,26 @@ class GoogleAuthStore extends BaseStore<IAuth>{
     }, function(reason){
 
     })
+  }
+
+  _addNewEntry(callback){
+    let date = new Date();
+    let name = date.getFullYear()+"."+date.getMonth()+"."+date.getDate() + ".";
+    var that = this;
+    gapi.client.drive.files.list({
+        q: "mimeType='text/markdown' and name contains "+"'"+name+"'",
+        fields: 'files(id, name)',
+        spaces: 'appDataFolder'
+      }).then( function (response) {
+        console.log(response);
+
+        let count = response.result.files.length;
+        that._createOrUpdateFile('','','',count, callback);
+        
+
+      }, function(reason) {
+
+      });
   }
 
   constructor(dispatcher: Flux.Dispatcher<AppEvent>) {
