@@ -7473,7 +7473,7 @@
 	        this.setState(gAuthStore_1.default.getState());
 	    };
 	    Dashboard.prototype.render = function () {
-	        return (React.createElement("div", null, React.createElement("div", {className: "row"}, React.createElement(authheader_1.default, null)), React.createElement("div", {className: "row"}, React.createElement("div", {className: "main-content-right"}, React.createElement(markdown_1.default, null)))));
+	        return (React.createElement("div", null, React.createElement("div", {className: "row"}, React.createElement(authheader_1.default, null)), React.createElement(markdown_1.default, null)));
 	    };
 	    return Dashboard;
 	}(React.Component));
@@ -7521,10 +7521,11 @@
 	            showGutter: false,
 	            showLineNumbers: false,
 	            highlightActiveLine: false,
-	            wrap: true
+	            wrap: true,
+	            vScrollBarAlwaysVisible: true
 	        });
 	        //editor.getSession().setMode('ace/mode/markdown');
-	        editor.setTheme('ace/theme/textmate');
+	        //editor.setTheme('ace/theme/textmate');
 	        editor.setValue(this.state.inputText);
 	        editor.on('change', function (e) {
 	            this.setState({ inputText: editor.getValue() });
@@ -7535,7 +7536,7 @@
 	        //GAuthStore._saveToGoogleDrive(this.state.inputText);
 	    };
 	    Markdown.prototype.render = function () {
-	        return (React.createElement("div", {className: "row"}, React.createElement("div", {className: "markdown-left"}, React.createElement("div", {id: "editor"})), React.createElement("div", {className: "markdown-right"}, React.createElement("div", {id: "markdown-output", className: "markdown-output-wrapper"}, React.createElement(ReactMarkdown, {source: this.state.inputText})))));
+	        return (React.createElement("div", {className: "row"}, React.createElement("div", {className: "markdown markdown-left"}, React.createElement("div", {id: "editor"})), React.createElement("div", {className: "markdown markdown-right"}, React.createElement("div", {id: "markdown-output", className: "markdown-output-wrapper"}, React.createElement(ReactMarkdown, {source: this.state.inputText})))));
 	    };
 	    return Markdown;
 	}(React.Component));

@@ -664,6 +664,23 @@ button:disabled:focus {
   box-shadow: none;
 }
 
+.incompatible-browser-notice {
+  width: 22.5em;
+  height: 15.75em;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  font-weight: 300;
+  color: #383838;
+  font-size: 21px;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: auto;
+}
+
 .logo {
   font-family: 'Satisfy', cursive;
   font-size: 72pt;
@@ -679,12 +696,60 @@ button:disabled:focus {
 }
 
 #editor {
-  font-size: 18pt;
   line-height: 1.5em;
+  height: 100%;
+}
+
+.markdown {
+  width: 49.7006%;
+  float: left;
+  margin-right: 0.5988%;
+  padding-left: 20px;
+  position: absolute;
+  bottom: 0;
+  top: 45px;
+  color: #444444;
+  display: inline-block;
+  background-color: #fcfcfc;
+}
+
+.markdown-left {
+  font-size: 18pt;
+  background-color: #fcfcfc;
+}
+.markdown-left textarea.mardown-textarea {
+  width: 100%;
+  float: left;
+  margin-left: 0;
+  margin-right: 0;
+  height: 100%;
+  resize: none;
+  border: none;
+}
+
+.markdown-right {
+  font-family: "Open Sans", sans-serif;
+  background-color: #f9f9f9;
+  left: 49.98%;
+  overflow-y: scroll;
+  font-size: 18pt;
+}
+.markdown-right .markdown-output-wrapper {
+  width: 100%;
+  float: left;
+  margin-left: 0;
+  margin-right: 0;
+  overflow: auto;
+}
+.markdown-right h1, .markdown-right h2, .markdown-right h3, .markdown-right h4, .markdown-right h5, .markdown-right h6 {
+  font-weight: 300;
 }
 
 .footer-to-diary {
   height: 60px;
+  color: #dddddd;
+  font-size: 14pt;
+  font-weight: 300;
   background-color: #4a4a4a;
   position: absolute;
   bottom: 0;
@@ -695,16 +760,53 @@ button:disabled:focus {
 .footer-to-diary input[type=submit], .footer-to-diary input[type=button], .footer-to-diary button {
   margin: 12px 0;
   background-color: #4a4a4a;
-  color: #dddddd;
   padding: 8px 11px;
+  color: #dddddd;
   font-size: 14pt;
   font-weight: 300;
+  background-color: #4a4a4a;
   -webkit-transition: background-color ease-in-out .15s, color ease-in-out .15s, border-color ease-in-out .15s;
   transition: background-color ease-in-out .15s, color ease-in-out .15s, border-color ease-in-out .15s;
 }
 .footer-to-diary input[type=submit]:hover, .footer-to-diary input[type=submit]:focus, .footer-to-diary input[type=button]:hover, .footer-to-diary input[type=button]:focus, .footer-to-diary button:hover, .footer-to-diary button:focus {
   box-shadow: none;
   background-color: #383838;
+}
+
+.auth-header {
+  color: #dddddd;
+  font-size: 14pt;
+  font-weight: 300;
+  background-color: #4a4a4a;
+  height: 45px;
+  margin-bottom: 15px;
+}
+.auth-header .hide-header-menu {
+  visibility: hidden;
+}
+.auth-header .show-header-menu {
+  visibility: visible;
+}
+.auth-header .header-logo {
+  float: left;
+  margin-left: 20px;
+}
+.auth-header .header-logo img {
+  height: 40px;
+}
+.auth-header .auth-header-right {
+  height: 45px;
+  padding-top: 10px;
+  text-align: center;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  cursor: pointer;
+  font-size: 20px;
+}
+.auth-header .auth-header-right .dropdown-wrapper {
+  margin-top: 10px;
+  margin-right: 10px;
 }
 
 body {
@@ -715,6 +817,8 @@ body {
   color: #333333;
   min-height: 520px;
   word-break: break-word;
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 .row {
@@ -722,60 +826,6 @@ body {
   float: left;
   margin-left: 0;
   margin-right: 0;
-}
-.row .markdown-left {
-  width: 49.7006%;
-  float: left;
-  margin-right: 0.5988%;
-  border-right: 1px solid grey;
-  position: relative;
-  display: inline-block;
-  height: 80vh;
-}
-.row .markdown-left textarea.mardown-textarea {
-  width: 100%;
-  float: left;
-  margin-left: 0;
-  margin-right: 0;
-  height: 80vh;
-  resize: none;
-  overflow: auto;
-  border: none;
-  outline: none;
-  -webkit-box-shadow: none;
-  -moz-box-shadow: none;
-  box-shadow: none;
-}
-.row .markdown-right {
-  width: 49.7006%;
-  float: left;
-  margin-right: 0.5988%;
-  padding-left: 20px;
-  margin-right: 0px;
-  display: inline-block;
-}
-.row .markdown-right .markdown-output-wrapper {
-  width: 100%;
-  float: left;
-  margin-left: 0;
-  margin-right: 0;
-  height: 80vh;
-  overflow: auto;
-}
-.row .main-content-left {
-  width: 9.46108%;
-  float: left;
-  margin-right: 0.5988%;
-  height: 80vh;
-}
-.row .main-content-right {
-  width: 87.42515%;
-  float: left;
-  margin-right: 0.5988%;
-}
-
-#editor {
-  height: 80vh;
 }
 
 .backdrop {
@@ -825,50 +875,18 @@ body {
   font-size: 4em;
 }
 
-.auth-header {
-  background-color: #eee;
-  color: #666;
-  height: 45px;
-  margin-bottom: 15px;
-}
-.auth-header .hide-header-menu {
-  visibility: hidden;
-}
-.auth-header .show-header-menu {
-  visibility: visible;
-}
-.auth-header .header-logo {
-  float: left;
-  margin-left: 20px;
-}
-.auth-header .header-logo img {
-  height: 40px;
-}
-.auth-header .auth-header-right {
-  height: 45px;
-  padding-top: 10px;
-  background-color: #abcdef;
-  text-align: center;
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  cursor: pointer;
-  font-size: 20px;
-}
-.auth-header .auth-header-right .dropdown-wrapper {
-  margin-top: 10px;
-  margin-right: 10px;
-}
-
 .calendar-wrapper {
   float: left;
   width: 30%;
-  padding: 2px;
+  padding: 5px;
+  color: #394275;
 }
 .calendar-wrapper .weekdays {
   width: 100%;
   overflow: hidden;
-  border-bottom: 3px solid gray;
+  padding: 2px;
+  border-top: 1px solid #394275;
+  border-bottom: 1px solid #394275;
 }
 .calendar-wrapper .weekdays div {
   position: relative;
@@ -900,7 +918,6 @@ body {
 .calendar-wrapper .calendar-value {
   text-align: center;
   padding: 10px;
-  border-bottom: 3px solid gray;
   font-weight: bold;
   font-size: 20px;
 }
@@ -918,7 +935,7 @@ body {
   position: absolute;
   width: 85%;
   left: 7%;
-  background: wheat;
+  background: #f7f7f7;
   min-width: 740px;
   overflow: auto;
   padding: 10px;
