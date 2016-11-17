@@ -1,0 +1,12 @@
+$default-font-family: 'Roboto', sans-serif;
+
+
+$markdown-height: 80vh;
+$header-margin-bottom : 15px;
+$calendar-normalizer : 0.8;
+$susy: (
+  columns: 8,
+  gutters: .05,
+  container: 360px,
+  global-box-sizing: border-box
+);

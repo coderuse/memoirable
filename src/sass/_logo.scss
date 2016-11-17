@@ -1,0 +1,13 @@
+.logo {
+  font-family: 'Satisfy', cursive;
+  font-size: 72pt;
+  color: rgb(255, 102, 94);
+  margin: 0 auto;
+  width: 430px;
+  z-index: 200;
+  position: relative;
+  padding-top: 50px;
+  &:after {
+    content: "Memoirable";
+  }
+}

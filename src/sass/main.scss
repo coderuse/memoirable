@@ -6,34 +6,37 @@
 @import "_mixins";
 
 @import "normalize/import-now";
-$markdown-height: 80vh;
-$header-margin-bottom : 15px;
-$calendar-normalizer : 0.8;
-$susy: (
-  columns: 8,
-  gutters: .05,
-  container: 360px,
-  global-box-sizing: border-box
-);
 
-*, *:before, *:after {
-  box-sizing: border-box;
+@import "_variables";
+
+* {
+  outline: none !important;
 }
 
-body{
-  font-family: Arimo,"Helvetica Neue",Helvetica,Arial,Verdana,"Trebuchet MS";
-  min-width: 360.25px;
-  font-size: .9em;
-  line-height: 1.5em;
-  color: rgb(51,51,51);
-  min-height: 520px;
-  word-break: break-word;
+*, *:before, *:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;  
 }
 
 input[type=submit],
 input[type=button],
 button {
   @include sassy-button;
+}
+
+@import "_logo";
+@import "_editor";
+@import "_footer";
+
+body{
+  font-family: $default-font-family;
+  min-width: 360.25px;
+  font-size: .9em;
+  line-height: 1.5em;
+  color: rgb(51,51,51);
+  min-height: 520px;
+  word-break: break-word;
 }
 
 .row {
@@ -103,7 +106,7 @@ button {
   z-index: 200;
   width: 25%;
   position: relative;
-  top: 50vh;
+  top: 45vh;
   transform: translateY(-50%);
   margin:0 auto;
   text-align: center;

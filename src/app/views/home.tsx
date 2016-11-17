@@ -30,13 +30,12 @@ export class Home extends React.Component<{}, {}> {
   render() {
     return (
       <div className="row">
-        <div className="backdrop"></div>
-        <div className="auth-modal">
-          <p>Authenticate To</p>
-          <div className="button-groups">
-            <button className="auth-buttons memocon-google-drive"
-              onClick={this._authenticate.bind(this, ProviderTypes.GOOGLE) } />
-          </div>
+        <div className="logo"></div>
+        <div className="footer-to-diary">
+          <button className=""
+              onClick={this._authenticate.bind(this, ProviderTypes.GOOGLE) }>
+            Hi, here's your diary.
+          </button>
         </div>
       </div>
     );
