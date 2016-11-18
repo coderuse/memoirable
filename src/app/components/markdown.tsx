@@ -20,11 +20,12 @@ function onChange(newValue) {
   console.log('change',newValue);
 }
 
-export interface IMarkdowState { inputText: string };
+export interface IMarkdowState { inputText?: string , files?: any};
 
 export default class Markdown extends React.Component<{}, IMarkdowState> {
   _listenerToken : FBEmitter.EventSubscription;
   _valueBefore: string;
+  files: any;
   constructor(props) {
     super(props);
     this.state = { inputText: `# Diary, O' Diary!!!`};
@@ -32,6 +33,10 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
 
   _navigateBack() {
     browserHistory.goBack();
+  }
+
+  componentWillMount() {
+    this.fetchFilesForToday();
   }
 
   // https://github.com/ajaxorg/ace/wiki/Configuring-Ace
@@ -66,31 +71,52 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
 
   _checkTriggerShouldHappenOrNot(val){
     if(this.state.inputText === val){
-      GAuthStore._createOrUpdateFile('','',this.state.inputText,0,function(){
-        console.log("yup");
-      });
+      GAuthStore._createOrUpdateFile('','',this.state.inputText,0);
     }
   }
 
   newEntry(){
     var that = this;
-    GAuthStore._addNewEntry(function(){
+    const editor = ace.edit('editor');
+
+    GAuthStore._addNewEntry(function(that){
       that.setState({inputText: ""});
-    });
+      editor.setValue("",1);
+    }.bind(this, that));
+  }
+
+  fetchFilesForToday(){
+    let date = new Date();
+    let selectedDate = date.getFullYear()+"."+date.getMonth()+"."+date.getDate();
+    var that = this;
+    GAuthStore._getFilesByDate(selectedDate, function(that, files){
+      that.setState({files: files});
+    }.bind(this, that))
   }
 
   render() {
+    var files = this.state.files;
     return (
       <div className="row">
-        <div className="markdown-left">
-          <div id="editor"></div>
+        <div className="left-panel">
+          { files ? files.map(function(val,index){
+            return <div>
+              {val.name}
+            </div>
+            }) : <div></div>
+          }
         </div>
-        <div className="markdown-right">
-          <div id="markdown-output" className="markdown-output-wrapper">
-            <ReactMarkdown source={this.state.inputText} />
+        <div className="right-panel">
+          <div className="markdown-left">
+            <div id="editor"></div>
           </div>
-          <div className="new-entry" onClick={this.newEntry}>
-            <i className="memocon memocon-add"></i>
+          <div className="markdown-right">
+            <div id="markdown-output" className="markdown-output-wrapper">
+              <ReactMarkdown source={this.state.inputText} />
+            </div>
+            <div className="new-entry" onClick={this.newEntry} title="Add New Entry">
+              <i className="memocon memocon-add"></i>
+            </div>
           </div>
         </div>
       </div>

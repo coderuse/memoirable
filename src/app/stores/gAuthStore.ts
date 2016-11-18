@@ -12,7 +12,7 @@ import { IAuth } from '../interfaces/auth';
 // https://developers.google.com/drive/v3/web/appdata
 // https://console.developers.google.com/apis/credentials?project=memoirable
 // https://security.google.com/settings/security/permissions
-class GoogleAuthStore extends BaseStore<IAuth>{
+class GoogleAuthStore extends BaseStore < IAuth > {
   _clientId = '797749045300-48asg0koqf5aa9npc40kmch9r754dl87.apps.googleusercontent.com';
   _scopes = ['https://www.googleapis.com/auth/drive.appdata', 'https://www.googleapis.com/auth/plus.me'];
   callback: () => void;
@@ -27,73 +27,76 @@ class GoogleAuthStore extends BaseStore<IAuth>{
 
   _authorize(immediate: boolean, event: AppEvent) {
 
-    gapi.auth.authorize(
-      {
-        'client_id': this._clientId,
-        'scope': this._scopes.join(' '),
-        'immediate': immediate,
-        response_type: 'token'
-      }, function (authResult) {
-        if (!authResult || authResult.error) {
-          this._authorize.bind(this, false, event)();
-          return;
-        }
+    gapi.auth.authorize({
+      'client_id': this._clientId,
+      'scope': this._scopes.join(' '),
+      'immediate': immediate,
+      response_type: 'token'
+    }, function(authResult) {
+      if (!authResult || authResult.error) {
+        this._authorize.bind(this, false, event)();
+        return;
+      }
 
-        this._changeToken = event.type;
-        this.emitChange();
-      }.bind(this));
+      this._changeToken = event.type;
+      this.emitChange();
+    }.bind(this));
   }
+
   _getProfileInfo(event: AppEvent) {
-    gapi.client.load('plus', 'v1', function () {
+    gapi.client.load('plus', 'v1', function() {
       var request = gapi.client.plus.people.get({
         'userId': 'me'
       });
-      request.execute(function (resp) {
+      request.execute(function(resp) {
         this._state = {
           displayName: resp.displayName
-        };       
+        };
         this._changeToken = event.type;
         this.emitChange();
       }.bind(this));
     }.bind(this));
   }
 
-  _saveToGoogleDrive(data:string){
-    console.log(data);
-    gapi.client.load('drive', 'v3', function(){
-      var createRequest = gapi.client.drive.files.create({'uploadType':'media'});
-      createRequest.then(function(res){
-        console.log(res);
-        gapi.client.request({'path': ('/upload/drive/v3/files/'+res.result.id).toString(), 'method':'PATCH', 'body':data, 'headers':'',  'params': ''}).then(function(response) {
-          console.log(response);
+  _saveToGoogleDrive(data: string) {
+    gapi.client.load('drive', 'v3', function() {
+      var createRequest = gapi.client.drive.files.create({ 'uploadType': 'media' });
+      createRequest.then(function(res) {
+        gapi.client.request({ 
+          'path': ('/upload/drive/v3/files/' + res.result.id).toString(),
+          'method': 'PATCH', 
+          'body': data, 
+          'headers': '', 
+          'params': '' })
+        .then(function(response) {
+
         }, function(reason) {
           console.log(reason);
         });
 
-      },function(err){
+      }, function(err) {
         console.log(err);
       });
 
-   });
+    });
   }
 
-  _createInitialFolderStructure(event: AppEvent, folderIds){
+  _createInitialFolderStructure(event: AppEvent, folderIds) {
     var that = this;
-    gapi.client.load('drive','v3', function(){
+    gapi.client.load('drive', 'v3', function() {
 
       gapi.client.drive.files.list({
         q: "mimeType='application/vnd.google-apps.folder' and name='Memoirable' or name='Entries'",
         fields: 'files(id, name)',
         spaces: 'appDataFolder'
-      }).then( function (response) {
+      }).then(function(response) {
 
-        // check whether the initial structure is present or not 
-        if(response.result.files.length !== 0){
-          response.result.files.forEach( function( item, index){
-            if(item.name === 'Memoirable'){
+        // check whether the initial structure is present or not
+        if (response.result.files.length !== 0) {
+          response.result.files.forEach(function(item, index) {
+            if (item.name === 'Memoirable') {
               folderIds['Memoirable'] = item.id;
-            }
-            else if ( item.name === 'Entries'){
+            } else if (item.name === 'Entries') {
               folderIds['Entries'] = item.id;
             }
           });
@@ -101,38 +104,35 @@ class GoogleAuthStore extends BaseStore<IAuth>{
           // create a folder for the current date in the format (yyyy/mm/dd) if it does not exists
           let date = new Date();
           that._createFolderIfNotExistent({
-            name : date.getFullYear()+"."+date.getMonth()+"."+date.getDate(),
-            parent : folderIds['Entries']
+            name: date.getFullYear() + "." + date.getMonth() + "." + date.getDate(),
+            parent: folderIds['Entries']
           });
 
-        }
-        else {
+        } else {
 
           // Initial Structure not present , create Memoirable and Entries Inside Memoirable folder
           let data = {
-              name : 'Memoirable',
-              mimeType: 'application/vnd.google-apps.folder',
-              parents: ['appDataFolder']
+            name: 'Memoirable',
+            mimeType: 'application/vnd.google-apps.folder',
+            parents: ['appDataFolder']
           };
 
           that._requestForFolderGoogleDrive(data).then(function(response) {
-                let data = {
-                  name : 'Entries',
-                  mimeType: 'application/vnd.google-apps.folder',
-                  parents: [response.result.id]
-                };
-                that._requestForFolderGoogleDrive(data).then(function(response) {
-                  // create a folder for the current date in the format (yyyy/mm/dd) if it does not exists
-
-                  console.log(response);
-                  let date = new Date();
-                  that._createFolderIfNotExistent({
-                    name : date.getFullYear()+"."+date.getMonth()+"."+date.getDate(),
-                    parent : [response.result.id]
-                  });
-                },function(reason){
-
-                });
+            let data = {
+              name: 'Entries',
+              mimeType: 'application/vnd.google-apps.folder',
+              parents: [response.result.id]
+            };
+            that._requestForFolderGoogleDrive(data).then(function(response) {
+              // create a folder for the current date in the format (yyyy/mm/dd) if it does not exists
+              let date = new Date();
+              that._createFolderIfNotExistent({
+                name: date.getFullYear() + "." + date.getMonth() + "." + date.getDate(),
+                parent: [response.result.id]
+              });
+            }, function(reason) {
+              console.log(reason);
+            });
           }, function(reason) {
             console.log(reason);
           });
@@ -143,36 +143,39 @@ class GoogleAuthStore extends BaseStore<IAuth>{
     })
   }
 
-  _createFolder(data){
+  _createFolder(data) {
     var currentObj = {
-        name : data.name,
-        mimeType: 'application/vnd.google-apps.folder',
-        parents: [data.parent]
+      name: data.name,
+      mimeType: 'application/vnd.google-apps.folder',
+      parents: [data.parent]
     };
     return this._requestForFolderGoogleDrive(currentObj);
   }
 
-  _createFolderIfNotExistent(data){
+  _createFolderIfNotExistent(data) {
     var that = this;
-    gapi.client.load('drive','v3', function(){
+    gapi.client.load('drive', 'v3', function() {
       gapi.client.drive.files.list({
-        q: "mimeType='application/vnd.google-apps.folder' and name = '"+data.name+"'",
+        q: "mimeType='application/vnd.google-apps.folder' and name = '" + data.name + "'",
         fields: 'files(id, name)',
         spaces: 'appDataFolder'
-      }).then( function (response) {
-        if(response.result.files.length === 0){
-          that._createFolder(data).then( function(response){
-            this.currentFolderIdInUse = response.result.id;
-            this.folderIds['currentFolderId'] = response.result.id;
-          }, function(reason){
+      }).then(function(response) {
+        if (response.result.files.length === 0) {
+          that._createFolder(data).then(function(response) {
+            that.currentFolderIdInUse = response.result.id;
+            that.folderIds['currentFolderId'] = response.result.id;
+
+            // folder with the current date is created, create the file for this day
+            that._addNewEntry(function() {
+              console.log("file created");
+            });
+
+          }, function(reason) {
 
           })
-        }
-        else{
-          
-          this._createOrUpdateFile(response.result.files[0].id,response.result.files[0].name, "", 0, function(){
-            console.log("folder for current day existed created an empty file with name "+data.name);
-          });
+        } else {
+
+          this._createOrUpdateFile(response.result.files[0].id, response.result.files[0].name, "", 0, this._getFileContents.bind(this, response.result.files[0].id));
           this.currentFolderIdInUse = response.result.files[0].id;
           this.folderIds['currentFolderId'] = response.result.files[0].id;
         }
@@ -180,44 +183,46 @@ class GoogleAuthStore extends BaseStore<IAuth>{
     }.bind(this));
   }
 
-  _requestForFolderGoogleDrive(data){
+  _requestForFolderGoogleDrive(data) {
     return gapi.client.request({
       'path': '/drive/v3/files',
-      'method' : 'POST',
+      'method': 'POST',
       'body': data
     })
   }
 
-  _createOrUpdateFile(parentId, parentName, data, count, callback) {
+  _createOrUpdateFile(parentId, parentName, data, count, callback ? ) {
     var parentId = parentId.length > 0 ? parentId : this.currentFolderIdInUse;
     var date = new Date();
-    var parentName = parentName.length > 0 ? parentName :  date.getFullYear()+"."+date.getMonth()+"."+date.getDate();
+    var parentName = parentName.length > 0 ? parentName : date.getFullYear() + "." + date.getMonth() + "." + date.getDate();
     var count = count != 0 ? count : 1;
-    var filename = parentName+"."+count+".md";
-    var file = new File([data.toString()], filename, {type: "text/markdown",})
+    var filename = parentName + "." + count + ".md";
+    var file = new File([data.toString()], filename, { type: "text/markdown", })
     var fileId = this.currentFileId ? this.currentFileId : '';
 
-    this._isFileExistent(filename,this._insertOrUpdateFile(file, parentId, filename, fileId, callback));
-    
-  } 
+    this._isFileExistent(filename, parentName, this._insertOrUpdateFile(file, parentId, filename, fileId, callback));
 
-  _isFileExistent(name, callback){
-    gapi.client.drive.files.list({
-        q: "mimeType='text/markdown' and name contains "+"'"+name+"'",
-        fields: 'files(id, name)',
-        spaces: 'appDataFolder'
-      }).then( function (response) {
-        if(response.result.files.length === 0){
-          if(callback){
-            callback();
-          }
-        }
-      }, function(reason) {
-
-      });
   }
 
-  _insertOrUpdateFile(fileData, folderId?, filename?, fileId?, callback?){
+  _isFileExistent(name: string, parent, callback) {
+    var checkName = name.substr(0, name.length - 2);
+
+    gapi.client.drive.files.list({
+      q: "mimeType='text/markdown' and name contains " + "'" + checkName + "'",
+      fields: 'files(id, name)',
+      spaces: 'appDataFolder'
+    }).then(function(response) {
+      if (response.result.files.length === 0) {
+        if (callback) {
+          callback();
+        }
+      }
+    }, function(reason) {
+
+    });
+  }
+
+  _insertOrUpdateFile(fileData, folderId ? , filename ? , fileId ? , callback ? ) {
 
     const boundary = '-------314159265358979323846';
     const delimiter = "\r\n--" + boundary + "\r\n";
@@ -230,105 +235,110 @@ class GoogleAuthStore extends BaseStore<IAuth>{
       var metadata = {
         'title': filename,
         'mimeType': contentType,
-        'parents': [{'id': 'appfolder'}]
+        'parents': [{ 'id': 'appfolder' }]
       };
 
       var base64Data = btoa(reader.result);
       var multipartRequestBody =
-          delimiter +
-          'Content-Type: application/json\r\n\r\n' +
-          JSON.stringify(metadata) +
-          delimiter +
-          'Content-Type: ' + contentType + '\r\n' +
-          'Content-Transfer-Encoding: base64\r\n' +
-          '\r\n' +
-          base64Data +
-          close_delim;
+        delimiter +
+        'Content-Type: application/json\r\n\r\n' +
+        JSON.stringify(metadata) +
+        delimiter +
+        'Content-Type: ' + contentType + '\r\n' +
+        'Content-Transfer-Encoding: base64\r\n' +
+        '\r\n' +
+        base64Data +
+        close_delim;
 
       var path, method;
-      if(fileId && fileId.length>0){
-        path = '/upload/drive/v2/files/'+ fileId;
+      if (fileId && fileId.length > 0) {
+        path = '/upload/drive/v2/files/' + fileId;
         method = 'PUT'
-      }
-      else{
+      } else {
         path = '/upload/drive/v2/files';
         method = 'POST'
       }
 
       var request = gapi.client.request({
-          'path': path,
-          'method': method,
-          'params': {'uploadType': 'multipart'},
-          'headers': {
-            'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
-          },
-          'body': multipartRequestBody});
-      request.then(function(response){
-        if(!fileId){
+        'path': path,
+        'method': method,
+        'params': { 'uploadType': 'multipart' },
+        'headers': {
+          'Content-Type': 'multipart/mixed; boundary="' + boundary + '"'
+        },
+        'body': multipartRequestBody
+      });
+
+      request.then(function(response) {
+        if (fileId) {
           that.currentFileId = response.result.id;
         }
-        console.log(response);
-
-        if(callback){
-          callback();
+        if (callback && fileId) {
+          callback(fileId);
         }
-        
-        
-      }, function(){
+
+        that._getFileContents(response.result.id);
+      }, function(reason) {
 
       })
     }
   }
-  
-  _getSelectedDate(){
+
+  _getSelectedDate() {
     return this.selectedDate;
   }
 
-  _setSelectedDate(event){
+  _setSelectedDate(event) {
     this.selectedDate = event.payLoad.date;
     this._changeToken = event.type;
     this.emitChange();
   }
 
-  _isInitialStructureSetup (){
-    let params = {
-      q:"mimeType='application/vnd.google-apps.folder' and name='Memoirable'",
-      fields: 'nextPageToken, files(id, name)',
-      spaces: 'drive',
-    };
-
-    gapi.client.request({
-      'path': '/drive/v3/files',
-      'method' : 'GET',
-      'params' : Object.keys(params).map((i) => i+'='+params[i]).join('&')
-    }).then( function(response){
-      console.log(response.result);
-    }, function(reason){
-
-    })
-  }
-
-  _addNewEntry(callback){
+  _addNewEntry(callback) {
     let date = new Date();
-    let name = date.getFullYear()+"."+date.getMonth()+"."+date.getDate() + ".";
+    let name = date.getFullYear() + "." + date.getMonth() + "." + date.getDate() + ".";
     var that = this;
     gapi.client.drive.files.list({
-        q: "mimeType='text/markdown' and name contains "+"'"+name+"'",
+      q: "mimeType='text/markdown' and name contains " + "'" + name + "'",
+      fields: 'files(id, name)',
+      spaces: 'appDataFolder'
+    }).then(function(response) {
+      let count = response.result.files.length;
+      that._createOrUpdateFile('', '', '', count, that._getFileContents.bind(that));
+    }, function(reason) {
+
+    });
+  }
+
+  _getFileContents(id ? ) {
+    gapi.client.drive.files.get({
+      fileId: id,
+      alt: 'media'
+    }).then(function(response) {
+      console.log(response);
+    }, function(reason) {
+
+    });
+  }
+
+
+  _getFilesByDate(date, callback) {
+
+    gapi.client.load('drive', 'v3', function() {
+      gapi.client.drive.files.list({
+        q: "mimeType='text/markdown' and name contains " + "'" + name + "'",
         fields: 'files(id, name)',
         spaces: 'appDataFolder'
-      }).then( function (response) {
-        console.log(response);
-
-        let count = response.result.files.length;
-        that._createOrUpdateFile('','','',count, callback);
-        
-
+      }).then(function(response) {
+        // found the files for the given date
+        callback(response.result.files);
       }, function(reason) {
 
       });
+    });
   }
 
-  constructor(dispatcher: Flux.Dispatcher<AppEvent>) {
+  constructor(dispatcher: Flux.Dispatcher < AppEvent > ) {
     super(dispatcher, (event: AppEvent) => {
       if (event.payLoad.provider !== ProviderTypes.GOOGLE) {
         return;
