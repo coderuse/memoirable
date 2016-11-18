@@ -21,6 +21,7 @@ export default class AuthHeader extends React.Component<{}, any> {
   componentDidMount() {
     this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.AUTH_GET_PROFILE, this._setStateFromStores.bind(this));
     AuthActions.updateProfileInfo({ provider: ProviderTypes.GOOGLE });
+    AuthActions.createInitialFolderStructure({ provider: ProviderTypes.GOOGLE});
   }
 
   componentWillUnmount() {
@@ -48,7 +49,7 @@ export default class AuthHeader extends React.Component<{}, any> {
         </div>
         <div className="auth-header-right" onClick={this.toggleClass.bind(this)}> {this.state.displayName}
           <div className="dropdown-wrapper">
-            <button id="savetodrive" className={this.toggledClass} type="button" onClick={this.saveToDrive.bind(this,'google')}>Create Initial Structure</button>
+          
           </div>
         </div>
       </header>

@@ -332,6 +332,7 @@ declare module gapi.client {
             get: (params: {
                 acknowledgeAbuse?: boolean;
                 fileId: string;
+                alt?: string;
             }) => {
                 execute(callback: (data: IResponse<IFile>, original: string) => void):void;
                 then<U>(onFulfilled: (response: IPromiseResponse<IFile>) =>  Thenable<U>, onRejected?:(reason:IPromiseErrorResponse) => Thenable<U>): Thenable<U>;
