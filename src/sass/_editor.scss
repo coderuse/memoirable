@@ -1,4 +1,49 @@
 #editor {
-  font-size: 18pt;
   line-height: 1.5em;
+  height: 100%;
+}
+
+.ace-tm {
+  color: $default-editor-color !important;
+}
+
+.ace-tm .ace_cursor {
+  color: $default-editor-color !important;
+}
+
+.markdown {
+  @include span(4);
+  padding-left: 20px;
+  position: absolute;
+  bottom: 0;
+  top: 45px;
+  color: $default-editor-color;
+  display: inline-block;
+  background-color: $default-editor-back-color;
+}
+
+.markdown-left{
+  font-size: 18pt;
+  background-color: $default-editor-back-color;
+  textarea.mardown-textarea{
+    @include span(8);
+    height: 100%;
+    resize: none;
+    border: none;
+  }
+}
+
+.markdown-right{
+  font-family: $default-viewer-font-family;
+  background-color: $default-viewer-back-color;
+  left: 49.98%;
+  overflow-y: scroll;
+  .markdown-output-wrapper{
+    @include span(8);
+    overflow: auto;
+  }
+  font-size: 18pt;
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 300;
+  }
 }

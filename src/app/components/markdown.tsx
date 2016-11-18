@@ -49,13 +49,15 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
       showGutter: false,
       showLineNumbers: false,
       highlightActiveLine: false,
-      wrap: true
+      wrap: true,
+      vScrollBarAlwaysVisible: true
     });
     //editor.getSession().setMode('ace/mode/markdown');
-    editor.setTheme('ace/theme/textmate');
+    //editor.setTheme('ace/theme/chaos');
     editor.setValue(this.state.inputText);
     editor.on('change',function(e){
       this.setState({inputText: editor.getValue()});
+
       this._valueBefore = editor.getValue();
       var timeout;
       let val = editor.getValue();
@@ -64,7 +66,6 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
                     this._checkTriggerShouldHappenOrNot(val)
                   }.bind(this, val ), 2000);
       }
-      
       
     }.bind(this));
   }
@@ -95,28 +96,14 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
   }
 
   render() {
-    var files = this.state.files;
     return (
       <div className="row">
-        <div className="left-panel">
-          { files ? files.map(function(val,index){
-            return <div>
-              {val.name}
-            </div>
-            }) : <div></div>
-          }
+        <div className="markdown markdown-left">
+          <div id="editor"></div>
         </div>
-        <div className="right-panel">
-          <div className="markdown-left">
-            <div id="editor"></div>
-          </div>
-          <div className="markdown-right">
-            <div id="markdown-output" className="markdown-output-wrapper">
-              <ReactMarkdown source={this.state.inputText} />
-            </div>
-            <div className="new-entry" onClick={this.newEntry} title="Add New Entry">
-              <i className="memocon memocon-add"></i>
-            </div>
+        <div className="markdown markdown-right">
+          <div id="markdown-output" className="markdown-output-wrapper">
+            <ReactMarkdown source={this.state.inputText} />
           </div>
         </div>
       </div>

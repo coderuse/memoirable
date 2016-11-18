@@ -1,6 +1,6 @@
 .footer-to-diary {
   height: 60px;
-  background-color: rgb(74, 74, 74);
+  @include strip-properties();
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -8,11 +8,9 @@
   vertical-align: middle;
   input[type=submit], input[type=button], button {
     margin: 12px 0;
-    background-color: rgb(74, 74, 74);
-    color: rgb(221, 221, 221);    
+    background-color: $default-strip-color;
     padding: 8px 11px;
-    font-size: 14pt;
-    font-weight: 300;
+    @include strip-properties();
     -webkit-transition: background-color ease-in-out .15s, color ease-in-out .15s, border-color ease-in-out .15s;
     transition: background-color ease-in-out .15s, color ease-in-out .15s, border-color ease-in-out .15s;
     &:hover, &:focus {

@@ -1,0 +1,35 @@
+.auth-header{
+  @include strip-properties();
+  height: 45px; 
+  margin-bottom: $header-margin-bottom;
+  .hide-header-menu {
+    visibility: hidden;
+  }
+
+  .show-header-menu {
+    visibility: visible;
+  }
+
+  .header-logo{
+    float: left;
+    margin-left: 20px; 
+    img{
+      height: 40px;
+    }
+  } 
+
+  .auth-header-right{
+    height: 45px;
+    padding-top: 10px;
+    text-align: center;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    cursor: pointer;
+    font-size: 20px;
+    .dropdown-wrapper{
+      margin-top: 10px;
+      margin-right: 10px;
+    }
+  }
+}

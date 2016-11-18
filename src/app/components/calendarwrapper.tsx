@@ -94,7 +94,6 @@ export default class CalendarWrapper extends React.Component<{}, { date?: Date, 
   }
 
   toggleCalendar() {
-    console.log("toggle called");
     if(this.wrapperToggledClass === 'hide-wrapper'){
       this.wrapperToggledClass = 'wrapper';
     }
