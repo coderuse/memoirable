@@ -32,7 +32,7 @@ export class Home extends React.Component<{}, {}> {
       <div className="row">
         <div className="logo"></div>
         <div className="footer-to-diary">
-          <button className=""
+          <button className="strip-button"
               onClick={this._authenticate.bind(this, ProviderTypes.GOOGLE) }>
             Hi, here's your diary.
           </button>

@@ -109,15 +109,17 @@ export default class CalendarWrapper extends React.Component<{}, { date?: Date, 
   render() {
     return (
       <div className="calendar-wrapper-head">
-        <div className="selected-date-div" onClick={this.toggleCalendar.bind(this)}>{this.state.date.toDateString()} </div>
-          <div className={this.wrapperToggledClass}>
-            <div className="memocon-left-arrow" onClick={this.arrowClickHandler.bind(this,'left')}></div>
-            <div className="selected-date"></div>
-            <Calendar date={this.state.date} month={this.monthsArray[0].month} year={this.monthsArray[0].year}></Calendar>
-            <Calendar date={this.state.date} month={this.monthsArray[1].month} year={this.monthsArray[1].year}></Calendar>
-            <Calendar date={this.state.date} month={this.monthsArray[2].month} year={this.monthsArray[2].year}></Calendar>
-            <div className="memocon-right-arrow" onClick={this.arrowClickHandler.bind(this,'right')}></div>
-          </div>
+        <button className="strip-button text-content" onClick={this.toggleCalendar.bind(this)}>
+          {this.state.date.toDateString()}
+        </button>
+        <div className={this.wrapperToggledClass}>
+          <div className="memocon-navigate_before pull-left" onClick={this.arrowClickHandler.bind(this,'left')}></div>
+          <div className="selected-date"></div>
+          <Calendar date={this.state.date} month={this.monthsArray[0].month} year={this.monthsArray[0].year}></Calendar>
+          <Calendar date={this.state.date} month={this.monthsArray[1].month} year={this.monthsArray[1].year}></Calendar>
+          <Calendar date={this.state.date} month={this.monthsArray[2].month} year={this.monthsArray[2].year}></Calendar>
+          <div className="memocon-navigate_next" onClick={this.arrowClickHandler.bind(this,'right')}></div>
+        </div>
       </div>
     );
   }

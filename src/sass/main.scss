@@ -23,7 +23,20 @@ input[type=submit],
 input[type=button],
 button {
   @include sassy-button;
+  &.strip-button {
+    margin: 12px 0;
+    background-color: $default-strip-color;
+    padding: 8px 11px;
+    @include strip-properties();
+    -webkit-transition: background-color ease-in-out .15s, color ease-in-out .15s, border-color ease-in-out .15s;
+    transition: background-color ease-in-out .15s, color ease-in-out .15s, border-color ease-in-out .15s;
+    &:hover, &:focus {
+      box-shadow: none;
+      background-color: rgb(56, 56, 56);
+    }
+  }
 }
+
 
 @import "_logo";
 @import "_editor";
@@ -34,7 +47,6 @@ body{
   font-family: $default-font-family;
   min-width: 360.25px;
   font-size: .9em;
-  line-height: 1.5em;
   color: rgb(51,51,51);
   min-height: 520px;
   word-break: break-word;
@@ -44,6 +56,18 @@ body{
 
 .row {
   @include span(8);
+}
+
+.pull-left {
+  float: left;
+}
+
+.pull-right {
+  float: right;
+}
+
+.clear-float {
+  clear: both;
 }
 
 .backdrop {
@@ -86,97 +110,5 @@ body{
       margin: 0;
       font-size: 4em;
     }
-  }
-}
-
-
-.calendar-wrapper{
-  float: left;
-  width: 30%;
-  padding: 5px;
-  color: $default-calendar-font-color;
-  .weekdays{
-    width: 100%;
-    overflow: hidden;
-    padding: 2px;
-    border-top: 1px solid $default-calendar-font-color;
-    border-bottom: 1px solid $default-calendar-font-color;
-    div{
-      position: relative;
-      float: left;
-      width: 14%;
-      height: 14%;
-      text-align: center;
-      padding-top: 0.5emx;
-      font-size:0.8em;
-    }
-  } 
-
-  .weekvalues{
-    width: 100%;
-    overflow: hidden;
-    div{
-      position: relative;
-      float: left;
-      width: 14%;
-      height: 14%;
-      text-align: center;
-      padding: 0.6em;
-      font-size: 0.8em;
-    }
-
-    .selected-date {
-      background-color: #124680;
-      color: white;
-      border-radius: 50%;
-    }
-
-  }
-
-  .calendar-value{
-    text-align: center;
-    padding: 10px;
-    font-weight: bold;
-    font-size: 20px;
-  }
-}
-
-.calendar-wrapper-head{
-  position: relative;
-  
-  div.selected-date-div {
-    font-size: 20px;
-    font-weight: bold;
-    padding: 12px;
-  }
-
-  .wrapper{
-    z-index: 1000;
-    position: absolute;
-    width: 85%;
-    left: 7%;
-    background: $default-calendar-back-color;
-    min-width: 740px;
-    overflow: auto;
-    padding: 10px;
-
-    .memocon-left-arrow {
-      float: left;
-      padding-top: 135px;
-      height: 276px;
-      padding-left: 10px;
-      width: 5%;
-    }
-
-    .memocon-right-arrow {
-      float: left;
-      padding-top: 135px;
-      height: 276px;
-      width:5%;
-    }
-  }
-
-  .hide-wrapper{
-    display: none;
   }
 }
