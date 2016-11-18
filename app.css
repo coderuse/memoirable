@@ -1,14 +1,14 @@
-@charset "UTF-8";
 /* https://github.com/negomi/sassy-inputs */
 @font-face {
-  font-family: 'memoirable';
-  src: url("fonts/memoirable.ttf?6kpsl7") format("truetype"), url("fonts/memoirable.woff?6kpsl7") format("woff"), url("fonts/memoirable.svg?6kpsl7#memoirable") format("svg");
+  font-family: 'memocon';
+  src: url("fonts/memocon.eot?jy10ew");
+  src: url("fonts/memocon.eot?jy10ew#iefix") format("embedded-opentype"), url("fonts/memocon.ttf?jy10ew") format("truetype"), url("fonts/memocon.woff?jy10ew") format("woff"), url("fonts/memocon.svg?jy10ew#memocon") format("svg");
   font-weight: normal;
   font-style: normal;
 }
 [class^="memocon-"], [class*=" memocon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'memoirable' !important;
+  font-family: 'memocon' !important;
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -24,120 +24,56 @@
   content: "\e145";
 }
 
-.memocon-cached:before {
-  content: "\e86a";
+.memocon-arrow_back:before {
+  content: "\e5c4";
 }
 
-.memocon-chrome_reader_mode:before {
-  content: "\e86d";
+.memocon-arrow_forward:before {
+  content: "\e5c8";
 }
 
-.memocon-date_range:before {
-  content: "\e916";
+.memocon-navigate_before:before {
+  content: "\e408";
 }
 
-.memocon-markunread:before {
-  content: "\e159";
+.memocon-navigate_next:before {
+  content: "\e409";
 }
 
-.memocon-home:before {
-  content: "\e88a";
+.memocon-close:before {
+  content: "\e5cd";
 }
 
-.memocon-info:before {
-  content: "\e88e";
+.memocon-format_bold:before {
+  content: "\e238";
 }
 
-.memocon-back-arrow:before {
-  content: "\e317";
+.memocon-format_italic:before {
+  content: "\e23f";
 }
 
-.memocon-more_horiz:before {
-  content: "\e5d3";
+.memocon-format_list_bulleted:before {
+  content: "\e241";
 }
 
-.memocon-more_vert:before {
-  content: "\e5d4";
+.memocon-format_quote:before {
+  content: "\e244";
 }
 
-.memocon-notifications:before {
-  content: "\e7f4";
+.memocon-format_underlined:before {
+  content: "\e249";
 }
 
-.memocon-reply:before {
-  content: "\e15e";
-}
-
-.memocon-search:before {
-  content: "\e8b6";
-}
-
-.memocon-sentiment_dissatisfied:before {
-  content: "\e811";
-}
-
-.memocon-sentiment_neutral:before {
-  content: "\e812";
-}
-
-.memocon-sentiment_satisfied:before {
-  content: "\e813";
-}
-
-.memocon-sentiment_very_dissatisfied:before {
-  content: "\e814";
-}
-
-.memocon-sentiment_very_satisfied:before {
-  content: "\e815";
-}
-
-.memocon-settings:before {
-  content: "\e8b8";
-}
-
-.memocon-share:before {
-  content: "\e80d";
-}
-
-.memocon-thumb_down:before {
-  content: "\e8db";
-}
-
-.memocon-thumb_up:before {
-  content: "\e8dc";
+.memocon-remove:before {
+  content: "\e15b";
 }
 
 .memocon-view_headline:before {
   content: "\e8ee";
 }
 
-.memocon-wifi:before {
-  content: "\e63e";
-}
-
-.memocon-zoom_in:before {
-  content: "\e8ff";
-}
-
-.memocon-zoom_out:before {
-  content: "\e900";
-}
-
 .memocon-zoom_out_map:before {
   content: "\e56b";
-}
-
-.memocon-google-drive:before {
-  content: "\ea8f";
-}
-
-.memocon-left-arrow:before {
-  content: "\e904";
-}
-
-.memocon-right-arrow:before {
-  content: "";
 }
 
 /*! normalize-scss | MIT/GPLv2 License | bit.ly/normalize-scss */
@@ -663,6 +599,27 @@ button:disabled:hover,
 button:disabled:focus {
   box-shadow: none;
 }
+input[type=submit].strip-button,
+input[type=button].strip-button,
+button.strip-button {
+  margin: 12px 0;
+  background-color: #4a4a4a;
+  padding: 8px 11px;
+  color: #dddddd;
+  font-size: 14pt;
+  font-weight: 300;
+  background-color: #4a4a4a;
+  -webkit-transition: background-color ease-in-out .15s, color ease-in-out .15s, border-color ease-in-out .15s;
+  transition: background-color ease-in-out .15s, color ease-in-out .15s, border-color ease-in-out .15s;
+}
+input[type=submit].strip-button:hover, input[type=submit].strip-button:focus,
+input[type=button].strip-button:hover,
+input[type=button].strip-button:focus,
+button.strip-button:hover,
+button.strip-button:focus {
+  box-shadow: none;
+  background-color: #383838;
+}
 
 .incompatible-browser-notice {
   width: 22.5em;
@@ -765,22 +722,8 @@ button:disabled:focus {
   text-align: center;
   vertical-align: middle;
 }
-.footer-to-diary input[type=submit], .footer-to-diary input[type=button], .footer-to-diary button {
-  margin: 12px 0;
-  background-color: #4a4a4a;
-  padding: 8px 11px;
-  color: #dddddd;
-  font-size: 14pt;
-  font-weight: 300;
-  background-color: #4a4a4a;
-  -webkit-transition: background-color ease-in-out .15s, color ease-in-out .15s, border-color ease-in-out .15s;
-  transition: background-color ease-in-out .15s, color ease-in-out .15s, border-color ease-in-out .15s;
-}
-.footer-to-diary input[type=submit]:hover, .footer-to-diary input[type=submit]:focus, .footer-to-diary input[type=button]:hover, .footer-to-diary input[type=button]:focus, .footer-to-diary button:hover, .footer-to-diary button:focus {
-  box-shadow: none;
-  background-color: #383838;
-}
 
+/** ///TODO: Cleanup calendar css */
 .auth-header {
   color: #dddddd;
   font-size: 14pt;
@@ -802,26 +745,98 @@ button:disabled:focus {
 .auth-header .header-logo img {
   height: 40px;
 }
-.auth-header .auth-header-right {
-  height: 45px;
-  padding-top: 10px;
+.auth-header button.strip-button {
+  margin: 0;
+  font-size: 16pt;
+  padding: 14px 11px;
+}
+.auth-header button.strip-button.text-content {
+  padding: 12px 11px;
+}
+.auth-header .calendar-wrapper {
+  width: 30%;
+  padding: 5px;
+  color: #394275;
+}
+.auth-header .calendar-wrapper .weekdays {
+  width: 100%;
+  overflow: hidden;
+  padding: 2px;
+  border-top: 1px solid #394275;
+  border-bottom: 1px solid #394275;
+}
+.auth-header .calendar-wrapper .weekdays div {
+  position: relative;
+  float: left;
+  width: 14%;
+  height: 14%;
   text-align: center;
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  cursor: pointer;
+  padding-top: 0.5em;
+  font-size: 0.8em;
+}
+.auth-header .calendar-wrapper .weekvalues {
+  width: 100%;
+  overflow: hidden;
+}
+.auth-header .calendar-wrapper .weekvalues div {
+  position: relative;
+  float: left;
+  width: 14%;
+  height: 14%;
+  text-align: center;
+  padding: 0.6em;
+  font-size: 0.8em;
+}
+.auth-header .calendar-wrapper .weekvalues .selected-date {
+  background-color: #124680;
+  color: white;
+  border-radius: 50%;
+}
+.auth-header .calendar-wrapper .calendar-value {
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
   font-size: 20px;
 }
-.auth-header .auth-header-right .dropdown-wrapper {
-  margin-top: 10px;
-  margin-right: 10px;
+.auth-header .calendar-wrapper-head {
+  float: left;
+}
+.auth-header .calendar-wrapper-head .wrapper {
+  z-index: 1000;
+  position: absolute;
+  width: 85%;
+  left: 7%;
+  top: 45px;
+  background: #f7f7f7;
+  min-width: 740px;
+  overflow: auto;
+  padding: 10px;
+}
+.auth-header .calendar-wrapper-head .wrapper .memocon-navigate_before {
+  float: left;
+  padding-top: 135px;
+  height: 276px;
+  padding-left: 10px;
+  width: 5%;
+  font-size: 23pt;
+  font-weight: bold;
+}
+.auth-header .calendar-wrapper-head .wrapper .memocon-navigate_next {
+  float: left;
+  padding-top: 135px;
+  height: 276px;
+  width: 5%;
+  font-size: 23pt;
+  font-weight: bold;
+}
+.auth-header .calendar-wrapper-head .hide-wrapper {
+  display: none;
 }
 
 body {
   font-family: "Roboto", sans-serif;
   min-width: 360.25px;
   font-size: .9em;
-  line-height: 1.5em;
   color: #333333;
   min-height: 520px;
   word-break: break-word;
@@ -834,6 +849,18 @@ body {
   float: left;
   margin-left: 0;
   margin-right: 0;
+}
+
+.pull-left {
+  float: left;
+}
+
+.pull-right {
+  float: right;
+}
+
+.clear-float {
+  clear: both;
 }
 
 .backdrop {
@@ -881,86 +908,4 @@ body {
 .auth-modal .button-groups button {
   margin: 0;
   font-size: 4em;
-}
-
-.calendar-wrapper {
-  float: left;
-  width: 30%;
-  padding: 5px;
-  color: #394275;
-}
-.calendar-wrapper .weekdays {
-  width: 100%;
-  overflow: hidden;
-  padding: 2px;
-  border-top: 1px solid #394275;
-  border-bottom: 1px solid #394275;
-}
-.calendar-wrapper .weekdays div {
-  position: relative;
-  float: left;
-  width: 14%;
-  height: 14%;
-  text-align: center;
-  padding-top: 0.5emx;
-  font-size: 0.8em;
-}
-.calendar-wrapper .weekvalues {
-  width: 100%;
-  overflow: hidden;
-}
-.calendar-wrapper .weekvalues div {
-  position: relative;
-  float: left;
-  width: 14%;
-  height: 14%;
-  text-align: center;
-  padding: 0.6em;
-  font-size: 0.8em;
-}
-.calendar-wrapper .weekvalues .selected-date {
-  background-color: #124680;
-  color: white;
-  border-radius: 50%;
-}
-.calendar-wrapper .calendar-value {
-  text-align: center;
-  padding: 10px;
-  font-weight: bold;
-  font-size: 20px;
-}
-
-.calendar-wrapper-head {
-  position: relative;
-}
-.calendar-wrapper-head div.selected-date-div {
-  font-size: 20px;
-  font-weight: bold;
-  padding: 12px;
-}
-.calendar-wrapper-head .wrapper {
-  z-index: 1000;
-  position: absolute;
-  width: 85%;
-  left: 7%;
-  background: #f7f7f7;
-  min-width: 740px;
-  overflow: auto;
-  padding: 10px;
-}
-.calendar-wrapper-head .wrapper .memocon-left-arrow {
-  float: left;
-  padding-top: 135px;
-  height: 276px;
-  padding-left: 10px;
-  width: 5%;
-}
-.calendar-wrapper-head .wrapper .memocon-right-arrow {
-  float: left;
-  padding-top: 135px;
-  height: 276px;
-  width: 5%;
-}
-.calendar-wrapper-head .hide-wrapper {
-  display: none;
 }

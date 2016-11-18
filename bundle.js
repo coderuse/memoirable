@@ -6184,7 +6184,7 @@
 	        AuthActions.authorize({ provider: provider });
 	    };
 	    Home.prototype.render = function () {
-	        return (React.createElement("div", {className: "row"}, React.createElement("div", {className: "logo"}), React.createElement("div", {className: "footer-to-diary"}, React.createElement("button", {className: "", onClick: this._authenticate.bind(this, types_1.ProviderTypes.GOOGLE)}, "Hi, here's your diary."))));
+	        return (React.createElement("div", {className: "row"}, React.createElement("div", {className: "logo"}), React.createElement("div", {className: "footer-to-diary"}, React.createElement("button", {className: "strip-button", onClick: this._authenticate.bind(this, types_1.ProviderTypes.GOOGLE)}, "Hi, here's your diary."))));
 	    };
 	    return Home;
 	}(React.Component));
@@ -37750,7 +37750,7 @@
 	        this.setState({ 'name': 'button-state-changed' });
 	    };
 	    AuthHeader.prototype.render = function () {
-	        return (React.createElement("header", {className: "auth-header"}, React.createElement("div", {className: "auth-header-left"}, React.createElement(calendarwrapper_1.default, null)), React.createElement("div", {className: "auth-header-right", onClick: this.toggleClass.bind(this)}, " ", this.state.displayName, React.createElement("div", {className: "dropdown-wrapper"}))));
+	        return (React.createElement("div", {className: "auth-header row"}, React.createElement(calendarwrapper_1.default, null), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_bold"})), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_italic"})), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_underlined"})), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_list_bulleted"})), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_quote"})), React.createElement("button", {className: "strip-button pull-right text-content"}, this.state.displayName)));
 	    };
 	    return AuthHeader;
 	}(React.Component));
@@ -37860,7 +37860,7 @@
 	        });
 	    };
 	    CalendarWrapper.prototype.render = function () {
-	        return (React.createElement("div", {className: "calendar-wrapper-head"}, React.createElement("div", {className: "selected-date-div", onClick: this.toggleCalendar.bind(this)}, this.state.date.toDateString(), " "), React.createElement("div", {className: this.wrapperToggledClass}, React.createElement("div", {className: "memocon-left-arrow", onClick: this.arrowClickHandler.bind(this, 'left')}), React.createElement("div", {className: "selected-date"}), React.createElement(calendar_1.default, {date: this.state.date, month: this.monthsArray[0].month, year: this.monthsArray[0].year}), React.createElement(calendar_1.default, {date: this.state.date, month: this.monthsArray[1].month, year: this.monthsArray[1].year}), React.createElement(calendar_1.default, {date: this.state.date, month: this.monthsArray[2].month, year: this.monthsArray[2].year}), React.createElement("div", {className: "memocon-right-arrow", onClick: this.arrowClickHandler.bind(this, 'right')}))));
+	        return (React.createElement("div", {className: "calendar-wrapper-head"}, React.createElement("button", {className: "strip-button text-content", onClick: this.toggleCalendar.bind(this)}, this.state.date.toDateString()), React.createElement("div", {className: this.wrapperToggledClass}, React.createElement("div", {className: "memocon-navigate_before pull-left", onClick: this.arrowClickHandler.bind(this, 'left')}), React.createElement("div", {className: "selected-date"}), React.createElement(calendar_1.default, {date: this.state.date, month: this.monthsArray[0].month, year: this.monthsArray[0].year}), React.createElement(calendar_1.default, {date: this.state.date, month: this.monthsArray[1].month, year: this.monthsArray[1].year}), React.createElement(calendar_1.default, {date: this.state.date, month: this.monthsArray[2].month, year: this.monthsArray[2].year}), React.createElement("div", {className: "memocon-navigate_next", onClick: this.arrowClickHandler.bind(this, 'right')}))));
 	    };
 	    return CalendarWrapper;
 	}(React.Component));
@@ -37954,7 +37954,7 @@
 	    };
 	    Calendar.prototype.render = function () {
 	        var monthArray = this.monthArray;
-	        return (React.createElement("div", {className: "calendar-wrapper"}, React.createElement("div", {className: "calendar-value"}, helpers_1.Utils.getMonth(this.props.month) + ' ' + this.props.year), React.createElement("div", {className: "weekdays"}, React.createElement("div", null, "SUN"), React.createElement("div", null, "MON"), React.createElement("div", null, "TUE"), React.createElement("div", null, "WED"), React.createElement("div", null, "THU"), React.createElement("div", null, "FRI"), React.createElement("div", null, "SAT")), this.rowArray.map(function (rowNum, index) {
+	        return (React.createElement("div", {className: "calendar-wrapper pull-left"}, React.createElement("div", {className: "calendar-value"}, helpers_1.Utils.getMonth(this.props.month) + ' ' + this.props.year), React.createElement("div", {className: "weekdays"}, React.createElement("div", null, "SUN"), React.createElement("div", null, "MON"), React.createElement("div", null, "TUE"), React.createElement("div", null, "WED"), React.createElement("div", null, "THU"), React.createElement("div", null, "FRI"), React.createElement("div", null, "SAT")), this.rowArray.map(function (rowNum, index) {
 	            return React.createElement("div", {key: rowNum + index, className: "weekvalues"}, monthArray ? monthArray[rowNum].map(function (val, index) {
 	                var _this = this;
 	                var date = new Date(this.props.year, this.props.month, val);
