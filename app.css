@@ -832,6 +832,11 @@ button.strip-button:focus {
 .auth-header .calendar-wrapper-head .hide-wrapper {
   display: none;
 }
+@media (max-width: 1151px) {
+  .auth-header .calendar-wrapper-head .wrapper {
+    width: 90%;
+  }
+}
 
 body {
   font-family: "Roboto", sans-serif;
