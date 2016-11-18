@@ -114,5 +114,11 @@
     .hide-wrapper{
       display: none;
     }
+
+    @media (max-width: 1151px) {
+      .wrapper {
+        width: 90%;
+      }
+    }
   }
 }
