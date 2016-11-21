@@ -91,7 +91,7 @@ export default class Calendar extends React.Component<ICalendarDate, {}> {
   render() {
     var monthArray = this.monthArray;
     return (
-      <div className="calendar-wrapper">
+      <div className="calendar-wrapper pull-left">
         <div className="calendar-value">{ Utils.getMonth(this.props.month)+' '+this.props.year}</div>
         <div className="weekdays">
           <div>SUN</div>

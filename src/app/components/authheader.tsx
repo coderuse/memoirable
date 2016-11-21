@@ -43,16 +43,27 @@ export default class AuthHeader extends React.Component<{}, any> {
 
   render() {
     return (
-      <header className="auth-header">
-        <div className="auth-header-left">
+      <div className="auth-header row">
           <CalendarWrapper></CalendarWrapper>
-        </div>
-        <div className="auth-header-right" onClick={this.toggleClass.bind(this)}> {this.state.displayName}
-          <div className="dropdown-wrapper">
-          
-          </div>
-        </div>
-      </header>
+          <button className="strip-button pull-left">
+            <span className="memocon-format_bold" />
+          </button>
+          <button className="strip-button pull-left">
+            <span className="memocon-format_italic" />
+          </button>
+          <button className="strip-button pull-left">
+            <span className="memocon-format_underlined" />
+          </button>
+          <button className="strip-button pull-left">
+            <span className="memocon-format_list_bulleted" />
+          </button>
+          <button className="strip-button pull-left">
+            <span className="memocon-format_quote" />
+          </button>
+          <button className="strip-button pull-right text-content">
+            {this.state.displayName}
+          </button>
+      </div>
     );
   }
 }

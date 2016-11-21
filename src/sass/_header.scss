@@ -1,6 +1,7 @@
+/** ///TODO: Cleanup calendar css */
 .auth-header{
   @include strip-properties();
-  height: 45px; 
+  height: 45px;
   margin-bottom: $header-margin-bottom;
   .hide-header-menu {
     visibility: hidden;
@@ -18,18 +19,106 @@
     }
   } 
 
-  .auth-header-right{
-    height: 45px;
-    padding-top: 10px;
-    text-align: center;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    cursor: pointer;
-    font-size: 20px;
-    .dropdown-wrapper{
-      margin-top: 10px;
-      margin-right: 10px;
+  button.strip-button {
+    margin: 0;
+    font-size: 16pt;
+    padding: 14px 11px;
+    &.text-content {
+      padding: 12px 11px;
+    }
+  }
+
+  .calendar-wrapper{
+    width: 30%;
+    padding: 5px;
+    color: $default-calendar-font-color;
+    .weekdays{
+      width: 100%;
+      overflow: hidden;
+      padding: 2px;
+      border-top: 1px solid $default-calendar-font-color;
+      border-bottom: 1px solid $default-calendar-font-color;
+      div{
+        position: relative;
+        float: left;
+        width: 14%;
+        height: 14%;
+        text-align: center;
+        padding-top: 0.5em;
+        font-size:0.8em;
+      }
+    } 
+
+    .weekvalues{
+      width: 100%;
+      overflow: hidden;
+      div{
+        position: relative;
+        float: left;
+        width: 14%;
+        height: 14%;
+        text-align: center;
+        padding: 0.6em;
+        font-size: 0.8em;
+      }
+
+      .selected-date {
+        background-color: #124680;
+        color: white;
+        border-radius: 50%;
+      }
+    }
+
+    .calendar-value{
+      text-align: center;
+      padding: 10px;
+      font-weight: bold;
+      font-size: 20px;
+    }
+  }
+
+  .calendar-wrapper-head{
+    float: left;
+
+    .wrapper{
+      z-index: 1000;
+      position: absolute;
+      width: 85%;
+      left: 7%;
+      top: 45px;
+      background: $default-calendar-back-color;
+      min-width: 740px;
+      overflow: auto;
+      padding: 10px;
+
+      .memocon-navigate_before {
+        float: left;
+        padding-top: 135px;
+        height: 276px;
+        padding-left: 10px;
+        width: 5%;
+        font-size: 23pt;
+        font-weight: bold;
+      }
+
+      .memocon-navigate_next {
+        float: left;
+        padding-top: 135px;
+        height: 276px;
+        width:5%;
+        font-size: 23pt;
+        font-weight: bold;
+      }
+    }
+
+    .hide-wrapper{
+      display: none;
+    }
+
+    @media (max-width: 1151px) {
+      .wrapper {
+        width: 90%;
+      }
     }
   }
 }
