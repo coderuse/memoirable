@@ -6193,14 +6193,42 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	var types_1 = __webpack_require__(74);
 	var AuthActions = __webpack_require__(75);
 	var gAuthStore_1 = __webpack_require__(88);
+	;
 	var Home = (function (_super) {
 	    __extends(Home, _super);
 	    function Home() {
 	        _super.call(this);
 	    }
+	    Home.prototype.componentWillMount = function () {
+	        this.state = {
+	            diveInPages: []
+	        };
+	    };
 	    Home.prototype.componentDidMount = function () {
 	        this._listenerToken = gAuthStore_1.default.addChangeListener(types_1.AuthActionTypes.AUTH_INITIALIZE, function () {
 	            browserHistory_1.default.push('/dashboard');
+	        });
+	        this.setState({
+	            diveInPages: [
+	                {
+	                    text: '#First_Adventure'
+	                },
+	                {
+	                    text: '#First_Date'
+	                },
+	                {
+	                    text: '#With_Friends'
+	                },
+	                {
+	                    text: '#The_Proposal'
+	                },
+	                {
+	                    text: '#The_Marriage'
+	                },
+	                {
+	                    text: '#The_Day'
+	                }
+	            ]
 	        });
 	    };
 	    Home.prototype.componentWillUnmount = function () {
@@ -6210,7 +6238,9 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	        AuthActions.authorize({ provider: provider });
 	    };
 	    Home.prototype.render = function () {
-	        return (React.createElement("div", {className: "row"}, React.createElement("div", {className: "logo"}), React.createElement("div", {className: "footer-to-diary"}, React.createElement("button", {className: "strip-button", onClick: this._authenticate.bind(this, types_1.ProviderTypes.GOOGLE)}, "Hi, here's your diary."))));
+	        return (React.createElement("div", {className: "row pers"}, React.createElement("div", {className: "logo"}), React.createElement("div", {className: "dive-ins"}, this.state.diveInPages.map(function (r, i) {
+	            return (React.createElement("div", {key: r + i, className: 'dive-in-' + (i + 1)}, React.createElement("h1", null, this.state.diveInPages[i].text)));
+	        }.bind(this)), React.createElement("div", {className: "dive-in-7"}, React.createElement("h1", null, "#Let_All_Memoirables_Be_Written"))), React.createElement("div", {className: "footer-to-diary"}, React.createElement("button", {className: "strip-button", onClick: this._authenticate.bind(this, types_1.ProviderTypes.GOOGLE)}, "Hi, here's your diary."))));
 	    };
 	    return Home;
 	}(React.Component));

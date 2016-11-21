@@ -642,11 +642,9 @@ button.strip-button:focus {
   font-family: 'Satisfy', cursive;
   font-size: 72pt;
   color: #ff665e;
-  margin: 0 auto;
-  width: 430px;
   z-index: 200;
-  position: relative;
-  padding-top: 50px;
+  position: fixed;
+  padding: 0 24pt;
 }
 .logo:after {
   content: "Memoirable";
@@ -716,7 +714,7 @@ button.strip-button:focus {
   font-size: 14pt;
   font-weight: 300;
   background-color: #4a4a4a;
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   text-align: center;
@@ -866,6 +864,77 @@ button.strip-button:focus {
   cursor: pointer;
 }
 
+[class^="dive-in-"], [class*=" dive-in-"] {
+  position: relative;
+  opacity: 0.65;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 680px;
+}
+[class^="dive-in-"] h1, [class*=" dive-in-"] h1 {
+  float: right;
+  font-size: 48px;
+}
+
+.dive-in-1 {
+  background-image: url("./images/memories/first_adventure.jpg");
+}
+.dive-in-1 h1 {
+  color: #ff2a04;
+  margin: 323px 60px 0 0;
+}
+
+.dive-in-2 {
+  background-image: url("./images/memories/first_day_with_someone.jpg");
+}
+.dive-in-2 h1 {
+  color: #d6ff32;
+  margin: 24px 30px 0 0;
+}
+
+.dive-in-3 {
+  background-image: url("./images/memories/with_friends.jpg");
+}
+.dive-in-3 h1 {
+  color: #3299ff;
+  margin: 24px 30px 0 0;
+}
+
+.dive-in-4 {
+  background-image: url("./images/memories/proposed.jpg");
+}
+.dive-in-4 h1 {
+  color: #e732ff;
+  margin: 24px 30px 0 0;
+}
+
+.dive-in-5 {
+  background-image: url("./images/memories/marriage.jpg");
+}
+.dive-in-5 h1 {
+  color: #ff324e;
+  margin: 24px 30px 0 0;
+}
+
+.dive-in-6 {
+  background-image: url("./images/memories/new_born.jpg");
+}
+.dive-in-6 h1 {
+  color: #ffee32;
+  margin: 24px 30px 0 0;
+}
+
+.dive-in-7 {
+  background-image: url("./images/memories/let_all_be_written.jpg");
+}
+.dive-in-7 h1 {
+  margin: 0 auto;
+  color: #866dff;
+  margin: 24px 30px 0 0;
+}
+
 body {
   font-family: "Roboto", sans-serif;
   min-width: 360.25px;
@@ -873,7 +942,6 @@ body {
   color: #333333;
   min-height: 520px;
   word-break: break-word;
-  overflow-y: hidden;
   overflow-x: hidden;
 }
 
