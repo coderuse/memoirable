@@ -6,7 +6,7 @@ import { IndexLink, Link } from 'react-router';
 import { AuthActionTypes, ProviderTypes } from '../actions/types';
 import * as AuthActions from '../actions/authActions';
 import GAuthStore from '../stores/gAuthStore';
-
+import Entries from '../components/entries';
 import browserHistory from '../browserHistory';
 
 declare function require(name:string);
@@ -79,20 +79,50 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
   newEntry(){
     var that = this;
     const editor = ace.edit('editor');
+    var pr = new Promise( function(resolve, reject ){
+      
+    });
 
-    GAuthStore._addNewEntry(function(that){
-      that.setState({inputText: ""});
-      editor.setValue("",1);
-    }.bind(this, that));
+    GAuthStore._addNewEntry(pr);
+
+    pr.then(function(response: any){
+        
+      console.log("*********************");
+      
+      console.log(response);
+      console.log("*********************");
+
+      that.setState({files: response.files});
+    
+    }, function(reason){
+
+    });
   }
 
   fetchFilesForToday(){
     let date = new Date();
     let selectedDate = date.getFullYear()+"."+date.getMonth()+"."+date.getDate();
     var that = this;
-    GAuthStore._getFilesByDate(selectedDate, function(that, files){
-      that.setState({files: files});
-    }.bind(this, that))
+    var pr = new Promise( function(resolve, reject ){
+      
+    });
+
+    GAuthStore._getFilesByDate(selectedDate,pr)
+
+    
+
+    pr.then(function(response: any){
+        
+      console.log("*********************");
+      
+      console.log(response);
+      console.log("*********************");
+
+      that.setState({files: response.files});
+    
+    }, function(reason){
+
+    });
   }
 
   render() {
@@ -100,10 +130,14 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
       <div className="row">
         <div className="markdown markdown-left">
           <div id="editor"></div>
+          <Entries></Entries>
         </div>
         <div className="markdown markdown-right">
           <div id="markdown-output" className="markdown-output-wrapper">
             <ReactMarkdown source={this.state.inputText} />
+          </div>
+          <div className="new-entry" onClick={this.newEntry} title="Add New Entry">
+            <i className="memocon memocon-add"></i>
           </div>
         </div>
       </div>

@@ -1,0 +1,28 @@
+
+.hide-entries{
+  display: none;
+}
+
+.show-entries{
+  display: block;
+  font-size: 10px;
+  position: absolute;
+  bottom: 1px;
+  left: 40px;
+  width: 120px;
+}
+
+.memocon-view_headline {
+  position: fixed;
+  bottom: 5px;
+  font-size: 40px;
+  cursor: pointer;
+}
+
+.new-entry{
+  position: fixed;
+  bottom: 5px;
+  right: 40px;
+  font-size: 40px;
+  cursor: pointer;
+}
