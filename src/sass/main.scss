@@ -43,6 +43,7 @@ button {
 @import "_footer";
 @import "_header";
 @import "_entries";
+@import "_home";
 
 body{
   font-family: $default-font-family;
@@ -51,7 +52,6 @@ body{
   color: rgb(51,51,51);
   min-height: 520px;
   word-break: break-word;
-  overflow-y: hidden;
   overflow-x: hidden;
 }
 

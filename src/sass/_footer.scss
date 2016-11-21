@@ -1,7 +1,7 @@
 .footer-to-diary {
   height: 60px;
   @include strip-properties();
-  position: absolute;
+  position: fixed;
   bottom: 0;
   width: 100%;
   text-align: center;
