@@ -3,7 +3,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { browserHistory, IndexLink, Link } from 'react-router';
-import { ProviderTypes } from '../actions/types';
+import { AuthActionTypes, ProviderTypes } from '../actions/types';
 import * as AuthActions from '../actions/authActions';
 import GAuthStore from '../stores/gAuthStore';
 
@@ -18,19 +18,23 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
 
   componentWillMount() {
     this.fetchFilesForToday();
-  }
 
-  shouldComponentUpdate(nextProps: any, nextState: any) {
-    return true;
+    // this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.FETCH_FILES_FOR_DATE, function(){
+    //   this.setState({date: GAuthStore._getSelectedDate()});
+    // }.bind(this));
   }
 
   fetchFilesForToday(){
-    let date = GAuthStore._getSelectedDate();
+    let date = new Date();
     let selectedDate = date.getFullYear()+"."+date.getMonth()+"."+date.getDate();
     var that = this;
-    GAuthStore._getFilesByDate(selectedDate, function(that, files){
-      that.setState({files: files});
-    }.bind(this, that))
+    var pr = new Promise( function(resolve, reject ){
+      resolve({
+        this: that
+      });
+    });
+
+    AuthActions.getFilesForSelectedDate({ provider: ProviderTypes.GOOGLE, date: selectedDate, pr: pr })
   }
   
   handleClickEntries() {
@@ -45,14 +49,27 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
     })
   }
 
+  entryClicked(obj) {
+    if(obj && obj.id){
+      GAuthStore._getFileContents(obj.id).then( function(response){
+
+      }, function(reason){
+
+      });
+    }
+  }
+
   render() {
     var files = this.state && this.state.files ? this.state.files : [];
+    var that = this;
     return (
       <div className="memocon-view_headline" title="Entries" onClick={this.handleClickEntries.bind(this)}>
         <div className={this._currentClass}>
         { files ? files.map(function(val,index){
-                        return <div key={index}>
-                          {val.name}
+
+          let value = val.name.substr(13,10);
+                        return <div key={index} onClick={that.entryClicked.bind(that, val)}>
+                          {value}
                         </div>
                         }) : <div></div>
         }
