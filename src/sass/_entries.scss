@@ -14,22 +14,22 @@ $entries-box-height: 200px;
   width: $entries-box-width;
   height: $entries-box-height;
   background: #f9f9f9;
+  border-left: 1px solid #bbc;
   
   .entries-list {
-    overflow-y: auto;
+    overflow-y: visible;
     overflow-x: hidden;
     cursor: pointer;
+    max-height: 170px;
+    
     .entries-item {
       padding: 5px;
-      
     }
 
     .selected-item {
       background : cadetblue;
       color: white;
     }
-
-    
   }
 
   .entries-header {

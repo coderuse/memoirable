@@ -26,10 +26,9 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
     var that = this;
 
     AuthActions.getFilesForSelectedDate({ provider: ProviderTypes.GOOGLE, date: selectedDate, pr: function(files){
-      console.log(files);
       that.setState({files: files});
 
-      if(trigger){
+      if(!trigger){
         that.entryClicked(files[0]);  
       }
       
@@ -84,7 +83,7 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
             { files ? files.map(function(val,index){
 
               let className = 'entries-item';
-              let value = val.name.substr(13,10);
+              let value = val.name.substr(13,10)+'...';
               if(val.id === selectedFile.id){
                 className = className + " selected-item";
               }
