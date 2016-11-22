@@ -18,9 +18,10 @@ $entries-box-height: 200px;
   .entries-list {
     overflow-y: auto;
     overflow-x: hidden;
-
+    cursor: pointer;
     .entries-item {
       padding: 5px;
+      
     }
 
     .selected-item {
@@ -46,6 +47,7 @@ $entries-box-height: 200px;
 
     .entries-header-close{
       float: right;
+      cursor: pointer;
     }
   }
 }

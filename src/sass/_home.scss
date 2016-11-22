@@ -1,0 +1,92 @@
+[class^="dive-in-"], [class*=" dive-in-"] {
+  position: relative;
+  opacity: 0.65;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 680px;
+
+  h1 {
+    float: right;
+    font-size: 48px;
+  }
+}
+
+.dive-in-1 {
+  background-image: url("./images/memories/first_adventure.jpg");
+  h1 {
+    color: rgb(255, 42, 4);
+    margin: 323px 60px 0 0;
+  }
+}
+
+.dive-in-2 {
+  background-image: url("./images/memories/first_day_with_someone.jpg");
+  h1 {
+    color: rgb(214, 255, 50);
+    margin: 24px 30px 0 0;
+  }
+}
+
+.dive-in-3 {
+  background-image: url("./images/memories/with_friends.jpg");
+  h1 {
+    color: rgb(50, 153, 255);
+    margin: 24px 30px 0 0;
+  }
+}
+
+.dive-in-4 {
+  background-image: url("./images/memories/proposed.jpg");
+  h1 {
+    color: rgb(231, 50, 255);
+    margin: 24px 30px 0 0;
+  }
+}
+
+.dive-in-5 {
+  background-image: url("./images/memories/marriage.jpg");
+  h1 {
+    color: rgb(255, 50, 78);
+    margin: 24px 30px 0 0;
+  }
+}
+
+.dive-in-6 {
+  background-image: url("./images/memories/new_born.jpg");
+  h1 {
+    color: rgb(255, 238, 50);
+    margin: 24px 30px 0 0;
+  }
+}
+
+.dive-in-7 {
+  background-image: url("./images/memories/let_all_be_written.jpg");
+  h1 {
+    color: rgb(134, 109, 255);
+    margin: 24px 30px 0 0;
+  }
+  div.message {
+    border-radius: 20px;
+    background:rgba(0, 0, 0, 0.3);
+    color: rgb(249, 228, 53);
+    height: 350px;
+    width: 70%;
+    top: 150px;
+    position: absolute;
+    left: 15%;
+    padding: 10px 20px;
+    p {
+      line-height: 1.5em;
+      font-size: 1.2em;
+      letter-spacing: .05em;
+      span.message-logo {
+        font-family: 'Satisfy', cursive;
+        color: rgb(255, 102, 94);
+        font-size: 1.2em;
+      }
+    }
+  }
+}
+
