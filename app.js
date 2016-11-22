@@ -7516,14 +7516,7 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	                orderBy: 'modifiedTime desc'
 	            }).then(function (response) {
 	                that.currentFileId = response.result.files[0].id;
-	                pr.then(function (res) {
-	                    res.this.setState({ files: response.result.files });
-	                    if (!event.payLoad.trigger) {
-	                        res.this.entryClicked(response.result.files[0]);
-	                    }
-	                }, function () {
-	                });
-	                console.log(event.payLoad);
+	                event.payLoad.pr(response.result.files);
 	            }, function (reason) {
 	            });
 	        });
@@ -7642,16 +7635,14 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	var ace = __webpack_require__(119);
 	__webpack_require__(122);
 	__webpack_require__(127);
-	function onChange(newValue) {
-	    console.log('change', newValue);
-	}
 	;
 	var Markdown = (function (_super) {
 	    __extends(Markdown, _super);
 	    function Markdown(props) {
 	        _super.call(this, props);
-	        this._valueWhileSaving = '';
+	        this.valueWhileSaving = '';
 	        this.focusCount = 0;
+	        this.fetchedFileState = 'file.initial';
 	        this.state = { inputText: "# Diary, O' Diary!!!" };
 	    }
 	    Markdown.prototype._navigateBack = function () {
@@ -7680,13 +7671,13 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	        editor.setValue(this.state.inputText);
 	        editor.on('change', function (e) {
 	            this.setState({ inputText: editor.getValue() });
-	            this._valueBefore = editor.getValue();
+	            this.valueBefore = editor.getValue();
 	            var timeout;
 	            var val = editor.getValue();
 	            if (typeof timeout !== 'function') {
-	                timeout = setTimeout(function (val) {
-	                    this._checkTriggerShouldHappenOrNot(val);
-	                }.bind(this, val), 2000);
+	                timeout = setTimeout(function (val, state) {
+	                    this._checkTriggerShouldHappenOrNot(val, state);
+	                }.bind(this, val, this.fetchedFileState), 2000);
 	            }
 	        }.bind(this));
 	        editor.on("focus", function () {
@@ -7695,15 +7686,16 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	            }
 	            editor.setValue(this.state.inputText);
 	            this.focusCount++;
+	            that.fetchedFileState = 'file.changed';
 	        }.bind(this));
 	        var that = this;
 	        this._listenerToken = gAuthStore_1.default.addChangeListener(types_1.AuthActionTypes.SELECTED_FILE, function () {
 	            gAuthStore_1.default._getFileContents(gAuthStore_1.default.currentFileId).then(function (response) {
-	                console.log("inside markdown get file");
+	                that.fetchedFileState = 'file.fetched';
 	                that.setState({ inputText: response.body });
 	                editor.setValue(that.state.inputText);
 	                that.focusCount = 0;
-	                that._valueWhileSaving = '';
+	                that.valueWhileSaving = '';
 	                if (response.body.length >= 10) {
 	                    that.focusCount++;
 	                }
@@ -7713,12 +7705,12 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	        });
 	    };
 	    Markdown.prototype._checkTriggerShouldHappenOrNot = function (val) {
-	        if (val && val.length >= 10 && this.state.inputText === val && this._valueWhileSaving !== val) {
+	        if (this.fetchedFileState !== 'file.fetched' && val && val.length >= 10 && this.state.inputText === val && this.valueWhileSaving !== val) {
 	            var key = 'update';
 	            if (gAuthStore_1.default.currentFileId === '') {
 	                key = 'create';
 	            }
-	            this._valueWhileSaving = this.state.inputText;
+	            this.valueWhileSaving = this.state.inputText;
 	            gAuthStore_1.default._createOrUpdateFile(gAuthStore_1.default.currentFolderIdInUse, '', this.state.inputText, 0, key);
 	        }
 	    };
@@ -7728,7 +7720,7 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	        this.setState({ inputText: '' });
 	        editor.setValue('');
 	        this.focusCount = 0;
-	        this._valueWhileSaving = '';
+	        this.valueWhileSaving = '';
 	        gAuthStore_1.default.currentFileId = '';
 	    };
 	    Markdown.prototype.render = function () {
@@ -7770,12 +7762,12 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	        var date = new Date();
 	        var selectedDate = date.getFullYear() + "." + date.getMonth() + "." + date.getDate();
 	        var that = this;
-	        var pr = new Promise(function (resolve, reject) {
-	            resolve({
-	                this: that
-	            });
-	        });
-	        AuthActions.getFilesForSelectedDate({ provider: types_1.ProviderTypes.GOOGLE, date: selectedDate, pr: pr, trigger: trigger });
+	        AuthActions.getFilesForSelectedDate({ provider: types_1.ProviderTypes.GOOGLE, date: selectedDate, pr: function (files) {
+	                that.setState({ files: files });
+	                if (!trigger) {
+	                    that.entryClicked(files[0]);
+	                }
+	            } });
 	    };
 	    Entries.prototype.handleClickEntries = function () {
 	        if (this._currentClass === 'hide-entries') {
@@ -7791,12 +7783,14 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	    Entries.prototype.entryClicked = function (obj) {
 	        if (obj && obj.id) {
 	            gAuthStore_1.default.currentFileObj = obj;
+	            gAuthStore_1.default.currentFileId = obj.id;
 	            gAuthStore_1.default._changeToken = types_1.AuthActionTypes.SELECTED_FILE;
 	            gAuthStore_1.default.emitChange();
 	        }
 	    };
 	    Entries.prototype.componentDidMount = function () {
 	        this._listenerToken = gAuthStore_1.default.addChangeListener(types_1.AuthActionTypes.SAVE_FILE, function () {
+	            console.log("saved the file");
 	            this.fetchFilesForToday(true);
 	        }.bind(this));
 	    };
@@ -7807,8 +7801,8 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	        selectedFile.cleanedName = selectedFile.name.substr(13, 10);
 	        return (React.createElement("div", null, React.createElement("div", {className: "memocon-view_headline", title: "Entries", onClick: this.handleClickEntries.bind(this)}), React.createElement("div", {className: this._currentClass}, React.createElement("div", {className: "entries-header"}, React.createElement("div", {className: "entries-header-selected"}, selectedFile.cleanedName), React.createElement("div", {className: "entries-header-close", onClick: this.handleClickEntries.bind(this)}, "X")), React.createElement("div", {className: "entries-list"}, files ? files.map(function (val, index) {
 	            var className = 'entries-item';
-	            var value = val.name.substr(13, 10);
-	            if (val.id === gAuthStore_1.default.currentFileId) {
+	            var value = val.name.substr(13, 10) + '...';
+	            if (val.id === selectedFile.id) {
 	                className = className + " selected-item";
 	            }
 	            return React.createElement("div", {className: className, key: index, onClick: that.entryClicked.bind(that, val)}, value);

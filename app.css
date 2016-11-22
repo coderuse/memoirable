@@ -849,11 +849,13 @@ button.strip-button:focus {
   width: 200px;
   height: 200px;
   background: #f9f9f9;
+  border-left: 1px solid #bbc;
 }
 .show-entries .entries-list {
-  overflow-y: auto;
+  overflow-y: visible;
   overflow-x: hidden;
   cursor: pointer;
+  max-height: 170px;
 }
 .show-entries .entries-list .entries-item {
   padding: 5px;
