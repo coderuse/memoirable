@@ -15,12 +15,12 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
   constructor(props) {
     super();
   }
-  selectedFile: any = {name : 'initial'};
+  selectedFile: any = {name : ''};
   componentWillMount() {
-    this.fetchFilesForToday();
+    this.fetchFilesForToday(false);
   }
 
-  fetchFilesForToday(){
+  fetchFilesForToday(trigger){
     let date = new Date();
     let selectedDate = date.getFullYear()+"."+date.getMonth()+"."+date.getDate();
     var that = this;
@@ -30,7 +30,7 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
       });
     });
 
-    AuthActions.getFilesForSelectedDate({ provider: ProviderTypes.GOOGLE, date: selectedDate, pr: pr })
+    AuthActions.getFilesForSelectedDate({ provider: ProviderTypes.GOOGLE, date: selectedDate, pr: pr, trigger: trigger})
   }
   
   handleClickEntries() {
@@ -47,18 +47,23 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
 
   entryClicked(obj) {
     if(obj && obj.id){
-      this.selectedFile = obj;
-      GAuthStore._getFileContents(obj.id).then( function(response){
-
-      }, function(reason){
-
-      });
+      GAuthStore.currentFileObj = obj;
+      GAuthStore._changeToken = AuthActionTypes.SELECTED_FILE;
+      GAuthStore.emitChange();
     }
+  }
+
+  componentDidMount(){
+    this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.SAVE_FILE, function(){
+      this.fetchFilesForToday(true);
+    }.bind(this));
   }
 
   render() {
     var files = this.state && this.state.files ? this.state.files : [];
     var that = this;
+    var selectedFile = GAuthStore.currentFileObj? GAuthStore.currentFileObj : { 'name': 'initial'};
+    selectedFile.cleanedName = selectedFile.name.substr(13,10);
     return (
       <div>
         <div className="memocon-view_headline" title="Entries" onClick={this.handleClickEntries.bind(this)}>
@@ -66,17 +71,22 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
         </div>
         <div className={this._currentClass}>
           <div className="entries-header">
-            <div className="entries-header-selected">{this.selectedFile.name}</div>
+            <div className="entries-header-selected">{selectedFile.cleanedName}</div>
             <div className="entries-header-close" onClick={this.handleClickEntries.bind(this)}>X</div>
           </div>
           <div className="entries-list">
             { files ? files.map(function(val,index){
 
+              let className = 'entries-item';
               let value = val.name.substr(13,10);
-                            return <div className="entries-item" key={index} onClick={that.entryClicked.bind(that, val)}>
-                              {value}
-                            </div>
-                            }) : <div></div>
+              if(val.id === GAuthStore.currentFileId){
+                className = className + " selected-item";
+              }
+
+              return <div className={className} key={index} onClick={that.entryClicked.bind(that, val)}>
+                {value}
+              </div>
+              }) : <div></div>
             }
           </div>
         </div>

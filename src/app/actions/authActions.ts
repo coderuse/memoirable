@@ -27,3 +27,8 @@ export function getFilesForSelectedDate(payload?: any){
 export function getParticularFile(payload?: any){
   AppDispatcher.dispatch(new AppEvent(AuthActionTypes.FETCH_PARTICULAR_FILE, payload));
 }
+
+export function saveFile(payload?: any){
+  AppDispatcher.dispatch(new AppEvent(AuthActionTypes.SAVE_FILE, payload));
+}
+

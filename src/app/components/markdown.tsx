@@ -87,8 +87,9 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
 
 
       var that = this;
-      this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.FETCH_FILES_FOR_DATE, function(){
+      this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.SELECTED_FILE, function(){
         GAuthStore._getFileContents(GAuthStore.currentFileId).then( function(response){
+          console.log("inside markdown get file");
             that.setState({inputText: response.body});
             editor.setValue(that.state.inputText);
             that.focusCount = 0;
@@ -116,19 +117,14 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
   }
 
   newEntry(){
-    var that = this;
+    // Empty the editor
     const editor = ace.edit('editor');
-
-    GAuthStore._addNewEntry(GAuthStore._getFolderId(),function(id){
-      GAuthStore._getFileContents(id).then( function(response){
-          that.setState({inputText: response.body});
-          editor.setValue(that.state.inputText);
-          that.focusCount = 0;
-          that._valueWhileSaving = '';
-      }, function(reason){
-        console.log(reason);
-      });
-    });
+    this.setState({inputText: ''});
+    editor.setValue('');
+    this.focusCount = 0;
+    this._valueWhileSaving = '';
+    GAuthStore.currentFileId = '';
+    
   }
 
   render() {

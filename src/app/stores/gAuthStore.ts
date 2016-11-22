@@ -281,6 +281,9 @@ class GoogleAuthStore extends BaseStore < IAuth > {
         if(callback){
           callback(response.result.id);
         }
+
+        that._changeToken = 'file.save';
+        that.emitChange();
       }, function(reason) {
 
       })
@@ -336,18 +339,18 @@ class GoogleAuthStore extends BaseStore < IAuth > {
         spaces: 'appDataFolder',
         orderBy: 'modifiedTime desc'
       }).then(function(response) {
-          that.currentFileId = response.result.files[0].id;
+        that.currentFileId = response.result.files[0].id;
 
-          pr.then(function(res){
-            res.this.setState({files: response.result.files});
-          }, function(){
+        pr.then(function(res){
+          res.this.setState({files: response.result.files});
+          if(!event.payLoad.trigger){
+            res.this.entryClicked(response.result.files[0]);
+          }
+        }, function(){
 
-          });
-
-
-          that._changeToken = event.type;
-          that.emitChange();
-
+        });
+        console.log(event.payLoad);
+        
       }, function(reason) {
 
       });
@@ -375,10 +378,7 @@ class GoogleAuthStore extends BaseStore < IAuth > {
           break;
         case AuthActionTypes.FETCH_FILES_FOR_DATE:
           this._getFilesByDate.bind(this, event)();
-          break;
-        case AuthActionTypes.FETCH_PARTICULAR_FILE:
-          this._getFileContents.bind(this, event)();
-          break;      
+          break;  
         default:
           break;
       }

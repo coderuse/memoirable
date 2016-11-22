@@ -1,3 +1,5 @@
+$entries-box-width: 200px;
+$entries-box-height: 200px;
 
 .hide-entries{
   display: none;
@@ -5,12 +7,12 @@
 
 .show-entries{
   display: block;
-  font-size: 10px;
+  font-size: 15px;
   position: absolute;
   bottom: 1px;
   left: 70px;
-  width: 120px;
-  height: 200px;
+  width: $entries-box-width;
+  height: $entries-box-height;
   background: #f9f9f9;
   
   .entries-list {
@@ -19,24 +21,24 @@
 
     .entries-item {
       padding: 5px;
+    }
 
-      &:hover{
-        background : cadetblue;
-        color: white;
-      }
+    .selected-item {
+      background : cadetblue;
+      color: white;
     }
 
     
   }
 
   .entries-header {
-    width: 120px;
+    width: $entries-box-width;
     height: 30px;
     background: #4a4a4a;
     color: white;
     padding: 5px 7px;
     font-weight: bold;
-    font-size: 13px;
+    font-size: 15px;
 
     .entries-header-selected{
       float: left;
