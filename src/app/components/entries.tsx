@@ -8,7 +8,7 @@ import * as AuthActions from '../actions/authActions';
 import GAuthStore from '../stores/gAuthStore';
 
 export interface IEntries {};
-export interface IEntriesState {files? : any, currentClass: string}
+export interface IEntriesState {files? : any, currentClass?: string}
 export default class Entries extends React.Component<IEntries, IEntriesState> {
   _listenerToken: FBEmitter.EventSubscription;
   _currentClass : string = "hide-entries";
@@ -24,13 +24,16 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
     let date = new Date();
     let selectedDate = date.getFullYear()+"."+date.getMonth()+"."+date.getDate();
     var that = this;
-    var pr = new Promise( function(resolve, reject ){
-      resolve({
-        this: that
-      });
-    });
 
-    AuthActions.getFilesForSelectedDate({ provider: ProviderTypes.GOOGLE, date: selectedDate, pr: pr, trigger: trigger})
+    AuthActions.getFilesForSelectedDate({ provider: ProviderTypes.GOOGLE, date: selectedDate, pr: function(files){
+      console.log(files);
+      that.setState({files: files});
+
+      if(trigger){
+        that.entryClicked(files[0]);  
+      }
+      
+    }})
   }
   
   handleClickEntries() {
@@ -48,6 +51,7 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
   entryClicked(obj) {
     if(obj && obj.id){
       GAuthStore.currentFileObj = obj;
+      GAuthStore.currentFileId = obj.id;
       GAuthStore._changeToken = AuthActionTypes.SELECTED_FILE;
       GAuthStore.emitChange();
     }
@@ -55,6 +59,7 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
 
   componentDidMount(){
     this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.SAVE_FILE, function(){
+      console.log("saved the file");
       this.fetchFilesForToday(true);
     }.bind(this));
   }
@@ -64,6 +69,7 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
     var that = this;
     var selectedFile = GAuthStore.currentFileObj? GAuthStore.currentFileObj : { 'name': 'initial'};
     selectedFile.cleanedName = selectedFile.name.substr(13,10);
+
     return (
       <div>
         <div className="memocon-view_headline" title="Entries" onClick={this.handleClickEntries.bind(this)}>
@@ -79,7 +85,7 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
 
               let className = 'entries-item';
               let value = val.name.substr(13,10);
-              if(val.id === GAuthStore.currentFileId){
+              if(val.id === selectedFile.id){
                 className = className + " selected-item";
               }
 
