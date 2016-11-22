@@ -930,9 +930,29 @@ button.strip-button:focus {
   background-image: url("./images/memories/let_all_be_written.jpg");
 }
 .dive-in-7 h1 {
-  margin: 0 auto;
   color: #866dff;
   margin: 24px 30px 0 0;
+}
+.dive-in-7 div.message {
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.3);
+  color: #f9e435;
+  height: 350px;
+  width: 70%;
+  top: 150px;
+  position: absolute;
+  left: 15%;
+  padding: 10px 20px;
+}
+.dive-in-7 div.message p {
+  line-height: 1.5em;
+  font-size: 1.2em;
+  letter-spacing: .05em;
+}
+.dive-in-7 div.message p span.message-logo {
+  font-family: 'Satisfy', cursive;
+  color: #ff665e;
+  font-size: 1.2em;
 }
 
 body {
