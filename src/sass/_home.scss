@@ -64,9 +64,29 @@
 .dive-in-7 {
   background-image: url("./images/memories/let_all_be_written.jpg");
   h1 {
-    margin: 0 auto;
     color: rgb(134, 109, 255);
     margin: 24px 30px 0 0;
+  }
+  div.message {
+    border-radius: 20px;
+    background:rgba(0, 0, 0, 0.3);
+    color: rgb(249, 228, 53);
+    height: 350px;
+    width: 70%;
+    top: 150px;
+    position: absolute;
+    left: 15%;
+    padding: 10px 20px;
+    p {
+      line-height: 1.5em;
+      font-size: 1.2em;
+      letter-spacing: .05em;
+      span.message-logo {
+        font-family: 'Satisfy', cursive;
+        color: rgb(255, 102, 94);
+        font-size: 1.2em;
+      }
+    }
   }
 }
 
