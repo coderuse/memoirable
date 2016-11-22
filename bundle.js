@@ -6237,7 +6237,12 @@
 	    AUTH_INITIALIZE: 'auth.initialize',
 	    AUTH_GET_PROFILE: 'auth.getProfile',
 	    GOOGLE_CREATE_INITIAL_FOLDERS: 'google.initialFolders',
-	    CALENDAR_DATE_CHANGED: 'calendar.changedDate'
+	    CALENDAR_DATE_CHANGED: 'calendar.changedDate',
+	    FETCH_FILES_FOR_DATE: 'files.selectedDate',
+	    FETCH_PARTICULAR_FILE: 'files.fetchFile',
+	    SAVE_FILE: 'file.save',
+	    ADD_NEW_ENTRY: 'entry.add',
+	    SELECTED_FILE: 'file.selected'
 	};
 	exports.ProviderTypes = {
 	    GOOGLE: 'google',
@@ -6272,6 +6277,18 @@
 	    appDispatcher_1.default.dispatch(new appEvent_1.AppEvent(types_1.AuthActionTypes.CALENDAR_DATE_CHANGED, payload));
 	}
 	exports.calendarDateChanged = calendarDateChanged;
+	function getFilesForSelectedDate(payload) {
+	    appDispatcher_1.default.dispatch(new appEvent_1.AppEvent(types_1.AuthActionTypes.FETCH_FILES_FOR_DATE, payload));
+	}
+	exports.getFilesForSelectedDate = getFilesForSelectedDate;
+	function getParticularFile(payload) {
+	    appDispatcher_1.default.dispatch(new appEvent_1.AppEvent(types_1.AuthActionTypes.FETCH_PARTICULAR_FILE, payload));
+	}
+	exports.getParticularFile = getParticularFile;
+	function saveFile(payload) {
+	    appDispatcher_1.default.dispatch(new appEvent_1.AppEvent(types_1.AuthActionTypes.SAVE_FILE, payload));
+	}
+	exports.saveFile = saveFile;
 
 
 /***/ },
@@ -7183,6 +7200,9 @@
 	                case types_1.AuthActionTypes.CALENDAR_DATE_CHANGED:
 	                    _this._setSelectedDate.bind(_this, event)();
 	                    break;
+	                case types_1.AuthActionTypes.FETCH_FILES_FOR_DATE:
+	                    _this._getFilesByDate.bind(_this, event)();
+	                    break;
 	                default:
 	                    break;
 	            }
@@ -7199,6 +7219,7 @@
 	            'Entries': '',
 	            'currentFolderId': ''
 	        };
+	        this.currentFileId = '';
 	    }
 	    GoogleAuthStore.prototype._authorize = function (immediate, event) {
 	        gapi.auth.authorize({
@@ -7228,25 +7249,6 @@
 	                this.emitChange();
 	            }.bind(this));
 	        }.bind(this));
-	    };
-	    GoogleAuthStore.prototype._saveToGoogleDrive = function (data) {
-	        gapi.client.load('drive', 'v3', function () {
-	            var createRequest = gapi.client.drive.files.create({ 'uploadType': 'media' });
-	            createRequest.then(function (res) {
-	                gapi.client.request({
-	                    'path': ('/upload/drive/v3/files/' + res.result.id).toString(),
-	                    'method': 'PATCH',
-	                    'body': data,
-	                    'headers': '',
-	                    'params': '' })
-	                    .then(function (response) {
-	                }, function (reason) {
-	                    console.log(reason);
-	                });
-	            }, function (err) {
-	                console.log(err);
-	            });
-	        });
 	    };
 	    GoogleAuthStore.prototype._createInitialFolderStructure = function (event, folderIds) {
 	        var that = this;
@@ -7325,20 +7327,25 @@
 	                    that._createFolder(data).then(function (response) {
 	                        that.currentFolderIdInUse = response.result.id;
 	                        that.folderIds['currentFolderId'] = response.result.id;
-	                        // folder with the current date is created, create the file for this day
-	                        that._addNewEntry(function () {
-	                            console.log("file created");
-	                        });
+	                        // add a new entry
+	                        // commented Initially
+	                        /*that._addNewEntry(response.result.id, function(id){
+	                          that._getFileContents(id).then( function(response){
+	                            console.log("inside create folder if not existent ");
+	                            console.log(response);
+	                          }, function(reason){
+	                            console.log(reason);
+	                          });
+	                        });*/
 	                    }, function (reason) {
 	                    });
 	                }
 	                else {
-	                    this._createOrUpdateFile(response.result.files[0].id, response.result.files[0].name, "", 0, this._getFileContents.bind(this, response.result.files[0].id));
-	                    this.currentFolderIdInUse = response.result.files[0].id;
-	                    this.folderIds['currentFolderId'] = response.result.files[0].id;
+	                    that.currentFolderIdInUse = response.result.files[0].id;
+	                    that.folderIds['currentFolderId'] = response.result.files[0].id;
 	                }
-	            }.bind(this));
-	        }.bind(this));
+	            });
+	        });
 	    };
 	    GoogleAuthStore.prototype._requestForFolderGoogleDrive = function (data) {
 	        return gapi.client.request({
@@ -7347,19 +7354,24 @@
 	            'body': data
 	        });
 	    };
-	    GoogleAuthStore.prototype._createOrUpdateFile = function (parentId, parentName, data, count, callback) {
-	        var parentId = parentId.length > 0 ? parentId : this.currentFolderIdInUse;
+	    GoogleAuthStore.prototype._createOrUpdateFile = function (parentId, parentName, data, count, key, callback) {
+	        var parentId = parentId.length > 0 ? parentId : '';
 	        var date = new Date();
 	        var parentName = parentName.length > 0 ? parentName : date.getFullYear() + "." + date.getMonth() + "." + date.getDate();
 	        var count = count != 0 ? count : 1;
-	        var filename = parentName + "." + (count + 1) + ".md";
+	        var filename = parentName + "." + count + "." + data.substr(0, 10) + ".md";
 	        var file = new File([data.toString()], filename, { type: "text/markdown", });
-	        //var fileId = this.currentFileId ? this.currentFileId : '';
-	        this._isFileExistent(filename, parentName, this._insertOrUpdateFile.bind(this, file, parentId, filename, callback));
+	        var fileId;
+	        if (key === 'create') {
+	            fileId = '';
+	        }
+	        else {
+	            fileId = this.currentFileId ? this.currentFileId : '';
+	        }
+	        this._insertOrUpdateFile(file, parentId, filename, key, callback, fileId);
 	    };
 	    GoogleAuthStore.prototype._isFileExistent = function (name, parent, callback) {
 	        var checkName = name.substr(0, name.length - 2);
-	        console.log(checkName);
 	        gapi.client.drive.files.list({
 	            q: "mimeType='text/markdown' and name contains " + "'" + checkName + "'",
 	            fields: 'files(id, name)',
@@ -7380,8 +7392,7 @@
 	        }, function (reason) {
 	        });
 	    };
-	    GoogleAuthStore.prototype._insertOrUpdateFile = function (fileData, folderId, filename, callback, fileId) {
-	        console.log(arguments);
+	    GoogleAuthStore.prototype._insertOrUpdateFile = function (fileData, folderId, filename, key, callback, fileId) {
 	        var boundary = '-------314159265358979323846';
 	        var delimiter = "\r\n--" + boundary + "\r\n";
 	        var close_delim = "\r\n--" + boundary + "--";
@@ -7406,7 +7417,7 @@
 	                base64Data +
 	                close_delim;
 	            var path, method;
-	            if (fileId && fileId.length > 0) {
+	            if (key === 'update') {
 	                path = '/upload/drive/v2/files/' + fileId;
 	                method = 'PUT';
 	            }
@@ -7424,14 +7435,14 @@
 	                'body': multipartRequestBody
 	            });
 	            request.then(function (response) {
-	                if (fileId) {
-	                    that.currentFileId = response.result.id;
+	                console.log("inside the insert or update function");
+	                console.log(response);
+	                that.currentFileId = response.result.id;
+	                if (callback) {
+	                    callback(response.result.id);
 	                }
-	                if (callback && fileId) {
-	                    //callback(fileId);
-	                    callback.resolve();
-	                }
-	                // that._getFileContents(response.result.id, callback);
+	                that._changeToken = 'file.save';
+	                that.emitChange();
 	            }, function (reason) {
 	            });
 	        };
@@ -7444,7 +7455,7 @@
 	        this._changeToken = event.type;
 	        this.emitChange();
 	    };
-	    GoogleAuthStore.prototype._addNewEntry = function (callback) {
+	    GoogleAuthStore.prototype._addNewEntry = function (folderId, callback) {
 	        var date = new Date();
 	        var name = date.getFullYear() + "." + date.getMonth() + "." + date.getDate() + ".";
 	        var that = this;
@@ -7454,33 +7465,39 @@
 	            spaces: 'appDataFolder'
 	        }).then(function (response) {
 	            var count = response.result.files.length;
-	            that._createOrUpdateFile('', '', '', count, callback);
+	            that._createOrUpdateFile(folderId, '', '', count, 'create', callback);
 	        }, function (reason) {
 	        });
 	    };
-	    GoogleAuthStore.prototype._getFileContents = function (id, callback) {
-	        gapi.client.drive.files.get({
+	    GoogleAuthStore.prototype._getFolderId = function () {
+	        return this.folderIds['currentFolderId'];
+	    };
+	    GoogleAuthStore.prototype._getFileContents = function (id) {
+	        return gapi.client.drive.files.get({
 	            fileId: id,
 	            alt: 'media'
-	        }).then(function (response) {
-	            console.log(response);
-	            if (callback) {
-	                console.log(callback);
-	                callback.resolve(response.body);
-	            }
-	        }, function (reason) {
 	        });
 	    };
-	    GoogleAuthStore.prototype._getFilesByDate = function (date, pr) {
+	    GoogleAuthStore.prototype._getFilesByDate = function (event) {
+	        var date = event.payLoad.date;
+	        var pr = event.payLoad.pr;
+	        var that = this;
 	        gapi.client.load('drive', 'v3', function () {
 	            gapi.client.drive.files.list({
 	                q: "mimeType='text/markdown' and name contains " + "'" + date + "'",
-	                fields: 'files(id, name)',
-	                spaces: 'appDataFolder'
+	                fields: 'files(id, name, modifiedTime)',
+	                spaces: 'appDataFolder',
+	                orderBy: 'modifiedTime desc'
 	            }).then(function (response) {
-	                // found the files for the given date
-	                console.log(pr);
-	                pr.resolve(response.result.files);
+	                that.currentFileId = response.result.files[0].id;
+	                pr.then(function (res) {
+	                    res.this.setState({ files: response.result.files });
+	                    if (!event.payLoad.trigger) {
+	                        res.this.entryClicked(response.result.files[0]);
+	                    }
+	                }, function () {
+	                });
+	                console.log(event.payLoad);
 	            }, function (reason) {
 	            });
 	        });
@@ -7591,6 +7608,7 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(1);
+	var types_1 = __webpack_require__(74);
 	var gAuthStore_1 = __webpack_require__(88);
 	var entries_1 = __webpack_require__(92);
 	var browserHistory_1 = __webpack_require__(67);
@@ -7606,13 +7624,17 @@
 	    __extends(Markdown, _super);
 	    function Markdown(props) {
 	        _super.call(this, props);
+	        this._valueWhileSaving = '';
+	        this.focusCount = 0;
 	        this.state = { inputText: "# Diary, O' Diary!!!" };
 	    }
 	    Markdown.prototype._navigateBack = function () {
 	        browserHistory_1.default.goBack();
 	    };
 	    Markdown.prototype.componentWillMount = function () {
-	        this.fetchFilesForToday();
+	    };
+	    Markdown.prototype.shouldComponentUpdate = function (nextProps, nextState, nextContext) {
+	        return true;
 	    };
 	    // https://github.com/ajaxorg/ace/wiki/Configuring-Ace
 	    // https://github.com/ajaxorg/ace/blob/master/lib/ace/theme/textmate.css
@@ -7641,43 +7663,50 @@
 	                }.bind(this, val), 2000);
 	            }
 	        }.bind(this));
+	        editor.on("focus", function () {
+	            if (this.focusCount === 0) {
+	                this.setState({ inputText: '' });
+	            }
+	            editor.setValue(this.state.inputText);
+	            this.focusCount++;
+	        }.bind(this));
+	        var that = this;
+	        this._listenerToken = gAuthStore_1.default.addChangeListener(types_1.AuthActionTypes.SELECTED_FILE, function () {
+	            gAuthStore_1.default._getFileContents(gAuthStore_1.default.currentFileId).then(function (response) {
+	                console.log("inside markdown get file");
+	                that.setState({ inputText: response.body });
+	                editor.setValue(that.state.inputText);
+	                that.focusCount = 0;
+	                that._valueWhileSaving = '';
+	                if (response.body.length >= 10) {
+	                    that.focusCount++;
+	                }
+	            }, function (reason) {
+	                console.log(reason);
+	            });
+	        });
 	    };
 	    Markdown.prototype._checkTriggerShouldHappenOrNot = function (val) {
-	        if (this.state.inputText === val) {
-	            gAuthStore_1.default._createOrUpdateFile('', '', this.state.inputText, 0);
+	        if (val && val.length >= 10 && this.state.inputText === val && this._valueWhileSaving !== val) {
+	            var key = 'update';
+	            if (gAuthStore_1.default.currentFileId === '') {
+	                key = 'create';
+	            }
+	            this._valueWhileSaving = this.state.inputText;
+	            gAuthStore_1.default._createOrUpdateFile(gAuthStore_1.default.currentFolderIdInUse, '', this.state.inputText, 0, key);
 	        }
 	    };
 	    Markdown.prototype.newEntry = function () {
-	        var that = this;
+	        // Empty the editor
 	        var editor = ace.edit('editor');
-	        var pr = new Promise(function (resolve, reject) {
-	        });
-	        gAuthStore_1.default._addNewEntry(pr);
-	        pr.then(function (response) {
-	            console.log("*********************");
-	            console.log(response);
-	            console.log("*********************");
-	            that.setState({ files: response.files });
-	        }, function (reason) {
-	        });
-	    };
-	    Markdown.prototype.fetchFilesForToday = function () {
-	        var date = new Date();
-	        var selectedDate = date.getFullYear() + "." + date.getMonth() + "." + date.getDate();
-	        var that = this;
-	        var pr = new Promise(function (resolve, reject) {
-	        });
-	        gAuthStore_1.default._getFilesByDate(selectedDate, pr);
-	        pr.then(function (response) {
-	            console.log("*********************");
-	            console.log(response);
-	            console.log("*********************");
-	            that.setState({ files: response.files });
-	        }, function (reason) {
-	        });
+	        this.setState({ inputText: '' });
+	        editor.setValue('');
+	        this.focusCount = 0;
+	        this._valueWhileSaving = '';
+	        gAuthStore_1.default.currentFileId = '';
 	    };
 	    Markdown.prototype.render = function () {
-	        return (React.createElement("div", {className: "row"}, React.createElement("div", {className: "markdown markdown-left"}, React.createElement("div", {id: "editor"}), React.createElement(entries_1.default, null)), React.createElement("div", {className: "markdown markdown-right"}, React.createElement("div", {id: "markdown-output", className: "markdown-output-wrapper"}, React.createElement(ReactMarkdown, {source: this.state.inputText})), React.createElement("div", {className: "new-entry", onClick: this.newEntry, title: "Add New Entry"}, React.createElement("i", {className: "memocon memocon-add"})))));
+	        return (React.createElement("div", {className: "row"}, React.createElement("div", {className: "markdown markdown-left"}, React.createElement("div", {id: "editor"}), React.createElement(entries_1.default, null)), React.createElement("div", {className: "markdown markdown-right"}, React.createElement("div", {id: "markdown-output", className: "markdown-output-wrapper"}, React.createElement(ReactMarkdown, {source: this.state.inputText})), React.createElement("div", {className: "new-entry", onClick: this.newEntry.bind(this), title: "Add New Entry"}, React.createElement("i", {className: "memocon memocon-add"})))));
 	    };
 	    return Markdown;
 	}(React.Component));
@@ -7697,6 +7726,8 @@
 	    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 	};
 	var React = __webpack_require__(1);
+	var types_1 = __webpack_require__(74);
+	var AuthActions = __webpack_require__(75);
 	var gAuthStore_1 = __webpack_require__(88);
 	;
 	var Entries = (function (_super) {
@@ -7704,20 +7735,21 @@
 	    function Entries(props) {
 	        _super.call(this);
 	        this._currentClass = "hide-entries";
+	        this.selectedFile = { name: '' };
 	    }
 	    Entries.prototype.componentWillMount = function () {
-	        this.fetchFilesForToday();
+	        this.fetchFilesForToday(false);
 	    };
-	    Entries.prototype.shouldComponentUpdate = function (nextProps, nextState) {
-	        return true;
-	    };
-	    Entries.prototype.fetchFilesForToday = function () {
-	        var date = gAuthStore_1.default._getSelectedDate();
+	    Entries.prototype.fetchFilesForToday = function (trigger) {
+	        var date = new Date();
 	        var selectedDate = date.getFullYear() + "." + date.getMonth() + "." + date.getDate();
 	        var that = this;
-	        gAuthStore_1.default._getFilesByDate(selectedDate, function (that, files) {
-	            that.setState({ files: files });
-	        }.bind(this, that));
+	        var pr = new Promise(function (resolve, reject) {
+	            resolve({
+	                this: that
+	            });
+	        });
+	        AuthActions.getFilesForSelectedDate({ provider: types_1.ProviderTypes.GOOGLE, date: selectedDate, pr: pr, trigger: trigger });
 	    };
 	    Entries.prototype.handleClickEntries = function () {
 	        if (this._currentClass === 'hide-entries') {
@@ -7730,11 +7762,31 @@
 	            currentClass: this._currentClass
 	        });
 	    };
+	    Entries.prototype.entryClicked = function (obj) {
+	        if (obj && obj.id) {
+	            gAuthStore_1.default.currentFileObj = obj;
+	            gAuthStore_1.default._changeToken = types_1.AuthActionTypes.SELECTED_FILE;
+	            gAuthStore_1.default.emitChange();
+	        }
+	    };
+	    Entries.prototype.componentDidMount = function () {
+	        this._listenerToken = gAuthStore_1.default.addChangeListener(types_1.AuthActionTypes.SAVE_FILE, function () {
+	            this.fetchFilesForToday(true);
+	        }.bind(this));
+	    };
 	    Entries.prototype.render = function () {
 	        var files = this.state && this.state.files ? this.state.files : [];
-	        return (React.createElement("div", {className: "memocon-view_headline", title: "Entries", onClick: this.handleClickEntries.bind(this)}, React.createElement("div", {className: this._currentClass}, files ? files.map(function (val, index) {
-	            return React.createElement("div", {key: index}, val.name);
-	        }) : React.createElement("div", null))));
+	        var that = this;
+	        var selectedFile = gAuthStore_1.default.currentFileObj ? gAuthStore_1.default.currentFileObj : { 'name': 'initial' };
+	        selectedFile.cleanedName = selectedFile.name.substr(13, 10);
+	        return (React.createElement("div", null, React.createElement("div", {className: "memocon-view_headline", title: "Entries", onClick: this.handleClickEntries.bind(this)}), React.createElement("div", {className: this._currentClass}, React.createElement("div", {className: "entries-header"}, React.createElement("div", {className: "entries-header-selected"}, selectedFile.cleanedName), React.createElement("div", {className: "entries-header-close", onClick: this.handleClickEntries.bind(this)}, "X")), React.createElement("div", {className: "entries-list"}, files ? files.map(function (val, index) {
+	            var className = 'entries-item';
+	            var value = val.name.substr(13, 10);
+	            if (val.id === gAuthStore_1.default.currentFileId) {
+	                className = className + " selected-item";
+	            }
+	            return React.createElement("div", {className: className, key: index, onClick: that.entryClicked.bind(that, val)}, value);
+	        }) : React.createElement("div", null)))));
 	    };
 	    return Entries;
 	}(React.Component));
