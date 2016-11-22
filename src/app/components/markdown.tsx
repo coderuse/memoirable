@@ -16,18 +16,15 @@ import * as ace from 'brace';
 import 'brace/mode/markdown';
 import 'brace/theme/textmate';
 
-function onChange(newValue) {
-  console.log('change',newValue);
-}
-
 export interface IMarkdowState { inputText?: string , files?: any};
 
 export default class Markdown extends React.Component<{}, IMarkdowState> {
   _listenerToken : FBEmitter.EventSubscription;
-  _valueBefore: string;
+  valueBefore: string;
   files: any;
-  _valueWhileSaving: string = '';
+  valueWhileSaving: string = '';
   focusCount: number = 0;
+  fetchedFileState: string = 'file.initial';
   constructor(props) {
     super(props);
     this.state = { inputText: `# Diary, O' Diary!!!`};
@@ -49,6 +46,7 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
   // https://github.com/ajaxorg/ace/blob/master/lib/ace/theme/textmate.css
   componentDidMount() {
     const editor = ace.edit('editor');
+    
     editor.setOptions({
       //fontFamily: 'tahoma',
       fontSize: '18pt',
@@ -61,16 +59,17 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
     //editor.getSession().setMode('ace/mode/markdown');
     //editor.setTheme('ace/theme/chaos');
     editor.setValue(this.state.inputText);
+
     editor.on('change',function(e){
       this.setState({inputText: editor.getValue()});
 
-      this._valueBefore = editor.getValue();
+      this.valueBefore = editor.getValue();
       var timeout;
       let val = editor.getValue();
       if(typeof timeout !== 'function'){
-        timeout = setTimeout(function(val) {
-                    this._checkTriggerShouldHappenOrNot(val)
-                  }.bind(this, val ), 2000);
+        timeout = setTimeout(function(val, state) {
+                    this._checkTriggerShouldHappenOrNot(val,state)
+                  }.bind(this, val , this.fetchedFileState), 2000);
       }
       
     }.bind(this));
@@ -82,36 +81,35 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
       }
       editor.setValue(this.state.inputText);
       this.focusCount++;
+      that.fetchedFileState = 'file.changed';
     }.bind(this));
 
+    var that = this;
+    this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.SELECTED_FILE, function(){
+      GAuthStore._getFileContents(GAuthStore.currentFileId).then( function(response){
+          that.fetchedFileState = 'file.fetched';
+          that.setState({inputText: response.body});
+          editor.setValue(that.state.inputText);
+          that.focusCount = 0;
+          that.valueWhileSaving = '';
 
-
-      var that = this;
-      this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.SELECTED_FILE, function(){
-        GAuthStore._getFileContents(GAuthStore.currentFileId).then( function(response){
-          console.log("inside markdown get file");
-            that.setState({inputText: response.body});
-            editor.setValue(that.state.inputText);
-            that.focusCount = 0;
-            that._valueWhileSaving = '';
-
-            if(response.body.length >= 10){
-              that.focusCount++;
-            }
-        }, function(reason){
-          console.log(reason);
-        });
+          if(response.body.length >= 10){
+            that.focusCount++;
+          }
+      }, function(reason){
+        console.log(reason);
       });
+    });
   }
 
   _checkTriggerShouldHappenOrNot(val){
-    if(val && val.length >= 10 && this.state.inputText === val && this._valueWhileSaving !== val){
+    if(this.fetchedFileState !== 'file.fetched' && val && val.length >= 10 && this.state.inputText === val && this.valueWhileSaving !== val){
       var key = 'update';
 
       if(GAuthStore.currentFileId === ''){
         key = 'create';
       }
-      this._valueWhileSaving = this.state.inputText;
+      this.valueWhileSaving = this.state.inputText;
       GAuthStore._createOrUpdateFile(GAuthStore.currentFolderIdInUse,'',this.state.inputText,0, key);
     }
   }
@@ -122,9 +120,8 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
     this.setState({inputText: ''});
     editor.setValue('');
     this.focusCount = 0;
-    this._valueWhileSaving = '';
+    this.valueWhileSaving = '';
     GAuthStore.currentFileId = '';
-    
   }
 
   render() {

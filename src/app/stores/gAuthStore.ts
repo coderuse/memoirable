@@ -25,7 +25,7 @@ class GoogleAuthStore extends BaseStore < IAuth > {
   currentFileId: string = '';
   currentFolderIdInUse: string;
   currentFileObj: any ;
-
+  
   _authorize(immediate: boolean, event: AppEvent) {
 
     gapi.auth.authorize({
@@ -340,16 +340,7 @@ class GoogleAuthStore extends BaseStore < IAuth > {
         orderBy: 'modifiedTime desc'
       }).then(function(response) {
         that.currentFileId = response.result.files[0].id;
-
-        pr.then(function(res){
-          res.this.setState({files: response.result.files});
-          if(!event.payLoad.trigger){
-            res.this.entryClicked(response.result.files[0]);
-          }
-        }, function(){
-
-        });
-        console.log(event.payLoad);
+        event.payLoad.pr(response.result.files);
         
       }, function(reason) {
 
