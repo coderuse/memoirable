@@ -15,13 +15,9 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
   constructor(props) {
     super();
   }
-
+  selectedFile: any = {name : 'initial'};
   componentWillMount() {
     this.fetchFilesForToday();
-
-    // this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.FETCH_FILES_FOR_DATE, function(){
-    //   this.setState({date: GAuthStore._getSelectedDate()});
-    // }.bind(this));
   }
 
   fetchFilesForToday(){
@@ -51,6 +47,7 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
 
   entryClicked(obj) {
     if(obj && obj.id){
+      this.selectedFile = obj;
       GAuthStore._getFileContents(obj.id).then( function(response){
 
       }, function(reason){
@@ -63,16 +60,25 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
     var files = this.state && this.state.files ? this.state.files : [];
     var that = this;
     return (
-      <div className="memocon-view_headline" title="Entries" onClick={this.handleClickEntries.bind(this)}>
+      <div>
+        <div className="memocon-view_headline" title="Entries" onClick={this.handleClickEntries.bind(this)}>
+          
+        </div>
         <div className={this._currentClass}>
-        { files ? files.map(function(val,index){
+          <div className="entries-header">
+            <div className="entries-header-selected">{this.selectedFile.name}</div>
+            <div className="entries-header-close" onClick={this.handleClickEntries.bind(this)}>X</div>
+          </div>
+          <div className="entries-list">
+            { files ? files.map(function(val,index){
 
-          let value = val.name.substr(13,10);
-                        return <div key={index} onClick={that.entryClicked.bind(that, val)}>
-                          {value}
-                        </div>
-                        }) : <div></div>
-        }
+              let value = val.name.substr(13,10);
+                            return <div className="entries-item" key={index} onClick={that.entryClicked.bind(that, val)}>
+                              {value}
+                            </div>
+                            }) : <div></div>
+            }
+          </div>
         </div>
       </div>
     );
