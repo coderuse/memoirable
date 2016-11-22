@@ -19,3 +19,16 @@ export function createInitialFolderStructure(payload?: any) {
 export function calendarDateChanged(payload?: any){
   AppDispatcher.dispatch(new AppEvent(AuthActionTypes.CALENDAR_DATE_CHANGED, payload));
 }
+
+export function getFilesForSelectedDate(payload?: any){
+  AppDispatcher.dispatch(new AppEvent(AuthActionTypes.FETCH_FILES_FOR_DATE, payload));
+}
+
+export function getParticularFile(payload?: any){
+  AppDispatcher.dispatch(new AppEvent(AuthActionTypes.FETCH_PARTICULAR_FILE, payload));
+}
+
+export function saveFile(payload?: any){
+  AppDispatcher.dispatch(new AppEvent(AuthActionTypes.SAVE_FILE, payload));
+}
+

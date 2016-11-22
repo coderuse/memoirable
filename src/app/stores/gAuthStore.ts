@@ -22,8 +22,9 @@ class GoogleAuthStore extends BaseStore < IAuth > {
     'Entries': '',
     'currentFolderId': ''
   }
-  currentFileId: string;
+  currentFileId: string = '';
   currentFolderIdInUse: string;
+  currentFileObj: any ;
 
   _authorize(immediate: boolean, event: AppEvent) {
 
@@ -58,33 +59,9 @@ class GoogleAuthStore extends BaseStore < IAuth > {
     }.bind(this));
   }
 
-  _saveToGoogleDrive(data: string) {
-    gapi.client.load('drive', 'v3', function() {
-      var createRequest = gapi.client.drive.files.create({ 'uploadType': 'media' });
-      createRequest.then(function(res) {
-        gapi.client.request({ 
-          'path': ('/upload/drive/v3/files/' + res.result.id).toString(),
-          'method': 'PATCH', 
-          'body': data, 
-          'headers': '', 
-          'params': '' })
-        .then(function(response) {
-
-        }, function(reason) {
-          console.log(reason);
-        });
-
-      }, function(err) {
-        console.log(err);
-      });
-
-    });
-  }
-
   _createInitialFolderStructure(event: AppEvent, folderIds) {
     var that = this;
     gapi.client.load('drive', 'v3', function() {
-
       gapi.client.drive.files.list({
         q: "mimeType='application/vnd.google-apps.folder' and name='Memoirable' or name='Entries'",
         fields: 'files(id, name)',
@@ -165,22 +142,37 @@ class GoogleAuthStore extends BaseStore < IAuth > {
             that.currentFolderIdInUse = response.result.id;
             that.folderIds['currentFolderId'] = response.result.id;
 
-            // folder with the current date is created, create the file for this day
-            that._addNewEntry(function() {
-              console.log("file created");
-            });
+            // add a new entry
+            // commented Initially
+            /*that._addNewEntry(response.result.id, function(id){
+              that._getFileContents(id).then( function(response){
+                console.log("inside create folder if not existent ");
+                console.log(response);
+              }, function(reason){
+                console.log(reason);
+              });
+            });*/
 
           }, function(reason) {
 
           })
         } else {
 
-          this._createOrUpdateFile(response.result.files[0].id, response.result.files[0].name, "", 0, this._getFileContents.bind(this, response.result.files[0].id));
-          this.currentFolderIdInUse = response.result.files[0].id;
-          this.folderIds['currentFolderId'] = response.result.files[0].id;
+          that.currentFolderIdInUse = response.result.files[0].id;
+          that.folderIds['currentFolderId'] = response.result.files[0].id;
+
+          // add a new entry
+          // commented Initially
+          /*that._addNewEntry(response.result.files[0].id, function(id){
+            that._getFileContents(id).then( function(response){
+              console.log(response);
+            }, function(reason){
+              console.log(reason);
+            });
+          });*/
         }
-      }.bind(this));
-    }.bind(this));
+      });
+    });
   }
 
   _requestForFolderGoogleDrive(data) {
@@ -191,22 +183,29 @@ class GoogleAuthStore extends BaseStore < IAuth > {
     })
   }
 
-  _createOrUpdateFile(parentId, parentName, data, count, callback ? ) {
-    var parentId = parentId.length > 0 ? parentId : this.currentFolderIdInUse;
+  _createOrUpdateFile(parentId, parentName, data, count, key, callback?) {
+    var parentId = parentId.length > 0 ? parentId : '';
     var date = new Date();
     var parentName = parentName.length > 0 ? parentName : date.getFullYear() + "." + date.getMonth() + "." + date.getDate();
     var count = count != 0 ? count : 1;
-    var filename = parentName + "." + (count+1) + ".md";
+    var filename = parentName + "." + count + "." + data.substr(0,10)+ ".md";
     var file = new File([data.toString()], filename, { type: "text/markdown", })
-    //var fileId = this.currentFileId ? this.currentFileId : '';
+    var fileId;
 
-    this._isFileExistent(filename, parentName, this._insertOrUpdateFile.bind(this, file, parentId, filename, callback));
+    if(key === 'create'){
+      fileId = '';
+    }
+    else{
+      fileId = this.currentFileId ? this.currentFileId : '';
+    }
+
+    this._insertOrUpdateFile(file, parentId, filename, key, callback, fileId);
 
   }
 
   _isFileExistent(name: string, parent, callback) {
     var checkName = name.substr(0, name.length - 2);
-    console.log(checkName);
+
     gapi.client.drive.files.list({
       q: "mimeType='text/markdown' and name contains " + "'" + checkName + "'",
       fields: 'files(id, name)',
@@ -229,8 +228,7 @@ class GoogleAuthStore extends BaseStore < IAuth > {
     });
   }
 
-  _insertOrUpdateFile(fileData, folderId? , filename? , callback? , fileId?) {
-    console.log(arguments);
+  _insertOrUpdateFile(fileData, folderId? , filename? , key?,  callback? , fileId?) {
     const boundary = '-------314159265358979323846';
     const delimiter = "\r\n--" + boundary + "\r\n";
     const close_delim = "\r\n--" + boundary + "--";
@@ -258,7 +256,7 @@ class GoogleAuthStore extends BaseStore < IAuth > {
         close_delim;
 
       var path, method;
-      if (fileId && fileId.length > 0) {
+      if (key === 'update') {
         path = '/upload/drive/v2/files/' + fileId;
         method = 'PUT'
       } else {
@@ -277,15 +275,15 @@ class GoogleAuthStore extends BaseStore < IAuth > {
       });
 
       request.then(function(response) {
-        if (fileId) {
-          that.currentFileId = response.result.id;
-        }
-        if (callback && fileId) {
-          //callback(fileId);
-          callback.resolve()
+        console.log("inside the insert or update function");
+        console.log(response);
+        that.currentFileId = response.result.id;
+        if(callback){
+          callback(response.result.id);
         }
 
-       // that._getFileContents(response.result.id, callback);
+        that._changeToken = 'file.save';
+        that.emitChange();
       }, function(reason) {
 
       })
@@ -302,7 +300,7 @@ class GoogleAuthStore extends BaseStore < IAuth > {
     this.emitChange();
   }
 
-  _addNewEntry(callback) {
+  _addNewEntry(folderId, callback) {
     let date = new Date();
     let name = date.getFullYear() + "." + date.getMonth() + "." + date.getDate() + ".";
     var that = this;
@@ -312,44 +310,54 @@ class GoogleAuthStore extends BaseStore < IAuth > {
       spaces: 'appDataFolder'
     }).then(function(response) {
       let count = response.result.files.length;
-      that._createOrUpdateFile('', '', '', count, callback);
+      that._createOrUpdateFile(folderId, '', '', count, 'create', callback);
     }, function(reason) {
 
     });
   }
 
-  _getFileContents(id? , callback?) {
-    gapi.client.drive.files.get({
+  _getFolderId(){
+    return this.folderIds['currentFolderId'];
+  }
+
+  _getFileContents(id) {
+    return gapi.client.drive.files.get({
       fileId: id,
       alt: 'media'
-    }).then(function(response) {
-      console.log(response);
-      if(callback){
-        console.log(callback);
-        callback.resolve(response.body);
-      }
-    }, function(reason) {
-
     });
   }
 
 
-  _getFilesByDate(date, pr) {
+  _getFilesByDate(event) {
+    var date = event.payLoad.date;
+    var pr = event.payLoad.pr;
+    var that = this;
     gapi.client.load('drive', 'v3', function() {
       gapi.client.drive.files.list({
         q: "mimeType='text/markdown' and name contains " + "'" + date + "'",
-        fields: 'files(id, name)',
-        spaces: 'appDataFolder'
+        fields: 'files(id, name, modifiedTime)',
+        spaces: 'appDataFolder',
+        orderBy: 'modifiedTime desc'
       }).then(function(response) {
-        // found the files for the given date
-        console.log(pr);
-        pr.resolve(response.result.files);
+        that.currentFileId = response.result.files[0].id;
+
+        pr.then(function(res){
+          res.this.setState({files: response.result.files});
+          if(!event.payLoad.trigger){
+            res.this.entryClicked(response.result.files[0]);
+          }
+        }, function(){
+
+        });
+        console.log(event.payLoad);
+        
       }, function(reason) {
 
       });
     });
   }
 
+  
   constructor(dispatcher: Flux.Dispatcher < AppEvent > ) {
     super(dispatcher, (event: AppEvent) => {
       if (event.payLoad.provider !== ProviderTypes.GOOGLE) {
@@ -368,6 +376,9 @@ class GoogleAuthStore extends BaseStore < IAuth > {
         case AuthActionTypes.CALENDAR_DATE_CHANGED:
           this._setSelectedDate.bind(this, event)();
           break;
+        case AuthActionTypes.FETCH_FILES_FOR_DATE:
+          this._getFilesByDate.bind(this, event)();
+          break;  
         default:
           break;
       }

@@ -26,6 +26,8 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
   _listenerToken : FBEmitter.EventSubscription;
   _valueBefore: string;
   files: any;
+  _valueWhileSaving: string = '';
+  focusCount: number = 0;
   constructor(props) {
     super(props);
     this.state = { inputText: `# Diary, O' Diary!!!`};
@@ -36,7 +38,11 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
   }
 
   componentWillMount() {
-    this.fetchFilesForToday();
+    
+  }
+
+  shouldComponentUpdate(nextProps, nextState, nextContext){
+    return true;
   }
 
   // https://github.com/ajaxorg/ace/wiki/Configuring-Ace
@@ -68,61 +74,57 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
       }
       
     }.bind(this));
+
+
+    editor.on("focus", function(){
+      if(this.focusCount === 0 ){
+        this.setState({ inputText : ''});
+      }
+      editor.setValue(this.state.inputText);
+      this.focusCount++;
+    }.bind(this));
+
+
+
+      var that = this;
+      this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.SELECTED_FILE, function(){
+        GAuthStore._getFileContents(GAuthStore.currentFileId).then( function(response){
+          console.log("inside markdown get file");
+            that.setState({inputText: response.body});
+            editor.setValue(that.state.inputText);
+            that.focusCount = 0;
+            that._valueWhileSaving = '';
+
+            if(response.body.length >= 10){
+              that.focusCount++;
+            }
+        }, function(reason){
+          console.log(reason);
+        });
+      });
   }
 
   _checkTriggerShouldHappenOrNot(val){
-    if(this.state.inputText === val){
-      GAuthStore._createOrUpdateFile('','',this.state.inputText,0);
+    if(val && val.length >= 10 && this.state.inputText === val && this._valueWhileSaving !== val){
+      var key = 'update';
+
+      if(GAuthStore.currentFileId === ''){
+        key = 'create';
+      }
+      this._valueWhileSaving = this.state.inputText;
+      GAuthStore._createOrUpdateFile(GAuthStore.currentFolderIdInUse,'',this.state.inputText,0, key);
     }
   }
 
   newEntry(){
-    var that = this;
+    // Empty the editor
     const editor = ace.edit('editor');
-    var pr = new Promise( function(resolve, reject ){
-      
-    });
-
-    GAuthStore._addNewEntry(pr);
-
-    pr.then(function(response: any){
-        
-      console.log("*********************");
-      
-      console.log(response);
-      console.log("*********************");
-
-      that.setState({files: response.files});
+    this.setState({inputText: ''});
+    editor.setValue('');
+    this.focusCount = 0;
+    this._valueWhileSaving = '';
+    GAuthStore.currentFileId = '';
     
-    }, function(reason){
-
-    });
-  }
-
-  fetchFilesForToday(){
-    let date = new Date();
-    let selectedDate = date.getFullYear()+"."+date.getMonth()+"."+date.getDate();
-    var that = this;
-    var pr = new Promise( function(resolve, reject ){
-      
-    });
-
-    GAuthStore._getFilesByDate(selectedDate,pr)
-
-    
-
-    pr.then(function(response: any){
-        
-      console.log("*********************");
-      
-      console.log(response);
-      console.log("*********************");
-
-      that.setState({files: response.files});
-    
-    }, function(reason){
-
-    });
   }
 
   render() {
@@ -136,7 +138,7 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
           <div id="markdown-output" className="markdown-output-wrapper">
             <ReactMarkdown source={this.state.inputText} />
           </div>
-          <div className="new-entry" onClick={this.newEntry} title="Add New Entry">
+          <div className="new-entry" onClick={this.newEntry.bind(this)} title="Add New Entry">
             <i className="memocon memocon-add"></i>
           </div>
         </div>
