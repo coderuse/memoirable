@@ -22,8 +22,9 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
   }
 
   fetchFiles(trigger, dateGiven?){
+    console.log(dateGiven);
     let date = dateGiven ? dateGiven : new Date(); // if date is given use it otherwise use the current day
-    let selectedDate = date.getFullYear()+"."+date.getMonth()+"."+date.getDate();
+    let selectedDate = '' + date.getFullYear() + date.getMonth() + date.getDate();
     var that = this;
 
     AuthActions.getFilesForSelectedDate({ provider: ProviderTypes.GOOGLE, date: selectedDate, pr: function(files){
@@ -64,7 +65,7 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
 
 
     this._listenerTokenDateChanged = GAuthStore.addChangeListener(AuthActionTypes.CALENDAR_DATE_CHANGED, function(){
-      this.fetchFiles(true, GAuthStore.selectedDate);
+      this.fetchFiles(false, GAuthStore.selectedDate);
     }.bind(this));
   }
 
@@ -72,7 +73,7 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
     var files = this.state && this.state.files ? this.state.files : [];
     var that = this;
     var selectedFile = GAuthStore.currentFileObj? GAuthStore.currentFileObj : { 'name': 'initial'};
-    selectedFile.cleanedName = selectedFile.name.substr(13,10);
+    selectedFile.cleanedName = selectedFile.name.substr(9,10);
 
     return (
       <div>
@@ -88,7 +89,7 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
             { files ? files.map(function(val,index){
 
               let className = 'entries-item';
-              let value = val.name.substr(13,10)+'...';
+              let value = val.name.substr(9,10)+'...';
               if(val.id === selectedFile.id){
                 className = className + " selected-item";
               }

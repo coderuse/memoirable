@@ -110,7 +110,7 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
         key = 'create';
       }
       this.valueWhileSaving = this.state.inputText;
-      GAuthStore._createOrUpdateFile(GAuthStore.currentFolderIdInUse,'',this.state.inputText,0, key);
+      GAuthStore._createOrUpdateFile(GAuthStore.currentFolderIdInUse,'',this.state.inputText,0, key, GAuthStore.selectedDate);
     }
   }
 
