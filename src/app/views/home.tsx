@@ -12,9 +12,12 @@ export interface IHomeState {
 }; 
 
 export class Home extends React.Component<{}, IHomeState> {
+  _isChrome: boolean;
   _listenerToken: FBEmitter.EventSubscription;
   constructor() {
     super();
+    
+    this._isChrome = !!window['chrome'] && !!window['chrome']['webstore'];  
   }
 
   componentWillMount() {
@@ -86,9 +89,12 @@ export class Home extends React.Component<{}, IHomeState> {
         </div>
         </div>
         <div className="footer-to-diary">
-          <button className="strip-button"
+          <span className={this._isChrome? 'collapse': 'not-supported'}>
+            Currently we only support Chrome with at-least 1024px x 768px resolution
+          </span>
+          <button className={this._isChrome? 'strip-button': 'collapse'}
               onClick={this._authenticate.bind(this, ProviderTypes.GOOGLE) }>
-            Hi, here's your diary.
+            Hi, here's your diary
           </button>
         </div>
       </div>
