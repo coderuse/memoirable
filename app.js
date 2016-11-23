@@ -6276,6 +6276,13 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	    DROPBOX: 'dropbox',
 	    LOCALDRIVE: 'localdrive'
 	};
+	exports.EditorActionTypes = {
+	    BOLD: 'bold',
+	    ITALICS: 'italics',
+	    UNDERLINE: 'underline',
+	    LIST: 'list',
+	    QUOTE: 'quote'
+	};
 
 
 /***/ },
@@ -7631,6 +7638,7 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	var gAuthStore_1 = __webpack_require__(88);
 	var entries_1 = __webpack_require__(92);
 	var browserHistory_1 = __webpack_require__(67);
+	var appEvent_1 = __webpack_require__(76);
 	var ReactMarkdown = __webpack_require__(93);
 	var ace = __webpack_require__(119);
 	__webpack_require__(122);
@@ -7653,10 +7661,36 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	    Markdown.prototype.shouldComponentUpdate = function (nextProps, nextState, nextContext) {
 	        return true;
 	    };
+	    Markdown.prototype.changeStyle = function (changeDelimiter, editor) {
+	        var selectionRange = editor.getSelectionRange();
+	        editor.session.replace(selectionRange, changeDelimiter + editor.getCopyText() + changeDelimiter);
+	    };
 	    // https://github.com/ajaxorg/ace/wiki/Configuring-Ace
 	    // https://github.com/ajaxorg/ace/blob/master/lib/ace/theme/textmate.css
 	    Markdown.prototype.componentDidMount = function () {
 	        var editor = ace.edit('editor');
+	        editor.$blockScrolling = Infinity;
+	        appEvent_1.default.addListener('editor.actions', function (type) {
+	            switch (type) {
+	                case types_1.EditorActionTypes.BOLD:
+	                    this.changeStyle('**', editor);
+	                    break;
+	                case types_1.EditorActionTypes.ITALICS:
+	                    this.changeStyle('*', editor);
+	                    break;
+	                case types_1.EditorActionTypes.UNDERLINE:
+	                    this.changeStyle('__', editor);
+	                    break;
+	                case types_1.EditorActionTypes.LIST:
+	                    this.changeStyle('*', editor);
+	                    break;
+	                case types_1.EditorActionTypes.QUOTE:
+	                    this.changeStyle('*', editor);
+	                    break;
+	                default:
+	                    break;
+	            }
+	        }.bind(this));
 	        editor.setOptions({
 	            //fontFamily: 'tahoma',
 	            fontSize: '18pt',
@@ -37909,8 +37943,9 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	var React = __webpack_require__(1);
 	var types_1 = __webpack_require__(74);
 	var AuthActions = __webpack_require__(75);
-	var calendarwrapper_1 = __webpack_require__(129);
+	var appEvent_1 = __webpack_require__(76);
 	var gAuthStore_1 = __webpack_require__(88);
+	var calendarwrapper_1 = __webpack_require__(129);
 	var AuthHeader = (function (_super) {
 	    __extends(AuthHeader, _super);
 	    function AuthHeader() {
@@ -37937,8 +37972,12 @@ if(this.wrapperInitData[n]===a.OBSERVED_ERROR)try{this.initializeAll(n+1)}catch(
 	        this.toggledClass = this.toggledClass === 'hide-header-menu' ? 'show-header-menu' : 'hide-header-menu';
 	        this.setState({ 'name': 'button-state-changed' });
 	    };
+	    AuthHeader.prototype.editorAction = function (type) {
+	        appEvent_1.default.emit('editor.actions', type);
+	    };
 	    AuthHeader.prototype.render = function () {
-	        return (React.createElement("div", {className: "auth-header row"}, React.createElement(calendarwrapper_1.default, null), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_bold"})), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_italic"})), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_underlined"})), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_list_bulleted"})), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_quote"})), React.createElement("button", {className: "strip-button pull-right text-content"}, this.state.displayName)));
+	        var _this = this;
+	        return (React.createElement("div", {className: "auth-header row"}, React.createElement(calendarwrapper_1.default, null), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_bold", onClick: function () { return _this.editorAction(types_1.EditorActionTypes.BOLD); }})), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_italic", onClick: function () { return _this.editorAction(types_1.EditorActionTypes.ITALICS); }})), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_underlined", onClick: function () { return _this.editorAction(types_1.EditorActionTypes.UNDERLINE); }})), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_list_bulleted", onClick: function () { return _this.editorAction(types_1.EditorActionTypes.LIST); }})), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_quote", onClick: function () { return _this.editorAction(types_1.EditorActionTypes.QUOTE); }})), React.createElement("button", {className: "strip-button pull-right text-content"}, this.state.displayName)));
 	    };
 	    return AuthHeader;
 	}(React.Component));
