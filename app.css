@@ -640,6 +640,11 @@ button.strip-button:focus {
   display: block;
 }
 
+@media (max-width: 1250px) {
+  .hide-low-width {
+    display: none;
+  }
+}
 .incompatible-browser-notice {
   width: 22.5em;
   height: 15.75em;
