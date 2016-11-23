@@ -621,6 +621,25 @@ button.strip-button:focus {
   background-color: #383838;
 }
 
+.fade {
+  opacity: 0;
+  -webkit-transition: opacity .15s linear;
+  -o-transition: opacity .15s linear;
+  transition: opacity .15s linear;
+}
+
+.fade.in {
+  opacity: 1;
+}
+
+.collapse {
+  display: none;
+}
+
+.collapse.in {
+  display: block;
+}
+
 .incompatible-browser-notice {
   width: 22.5em;
   height: 15.75em;
@@ -719,6 +738,11 @@ button.strip-button:focus {
   width: 100%;
   text-align: center;
   vertical-align: middle;
+}
+.footer-to-diary .not-supported {
+  font-family: "Open Sans", sans-serif;
+  top: 18px;
+  position: relative;
 }
 
 /** ///TODO: Cleanup calendar css */
@@ -974,7 +998,7 @@ button.strip-button:focus {
   top: 150px;
   position: absolute;
   left: 15%;
-  padding: 10px 20px;
+  padding: 5px 20px;
 }
 .dive-in-7 div.message p {
   line-height: 1.5em;
