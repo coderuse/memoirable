@@ -12,16 +12,17 @@ export interface IEntriesState {files? : any, currentClass?: string}
 export default class Entries extends React.Component<IEntries, IEntriesState> {
   _listenerToken: FBEmitter.EventSubscription;
   _currentClass : string = "hide-entries";
+  _listenerTokenDateChanged: FBEmitter.EventSubscription;
   constructor(props) {
     super();
   }
   selectedFile: any = {name : ''};
   componentWillMount() {
-    this.fetchFilesForToday(false);
+    this.fetchFiles(false);
   }
 
-  fetchFilesForToday(trigger){
-    let date = new Date();
+  fetchFiles(trigger, dateGiven?){
+    let date = dateGiven ? dateGiven : new Date(); // if date is given use it otherwise use the current day
     let selectedDate = date.getFullYear()+"."+date.getMonth()+"."+date.getDate();
     var that = this;
 
@@ -58,8 +59,12 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
 
   componentDidMount(){
     this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.SAVE_FILE, function(){
-      console.log("saved the file");
-      this.fetchFilesForToday(true);
+      this.fetchFiles(true);
+    }.bind(this));
+
+
+    this._listenerTokenDateChanged = GAuthStore.addChangeListener(AuthActionTypes.CALENDAR_DATE_CHANGED, function(){
+      this.fetchFiles(true, GAuthStore.selectedDate);
     }.bind(this));
   }
 

@@ -297,7 +297,10 @@ class GoogleAuthStore extends BaseStore < IAuth > {
   _setSelectedDate(event) {
     this.selectedDate = event.payLoad.date;
     this._changeToken = event.type;
-    this.emitChange();
+    setTimeout(function() { // Run after dispatcher has finished
+      this.emitChange();
+    }.bind(this), 0);
+    
   }
 
   _addNewEntry(folderId, callback) {
@@ -339,8 +342,12 @@ class GoogleAuthStore extends BaseStore < IAuth > {
         spaces: 'appDataFolder',
         orderBy: 'modifiedTime desc'
       }).then(function(response) {
-        that.currentFileId = response.result.files[0].id;
-        event.payLoad.pr(response.result.files);
+
+        if(response.result.files.length && response.result.files[0].id){
+          that.currentFileId = response.result.files[0].id;
+          event.payLoad.pr(response.result.files);
+        }
+        
         
       }, function(reason) {
 
