@@ -52,6 +52,11 @@ button {
 .collapse.in {
   display: block;
 }
+@media (max-width: 1250px) {
+  .hide-low-width {
+    display: none;
+  }
+}
 
 
 @import "_logo";

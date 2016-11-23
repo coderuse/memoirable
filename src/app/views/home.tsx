@@ -78,11 +78,11 @@ export class Home extends React.Component<{}, IHomeState> {
         <div className="dive-in-7">
           <h1>#Let_All_Memoirables_Be_Written</h1>
           <div className="message">
-            <p>
+            <p className="hide-low-width">
             We wade through moments. Moments, we create, we become part of and some moments are just created for us. We should capture these moments. What we thought at that time. Some pictures of whom, we were with. And some evaluation/re-thinking of the activities we did at that time. We should write them. In a very personal space. Which no one but only you can access anytime. And that should also be free. Because, such space should have no connection with earthly matters.
             </p>
             <p>
-            So, we have made this diary. It's not fancy. It's not full of features. It's very simple. But, here we can write our own words. In our own style. No one else but you can only access this. And of-course it's free. We are using GitHub pages for hosting. And using Google drive to store the files with your own authentication. So, complete privacy unless credential is shared with someone else. We are not even using any domain name. So, we have no recurring cost, neither you.
+            We have made this diary. It's not fancy. It's not full of features. It's very simple. But, here we can write our own words. In our own style. No one else but you can only access this. And of-course it's free. We are using GitHub pages for hosting. And using Google drive to store the files with your own authentication. So, complete privacy unless credential is shared with someone else. We are not even using any domain name. So, we have no recurring cost, neither you.
             </p>
             <p>Enjoy writing the <span className="message-logo">Memoirables</span>. :-)</p>
           </div>
