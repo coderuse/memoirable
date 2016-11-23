@@ -118,10 +118,10 @@ class GoogleAuthStore extends BaseStore < IAuth > {
     })
   }
 
-  _createOrUpdateFile(parentId, parentName, data, key, callback?, selectedDate?) {
+  _createOrUpdateFile(parentId, data, key, callback?, selectedDate?) {
     var parentId = parentId.length > 0 ? parentId : '';
     var date = selectedDate ? selectedDate : new Date(); // if date is given use it otherwise use the current day
-    var parentName = parentName && parentName.length > 0 ? parentName : ''+ date.getFullYear() +  date.getMonth()  + date.getDate();
+    var parentName = ''+ date.getFullYear() +  date.getMonth()  + date.getDate();
     var filename = parentName + "." + data.substr(0,10)+ ".md";
     var file = new File([data.toString()], filename, { type: "text/markdown", })
     var fileId;
@@ -215,7 +215,7 @@ class GoogleAuthStore extends BaseStore < IAuth > {
   _addNewEntry(folderId, callback) {
     let date = new Date();
     let name = date.getFullYear() + "." + date.getMonth() + "." + date.getDate() + ".";
-    this._createOrUpdateFile(folderId, '', '', 'create', callback, this.selectedDate);
+    this._createOrUpdateFile(folderId, '', 'create', callback, this.selectedDate);
   }
 
   _getFolderId(){
@@ -246,7 +246,12 @@ class GoogleAuthStore extends BaseStore < IAuth > {
           that.currentFileId = response.result.files[0].id;
           event.payLoad.pr(response.result.files);
         }
-        
+        else {
+          that.currentFileId = '';
+          event.payLoad.pr([]);
+          that.currentFileObj = null;
+          that.currentFileId = '';
+        }
         
       }, function(reason) {
 

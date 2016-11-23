@@ -72,7 +72,7 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
   render() {
     var files = this.state && this.state.files ? this.state.files : [];
     var that = this;
-    var selectedFile = GAuthStore.currentFileObj? GAuthStore.currentFileObj : { 'name': 'initial'};
+    var selectedFile = GAuthStore.currentFileObj? GAuthStore.currentFileObj : { 'name': ''};
     selectedFile.cleanedName = selectedFile.name.substr(9,10);
 
     return (
@@ -87,17 +87,20 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
           </div>
           <div className="entries-list">
             { files ? files.map(function(val,index){
+              if(val){
+                let className = 'entries-item';
+                let value = val.name.substr(9,10)+'...';
+                if(val.id === selectedFile.id){
+                  className = className + " selected-item";
+                }
 
-              let className = 'entries-item';
-              let value = val.name.substr(9,10)+'...';
-              if(val.id === selectedFile.id){
-                className = className + " selected-item";
+                return <div className={className} key={index} onClick={that.entryClicked.bind(that, val)}>
+                  {value}
+                </div>
+                
               }
-
-              return <div className={className} key={index} onClick={that.entryClicked.bind(that, val)}>
-                {value}
-              </div>
-              }) : <div></div>
+              })
+              : <div></div>
             }
           </div>
         </div>
