@@ -874,7 +874,7 @@ button.strip-button:focus {
   font-size: 15px;
   position: absolute;
   bottom: 1px;
-  left: 70px;
+  left: 20px;
   width: 200px;
   height: 200px;
   background: #f9f9f9;
@@ -893,22 +893,6 @@ button.strip-button:focus {
   background: cadetblue;
   color: white;
 }
-.show-entries .entries-header {
-  width: 200px;
-  height: 30px;
-  background: #4a4a4a;
-  color: white;
-  padding: 5px 7px;
-  font-weight: bold;
-  font-size: 15px;
-}
-.show-entries .entries-header .entries-header-selected {
-  float: left;
-}
-.show-entries .entries-header .entries-header-close {
-  float: right;
-  cursor: pointer;
-}
 
 .memocon-view_headline {
   position: fixed;
@@ -923,6 +907,35 @@ button.strip-button:focus {
   right: 40px;
   font-size: 40px;
   cursor: pointer;
+}
+
+.entries-header {
+  width: 200px;
+  height: 30px;
+  background: #4a4a4a;
+  color: white;
+  padding: 5px 7px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+}
+.entries-header .entries-header-selected {
+  float: left;
+}
+.entries-header .entries-header-minimize {
+  float: right;
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.show-initial-header {
+  position: fixed;
+  bottom: 0px;
+}
+
+.hide-initial-header {
+  display: none;
 }
 
 [class^="dive-in-"], [class*=" dive-in-"] {
