@@ -8,6 +8,7 @@ import { BaseStore } from './baseStore';
 import { Server } from '../api/baseDAO';
 import { AppEvent } from '../events/appEvent';
 import { IAuth } from '../interfaces/auth';
+import { Utils } from '../helpers';
 
 // https://developers.google.com/drive/v3/web/appdata
 // https://console.developers.google.com/apis/credentials?project=memoirable
@@ -121,7 +122,7 @@ class GoogleAuthStore extends BaseStore < IAuth > {
   _createOrUpdateFile(parentId, data, callback?, selectedDate?) {
     var parentId = parentId && parentId.length > 0 ? parentId : '';
     var date = selectedDate ? selectedDate : new Date(); // if date is given use it otherwise use the current day
-    var parentName = ''+ date.getFullYear() +  date.getMonth()  + date.getDate();
+    var parentName = ''+ date.getFullYear() +  Utils.padString(date.getMonth())  + Utils.padString(date.getDate());
     var filename = parentName + "." + data.substr(0,10)+ ".md";
     var file = new File([data.toString()], filename, { type: "text/markdown", })
     var fileId, key;
@@ -211,12 +212,6 @@ class GoogleAuthStore extends BaseStore < IAuth > {
       this.emitChange();
     }.bind(this), 0);
     
-  }
-
-  _addNewEntry(folderId, callback) {
-    let date = new Date();
-    let name = date.getFullYear() + "." + date.getMonth() + "." + date.getDate() + ".";
-    this._createOrUpdateFile(folderId, '', callback, this.selectedDate);
   }
 
   _getFolderId(){

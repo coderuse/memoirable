@@ -170,4 +170,13 @@ export class Utils {
     && a.getDate() === b.getDate()
     && a.getMonth() === b.getMonth();
   }
+
+  public static padString(x: number) : string{
+    if(x < 10){
+      return '0'+x;
+    }
+    else {
+      return ''+x;
+    }
+  }
 }

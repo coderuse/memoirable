@@ -63,9 +63,11 @@ $entries-box-height: 200px;
     float: left;
   }
 
-  .entries-header-close{
+  .entries-header-minimize{
     float: right;
     cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
   }
 }
 

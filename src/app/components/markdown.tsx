@@ -25,7 +25,6 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
   files: any;
   valueWhileSaving: string = '';
   focusCount: number = 0;
-  fetchedFileState: string = 'file.initial';
   initialFileValue: string;
 
   constructor(props) {
@@ -35,14 +34,6 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
 
   _navigateBack() {
     browserHistory.goBack();
-  }
-
-  componentWillMount() {
-    
-  }
-
-  shouldComponentUpdate(nextProps, nextState, nextContext){
-    return true;
   }
 
   changeStyle(changeDelimiter: string, editor: ace.Editor) {
@@ -112,25 +103,33 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
       }
       editor.setValue(this.state.inputText);
       this.focusCount++;
-      //this.fetchedFileState = 'file.changed';
     }.bind(this));
 
     var that = this;
     this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.SELECTED_FILE, function(){
-      GAuthStore._getFileContents(GAuthStore.currentFileId).then( function(response){
-          that.fetchedFileState = 'file.fetched';
-          that.setState({inputText: response.body});
-          that.initialFileValue = response.body;
-          editor.setValue(that.state.inputText);
-          that.focusCount = 0;
-          that.valueWhileSaving = '';
+      console.log("yeah yeah yeah ");
+      if(GAuthStore.currentFileId !== ''){
+        GAuthStore._getFileContents(GAuthStore.currentFileId).then( function(response){
+            that.setState({inputText: response.body});
+            that.initialFileValue = response.body;
+            editor.setValue(that.state.inputText);
+            that.focusCount = 0;
+            that.valueWhileSaving = '';
 
-          if(response.body.length >= 10){
-            that.focusCount++;
-          }
-      }, function(reason){
-        console.log(reason);
-      });
+            if(response.body.length >= 10){
+              that.focusCount++;
+            }
+        }, function(reason){
+          console.log(reason);
+        });
+      }
+      else {
+        that.setState({inputText: ''});
+        that.initialFileValue = '';
+        editor.setValue(that.state.inputText);
+        that.focusCount = 0;
+        that.valueWhileSaving = '';
+      }
     });
   }
 
