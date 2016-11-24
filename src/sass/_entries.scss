@@ -10,7 +10,7 @@ $entries-box-height: 200px;
   font-size: 15px;
   position: absolute;
   bottom: 1px;
-  left: 70px;
+  left: 20px;
   width: $entries-box-width;
   height: $entries-box-height;
   background: #f9f9f9;
@@ -32,24 +32,7 @@ $entries-box-height: 200px;
     }
   }
 
-  .entries-header {
-    width: $entries-box-width;
-    height: 30px;
-    background: #4a4a4a;
-    color: white;
-    padding: 5px 7px;
-    font-weight: bold;
-    font-size: 15px;
-
-    .entries-header-selected{
-      float: left;
-    }
-
-    .entries-header-close{
-      float: right;
-      cursor: pointer;
-    }
-  }
+  
 }
 
 .memocon-view_headline {
@@ -65,4 +48,32 @@ $entries-box-height: 200px;
   right: 40px;
   font-size: 40px;
   cursor: pointer;
+}
+
+.entries-header {
+  width: $entries-box-width;
+  height: 30px;
+  background: #4a4a4a;
+  color: white;
+  padding: 5px 7px;
+  font-weight: bold;
+  font-size: 15px;
+  cursor: pointer;
+  .entries-header-selected{
+    float: left;
+  }
+
+  .entries-header-close{
+    float: right;
+    cursor: pointer;
+  }
+}
+
+.show-initial-header {
+  position: fixed;
+  bottom: 0px;
+}
+
+.hide-initial-header {
+  display: none;
 }

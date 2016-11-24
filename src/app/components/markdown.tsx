@@ -26,6 +26,8 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
   valueWhileSaving: string = '';
   focusCount: number = 0;
   fetchedFileState: string = 'file.initial';
+  initialFileValue: string;
+
   constructor(props) {
     super(props);
     this.state = { inputText: `# Diary, O' Diary!!!`};
@@ -91,13 +93,13 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
 
     editor.on('change',function(e){
       this.setState({inputText: editor.getValue()});
-
       this.valueBefore = editor.getValue();
       var timeout;
       let val = editor.getValue();
-      if(typeof timeout !== 'function'){
+
+      if(typeof timeout !== 'function' && val !== this.initialFileValue){
         timeout = setTimeout(function(val, state) {
-                    this._checkTriggerShouldHappenOrNot(val,state)
+                    this._checkTriggerShouldHappenOrNot(val);
                   }.bind(this, val , this.fetchedFileState), 2000);
       }
       
@@ -110,7 +112,7 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
       }
       editor.setValue(this.state.inputText);
       this.focusCount++;
-      that.fetchedFileState = 'file.changed';
+      //this.fetchedFileState = 'file.changed';
     }.bind(this));
 
     var that = this;
@@ -118,6 +120,7 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
       GAuthStore._getFileContents(GAuthStore.currentFileId).then( function(response){
           that.fetchedFileState = 'file.fetched';
           that.setState({inputText: response.body});
+          that.initialFileValue = response.body;
           editor.setValue(that.state.inputText);
           that.focusCount = 0;
           that.valueWhileSaving = '';
@@ -132,14 +135,9 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
   }
 
   _checkTriggerShouldHappenOrNot(val){
-    if(this.fetchedFileState !== 'file.fetched' && val && val.length >= 10 && this.state.inputText === val && this.valueWhileSaving !== val){
-      var key = 'update';
-
-      if(GAuthStore.currentFileId === ''){
-        key = 'create';
-      }
+    if(val && val.length >= 10 && this.state.inputText === val && this.valueWhileSaving !== val){
       this.valueWhileSaving = this.state.inputText;
-      GAuthStore._createOrUpdateFile(GAuthStore.currentFolderIdInUse,this.state.inputText,0, key, GAuthStore.selectedDate);
+      GAuthStore._createOrUpdateFile(GAuthStore.currentFolderIdInUse,this.state.inputText , null , GAuthStore.selectedDate);
     }
   }
 

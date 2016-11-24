@@ -118,19 +118,20 @@ class GoogleAuthStore extends BaseStore < IAuth > {
     })
   }
 
-  _createOrUpdateFile(parentId, data, key, callback?, selectedDate?) {
-    var parentId = parentId.length > 0 ? parentId : '';
+  _createOrUpdateFile(parentId, data, callback?, selectedDate?) {
+    var parentId = parentId && parentId.length > 0 ? parentId : '';
     var date = selectedDate ? selectedDate : new Date(); // if date is given use it otherwise use the current day
     var parentName = ''+ date.getFullYear() +  date.getMonth()  + date.getDate();
     var filename = parentName + "." + data.substr(0,10)+ ".md";
     var file = new File([data.toString()], filename, { type: "text/markdown", })
-    var fileId;
-
-    if(key === 'create'){
-      fileId = '';
+    var fileId, key;
+    if(this.currentFileId !== ''){
+      key = 'update';
+      fileId = this.currentFileId
     }
     else{
-      fileId = this.currentFileId ? this.currentFileId : '';
+      key = 'create';
+      fileId = '';
     }
 
     this._insertOrUpdateFile(file, parentId, filename, key, callback, fileId);
@@ -215,7 +216,7 @@ class GoogleAuthStore extends BaseStore < IAuth > {
   _addNewEntry(folderId, callback) {
     let date = new Date();
     let name = date.getFullYear() + "." + date.getMonth() + "." + date.getDate() + ".";
-    this._createOrUpdateFile(folderId, '', 'create', callback, this.selectedDate);
+    this._createOrUpdateFile(folderId, '', callback, this.selectedDate);
   }
 
   _getFolderId(){
@@ -244,6 +245,7 @@ class GoogleAuthStore extends BaseStore < IAuth > {
 
         if(response.result.files.length && response.result.files[0].id){
           that.currentFileId = response.result.files[0].id;
+          that.currentFileObj = response.result.files[0];
           event.payLoad.pr(response.result.files);
         }
         else {

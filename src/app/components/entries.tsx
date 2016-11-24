@@ -11,8 +11,9 @@ export interface IEntries {};
 export interface IEntriesState {files? : any, currentClass?: string}
 export default class Entries extends React.Component<IEntries, IEntriesState> {
   _listenerToken: FBEmitter.EventSubscription;
-  _currentClass : string = "hide-entries";
+  _currentClass : string = 'hide-entries';
   _listenerTokenDateChanged: FBEmitter.EventSubscription;
+  _displayInitialHeader : string =  'show-initial-header';
   constructor(props) {
     super();
   }
@@ -22,7 +23,6 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
   }
 
   fetchFiles(trigger, dateGiven?){
-    console.log(dateGiven);
     let date = dateGiven ? dateGiven : new Date(); // if date is given use it otherwise use the current day
     let selectedDate = '' + date.getFullYear() + date.getMonth() + date.getDate();
     var that = this;
@@ -40,9 +40,11 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
   handleClickEntries() {
     if(this._currentClass === 'hide-entries') {
       this._currentClass = 'show-entries';
+      this._displayInitialHeader = 'hide-initial-header';
     }
     else {
       this._currentClass = 'hide-entries';
+      this._displayInitialHeader = 'show-initial-header';
     }
     this.setState({
       currentClass: this._currentClass
@@ -60,7 +62,7 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
 
   componentDidMount(){
     this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.SAVE_FILE, function(){
-      this.fetchFiles(true);
+      this.fetchFiles(true, GAuthStore.selectedDate);
     }.bind(this));
 
 
@@ -74,16 +76,17 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
     var that = this;
     var selectedFile = GAuthStore.currentFileObj? GAuthStore.currentFileObj : { 'name': ''};
     selectedFile.cleanedName = selectedFile.name.substr(9,10);
-
+    var displayInitialHeader = !this._currentClass;
     return (
       <div>
-        <div className="memocon-view_headline" title="Entries" onClick={this.handleClickEntries.bind(this)}>
-          
+        <div className={this._displayInitialHeader} onClick={this.handleClickEntries.bind(this)}>
+          <div className="entries-header">
+              <div className="entries-header-selected">{selectedFile.cleanedName}</div>
+          </div>
         </div>
-        <div className={this._currentClass}>
+        <div className={this._currentClass} onClick={this.handleClickEntries.bind(this)}>
           <div className="entries-header">
             <div className="entries-header-selected">{selectedFile.cleanedName}</div>
-            <div className="entries-header-close" onClick={this.handleClickEntries.bind(this)}>X</div>
           </div>
           <div className="entries-list">
             { files ? files.map(function(val,index){
