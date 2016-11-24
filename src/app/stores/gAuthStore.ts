@@ -27,8 +27,16 @@ class GoogleAuthStore extends BaseStore < IAuth > {
   currentFolderIdInUse: string;
   currentFileObj: any ;
   
+  /**
+   * @description
+   *
+   * Authorizes the user using the google API
+   * 
+   * @param immediate : boolean
+   * @param event : refers to the event object
+   * @returns 
+   */
   _authorize(immediate: boolean, event: AppEvent) {
-
     gapi.auth.authorize({
       'client_id': this._clientId,
       'scope': this._scopes.join(' '),
@@ -44,7 +52,14 @@ class GoogleAuthStore extends BaseStore < IAuth > {
       this.emitChange();
     }.bind(this));
   }
-
+  /**
+   * @description
+   *
+   * Fetches the user details
+   * 
+   * @param event : refers to the event object
+   * @returns 
+   */
   _getProfileInfo(event: AppEvent) {
     gapi.client.load('plus', 'v1', function() {
       var request = gapi.client.plus.people.get({
@@ -60,6 +75,15 @@ class GoogleAuthStore extends BaseStore < IAuth > {
     }.bind(this));
   }
 
+  /**
+   * @description
+   *
+   * Creates the initial structure if not present
+   * 
+   * @param event : refers to the event object
+   * @param folderIds : refers to the folderIds object
+   * @returns 
+   */
   _createInitialFolderStructure(event: AppEvent, folderIds) {
     var that = this;
     gapi.client.load('drive', 'v3', function() {
@@ -111,6 +135,14 @@ class GoogleAuthStore extends BaseStore < IAuth > {
     })
   }
 
+  /**
+   * @description
+   *
+   * Creates and promise of the google API request
+   * 
+   * @param data : refers to the data object 
+   * @returns Promise of the google API request
+   */
   _requestForFolderGoogleDrive(data) {
     return gapi.client.request({
       'path': '/drive/v3/files',
@@ -119,6 +151,18 @@ class GoogleAuthStore extends BaseStore < IAuth > {
     })
   }
 
+  /**
+   * @description
+   *
+   * Creates the parameters and cleans them for the subsequent insert function
+   * 
+   * @param parentId : Id of the parent folder Id
+   * @param data : data string to be saved
+   * @param callback : callback function if any
+   * @param selectedDate : current date in use if any
+   * 
+   * @returns 
+   */
   _createOrUpdateFile(parentId, data, callback?, selectedDate?) {
     var parentId = parentId && parentId.length > 0 ? parentId : '';
     var date = selectedDate ? selectedDate : new Date(); // if date is given use it otherwise use the current day
@@ -139,6 +183,20 @@ class GoogleAuthStore extends BaseStore < IAuth > {
 
   }
 
+  /**
+   * @description
+   *
+   * Inserts or updates the file
+   * 
+   * @param fileData : File Object
+   * @param folderId : id of the parent folder
+   * @param filename : name of the file to be saved
+   * @param key : whether to create or update the file
+   * @param callback : callback function if any
+   * @param fileId : used in case of update
+   * 
+   * @returns 
+   */
   _insertOrUpdateFile(fileData, folderId? , filename? , key?,  callback? , fileId?) {
     const boundary = '-------314159265358979323846';
     const delimiter = "\r\n--" + boundary + "\r\n";
@@ -201,23 +259,41 @@ class GoogleAuthStore extends BaseStore < IAuth > {
     }
   }
 
+  /**
+   * @description
+   *
+   * Gets the current selected date
+   * 
+   * @returns 
+   */
   _getSelectedDate() {
     return this.selectedDate;
   }
 
+  /**
+   * @description
+   *
+   * Sets the current selected date and emits the change 
+   * 
+   * @param event : refers to the event object
+   * @returns 
+   */
   _setSelectedDate(event) {
     this.selectedDate = event.payLoad.date;
     this._changeToken = event.type;
     setTimeout(function() { // Run after dispatcher has finished
       this.emitChange();
     }.bind(this), 0);
-    
   }
 
-  _getFolderId(){
-    return this.folderIds['currentFolderId'];
-  }
-
+  /**
+   * @description
+   *
+   * Sets the current selected date and emits the change 
+   * 
+   * @param id : refers to the id of the file
+   * @returns Promise of the google API request
+   */
   _getFileContents(id) {
     return gapi.client.drive.files.get({
       fileId: id,
@@ -225,7 +301,14 @@ class GoogleAuthStore extends BaseStore < IAuth > {
     });
   }
 
-
+  /**
+   * @description
+   *
+   * Gets files for the selected date
+   * 
+   * @param event : refers to the id of the file with payLoad of date and callback
+   * @returns
+   */
   _getFilesByDate(event) {
     var date = event.payLoad.date;
     var pr = event.payLoad.pr;
