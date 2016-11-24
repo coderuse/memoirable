@@ -137,6 +137,17 @@ module.exports = function (grunt) {
         }
       }
     },
+    typedoc: {
+      build: {
+        options: {
+          module: 'commonjs',
+          target: 'es5',
+          out: 'build/docs/',
+          name: 'Memoirable: Docs'
+        },
+        src: 'src/app/**/*'
+      }
+    },
     watch: {
       styles: {
         files: [
@@ -155,5 +166,5 @@ module.exports = function (grunt) {
 
   grunt.registerTask('styles', ['sass', 'watch:styles']);
 
-  grunt.registerTask('build', ['clean', 'copy', 'sass', 'webpack', 'concat']);
+  grunt.registerTask('build', ['clean', 'copy', 'sass', 'webpack', 'concat', 'typedoc']);
 }
