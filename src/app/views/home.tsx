@@ -34,22 +34,22 @@ export class Home extends React.Component<{}, IHomeState> {
     this.setState({
       diveInPages: [
         {
-          text: '#First_Adventure'
+          text: '#first_adventure'
         },
         {
-          text: '#First_Date'
+          text: '#first_date'
         },
         {
-          text: '#With_Friends'
+          text: '#with_friends'
         },
         {
-          text: '#The_Proposal'
+          text: '#the_proposal'
         },
         {
-          text: '#The_Marriage'
+          text: '#the_marriage'
         },
         {
-          text: '#The_Day'
+          text: '#the_day'
         }
       ]
     });

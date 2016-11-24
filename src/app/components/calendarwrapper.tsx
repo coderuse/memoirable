@@ -112,7 +112,7 @@ export default class CalendarWrapper extends React.Component<{}, { date?: Date, 
         <button className="strip-button text-content" onClick={this.toggleCalendar.bind(this)}>
           {this.state.date.toDateString()}
         </button>
-        <div className={this.wrapperToggledClass}>
+        <div className={this.wrapperToggledClass} onBlur={this.toggleCalendar.bind(this)}>
           <div className="memocon-navigate_before pull-left" onClick={this.arrowClickHandler.bind(this,'left')}></div>
           <div className="selected-date"></div>
           <Calendar date={this.state.date} month={this.monthsArray[0].month} year={this.monthsArray[0].year}></Calendar>
