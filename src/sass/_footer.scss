@@ -5,5 +5,10 @@
   bottom: 0;
   width: 100%;
   text-align: center;
-  vertical-align: middle;  
+  vertical-align: middle;
+  .not-supported {
+    font-family: $default-viewer-font-family;
+    top: 18px;
+    position: relative;
+  }
 }

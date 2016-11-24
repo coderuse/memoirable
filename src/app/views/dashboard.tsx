@@ -16,8 +16,7 @@ export class Dashboard extends React.Component<{}, IAuth> {
   constructor() {
     super();
     GAuthStore.cleanState();
-    this.state = GAuthStore.getState();
-    
+    this.state = GAuthStore.getState();    
   }
 
   componentDidMount() {
@@ -40,7 +39,7 @@ export class Dashboard extends React.Component<{}, IAuth> {
         <div className="row">
           <AuthHeader></AuthHeader>
         </div>
-        <MarkDown></MarkDown>
+          <MarkDown></MarkDown>
       </div>
     );
   }

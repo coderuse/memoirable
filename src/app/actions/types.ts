@@ -25,3 +25,11 @@ export const ProviderTypes = {
   DROPBOX: 'dropbox',
   LOCALDRIVE: 'localdrive'
 }
+
+export const EditorActionTypes = {
+  BOLD: 'bold',
+  ITALICS: 'italics',
+  UNDERLINE: 'underline',
+  LIST: 'list',
+  QUOTE: 'quote'
+} 

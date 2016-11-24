@@ -3,11 +3,12 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { IndexLink, Link } from 'react-router';
-import { AuthActionTypes, ProviderTypes } from '../actions/types';
+import { AuthActionTypes, ProviderTypes, EditorActionTypes } from '../actions/types';
 import * as AuthActions from '../actions/authActions';
 import GAuthStore from '../stores/gAuthStore';
 import Entries from '../components/entries';
 import browserHistory from '../browserHistory';
+import Emitter from '../events/appEvent';
 
 declare function require(name:string);
 var ReactMarkdown = require('react-markdown');
@@ -42,10 +43,38 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
     return true;
   }
 
+  changeStyle(changeDelimiter: string, editor: ace.Editor) {
+    let selectionRange = editor.getSelectionRange();
+    editor.session.replace(selectionRange, changeDelimiter + editor.getCopyText() + changeDelimiter);
+  }
+
   // https://github.com/ajaxorg/ace/wiki/Configuring-Ace
   // https://github.com/ajaxorg/ace/blob/master/lib/ace/theme/textmate.css
   componentDidMount() {
     const editor = ace.edit('editor');
+    editor.$blockScrolling = Infinity;
+
+    Emitter.addListener('editor.actions', function(type: string) {
+      switch(type) {
+        case EditorActionTypes.BOLD:
+          this.changeStyle('**', editor);
+          break;
+        case EditorActionTypes.ITALICS:
+          this.changeStyle('*', editor);
+          break;
+        case EditorActionTypes.UNDERLINE:
+          this.changeStyle('__', editor);
+          break;
+        case EditorActionTypes.LIST:
+          this.changeStyle('*', editor);
+          break;
+        case EditorActionTypes.QUOTE:
+          this.changeStyle('*', editor);
+          break;
+        default:
+          break;
+      }
+    }.bind(this));
     
     editor.setOptions({
       //fontFamily: 'tahoma',
