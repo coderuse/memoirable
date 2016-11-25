@@ -19,29 +19,62 @@ export default class AuthHeader extends React.Component<{}, any> {
     this.state = GAuthStore.getState();
   }
 
+  /**
+   * @description
+   *
+   * Adds listener, updates profile info and creates initial folder structure in google drive
+   * 
+   * @returns 
+   */
   componentDidMount() {
     this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.AUTH_GET_PROFILE, this._setStateFromStores.bind(this));
     AuthActions.updateProfileInfo({ provider: ProviderTypes.GOOGLE });
     AuthActions.createInitialFolderStructure({ provider: ProviderTypes.GOOGLE});
   }
 
+  /**
+   * @description
+   *
+   * Removes listener while unmounting
+   * 
+   * @returns 
+   */
   componentWillUnmount() {
     GAuthStore.removeChangeListener(this._listenerToken);
   }
 
+  /**
+   * @description
+   *
+   * Sets state based on GAuthStore
+   * 
+   * @returns 
+   */
   _setStateFromStores() {
     this.setState(GAuthStore.getState());
   }
 
-  saveToDrive(drive){
-    AuthActions.createInitialFolderStructure({ provider: ProviderTypes.GOOGLE});
-  }
-
+  /**
+   * @description
+   *
+   * Emits the editor related actions
+   * 
+   * @param type: refers to the type of editor action
+   * @returns 
+   */
   toggleClass(){
     this.toggledClass =  this.toggledClass === 'hide-header-menu' ? 'show-header-menu' : 'hide-header-menu' ;
     this.setState({'name':'button-state-changed'});
   }
 
+  /**
+   * @description
+   *
+   * Emits the editor related actions
+   * 
+   * @param type: refers to the type of editor action
+   * @returns 
+   */
   editorAction(type: any) {
     Emitter.emit('editor.actions', type);
   }

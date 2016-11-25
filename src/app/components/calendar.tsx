@@ -29,10 +29,25 @@ export default class Calendar extends React.Component<ICalendarDate, {}> {
     this.selectedDate = GAuthStore._getSelectedDate();
   }
 
+  /**
+   * @description
+   *
+   * populate the month array using the month and year as input
+   * 
+   * @returns 
+   */
   componentWillMount() {
     this.populateValuesByMonth(this.props.month, this.props.year, this.monthArray);
   }
 
+  /**
+   * @description
+   *
+   * checks whether the calendar component should update on not based on the selected date
+   * also based on the month and the year
+   * 
+   * @returns 
+   */
   shouldComponentUpdate(nextProps: any, nextState: any) {
     if(this.props.month !== nextProps.month || this.props.year !== nextProps.year ){
       this.resetMonthArray(this.monthArray);
@@ -47,13 +62,30 @@ export default class Calendar extends React.Component<ICalendarDate, {}> {
     }
   }
 
+  /**
+   * @description
+   *
+   * reset month array to initial values
+   * 
+   * @returns 
+   */
   resetMonthArray(month){
     for(var i=1;i<=6;i++){
       month['row'+i] = [];
     }
   }
 
-  populateValuesByMonth(monthNum, year, month){
+  /**
+   * @description
+   *
+   * Creates the month array for the given month and year
+   * 
+   * @param monthNum : given month number (0-11)
+   * @param year : refers to the year value
+   * @param monthArray : refers to the month Array
+   * @returns 
+   */
+  populateValuesByMonth(monthNum, year, monthArray){
     let firstDate = new Date(year, monthNum);
     let firstDay = firstDate.getDay();
     let count = 0;
@@ -62,15 +94,15 @@ export default class Calendar extends React.Component<ICalendarDate, {}> {
     for(var i=0; i < rowArray.length; i++){
       for(var j=0; j < 7 ; j++){
         if(i==0 && j<firstDay){
-          month[rowArray[i]].push('');
+          monthArray[rowArray[i]].push('');
         }
         else{
           count = count+1;
           if(count> Utils.daysInMonth(monthNum, year)){
-            month[rowArray[i]].push('');
+            monthArray[rowArray[i]].push('');
           }
           else{
-            month[rowArray[i]].push(count);
+            monthArray[rowArray[i]].push(count);
           }
           
         }
@@ -79,11 +111,26 @@ export default class Calendar extends React.Component<ICalendarDate, {}> {
     }
   }
 
+  /**
+   * @description
+   *
+   * Toggles the class and sets state
+   * 
+   * @returns 
+   */
   toggleClass(){
     this.toggledClass =  this.toggledClass === 'hide-header-menu' ? 'show-header-menu' : 'hide-header-menu' ;
     this.setState({'name':'button-state-changed'});
   }
 
+  /**
+   * @description
+   *
+   * Click handler for the selected date
+   * 
+   * @param date: the clicked date
+   * @returns 
+   */
   handleClick(date){
     AuthActions.calendarDateChanged({ provider: ProviderTypes.GOOGLE, date: date});
   }
