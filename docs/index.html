@@ -65,17 +65,82 @@
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
 				<h1 id="memoirable">Memoirable</h1>
+				<blockquote>
+					<p>Online diary for all</p>
+				</blockquote>
 				<p><a href="https://gitter.im/coderuse/memoirable?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/coderuse/memoirable.svg" alt="Join the chat at https://gitter.im/coderuse/memoirable"></a>
 				<a href="https://travis-ci.org/coderuse/memoirable"><img src="https://travis-ci.org/coderuse/memoirable.svg?branch=master" alt="Build Status"></a></p>
+				<h6 id="-site-https-coderuse-github-io-memoirable-"><a href="https://coderuse.github.io/memoirable">Site</a></h6>
+				<h3 id="contents">Contents</h3>
+				<ul>
+					<li><a href="#overview">Overview</a></li>
+					<li><a href="#future-plan">Future Plan</a></li>
+					<li><a href="#release-notes">Current Release</a></li>
+					<li><a href="#support">Support</a></li>
+					<li><a href="#contribute">Contribute</a></li>
+					<li><a href="#documentation">Documentation</a></li>
+					<li><a href="#team">Team</a></li>
+					<li><a href="#license">License</a></li>
+				</ul>
+				<h3 id="overview">Overview</h3>
 				<p>We believe that, everyone should keep their experiences to meet new friends, starting new relations, having a bad day, having the most memorable day in a written format. In one&#39;s own language and with own feelings. And this written notes should not be lost. One of the problems in preserving paper diaries.</p>
 				<p>For this reason, we are building this. For you, for us. We can also pass these journals to future generations.</p>
 				<p>And of course this should remain free and private.</p>
 				<p>This app will use known and popular free storage providers like Google Drive, Microsoft OneDrive to store data and will be hosted on Github pages. So, as long as you can remember the password of your Storage provider&#39;s account, your journal will be accessible for you. And ofcourse it will remain for your own eye only.</p>
+				<h3 id="future-plan">Future Plan</h3>
 				<p>Later we may add some features like:</p>
 				<ul>
 					<li>Pass selective journal entries to another user</li>
 					<li>Make a backup of your journal to local disk and restore from there. So that, you can keep your journal more safe and more personal</li>
 				</ul>
+				<h3 id="release-notes">Release Notes</h3>
+				<h4 id="release-notes-for-version-0-1">Release notes for version 0.1</h4>
+				<p>In this first release of this diary, we have tried our best to keep it bug free as far as possible.</p>
+				<h5 id="features">Features</h5>
+				<ul>
+					<li>This release will be compatible with all the later releases. That means, any entry created with this release will be available and usable in later releases</li>
+					<li>Google Drive is supported as the only storage provider. User need to give the <a href="https://developers.google.com/drive/v3/web/appdata">permission for application data folder</a>. <a href="https://developers.google.com/drive/v2/web/scopes">More details</a></li>
+					<li>Multiple entries for a date is possible</li>
+					<li>Entries for future date is possible</li>
+					<li>Buttons for <strong>Bold</strong> &amp; <em>Italics</em> are available in the editor. As we are using <a href="http://commonmark.org/">CommonMark</a> compatible renderer, all the tags available for <code>CommonMark</code> will be available for the writing. <a href="http://spec.commonmark.org/0.27/">referrence</a></li>
+				</ul>
+				<h5 id="disclaimer">Disclaimer</h5>
+				<p>We have only manually tested this application. No unit tests and automated end-to-end tests have been added in this release. Those are planned for future releases.</p>
+				<h3 id="use-this-in-your-own-site">Use this in your own site</h3>
+				<pre><code class="lang-bash">git <span class="hljs-built_in">clone</span> https://github.com/coderuse/memoirable.git
+npm install -g grunt-cli typescript typings
+npm install
+</code></pre>
+				<p>Follow the <a href="https://developers.google.com/drive/v2/web/auth/web-client#create_a_client_id_and_client_secret">steps</a> to create a client id for the app and change the <code>clientId</code> in <code>src/app/constants.ts</code>.</p>
+				<p>Also installation of <code>Ruby</code> is required.</p>
+				<pre><code class="lang-bash">gem install sass susy normalize-scss
+grunt build
+</code></pre>
+				<h3 id="support">Support</h3>
+				<ul>
+					<li><a href="https://github.com/coderuse/memoirable/issues">GitHub Issues</a></li>
+					<li><a href="https://gitter.im/coderuse/memoirable">Gitter Chat</a></li>
+				</ul>
+				<h3 id="contribute">Contribute</h3>
+				<p>This project is at a very initial stage. So, it&#39;s the right time to show your love for Open Source Development and be a part of the core team for this awesome project.</p>
+				<p>So, fork it, follow the <a href="#use-this-in-your-own-site">above steps</a> and invoke <code>grunt</code> to spawn a dev server with watch over the dev file changes.</p>
+				<h3 id="documentation">Documentation</h3>
+				<p>An auto generated doc is hosted at <a href="https://coderuse.github.io/memoirable">https://coderuse.github.io/memoirable</a></p>
+				<h3 id="team">Team</h3>
+				<table>
+					<thead>
+						<tr>
+							<th><a href="http://coderuse.com"><img src="https://avatars3.githubusercontent.com/u/1061389?v=3&amp;s=130" alt="Arnab Das"></a></th>
+							<th><a href="http://chandankrjha.com"><img src="https://avatars3.githubusercontent.com/u/13062613?v=3&amp;s=130" alt="Chandan Kr Jha"></a></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><a href="http://coderuse.com">Arnab Das</a></td>
+							<td><a href="http://chandankrjha.com">Chandan Kr Jha</a></td>
+						</tr>
+					</tbody>
+				</table>
 				<h3 id="license">License</h3>
 				<pre><code>Copyright <span class="hljs-number">2016</span> Arnab Das &lt;arnab@coderuse.com&gt;
 
