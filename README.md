@@ -10,7 +10,7 @@
 
 - [Overview](#overview)
 - [Future Plan](#future-plan)
-- <a href="https://github.com/coderuse/memoirable/wiki" target="_blank">User Manual</a>
+- [User Manual](#user-manual)
 - [Current Release](#release-notes)
 - [Support](#support)
 - [Use in your own site](#use-this-in-your-own-site)
@@ -36,6 +36,10 @@ Later we may add some features like:
 - Add user preference for fonts, diary editor theme etc
 - Pass selective journal entries to another user
 - Make a backup of your journal to local disk and restore from there. So that, you can keep your journal more safe and more personal
+
+## User Manual
+
+We have a small user manual [here](https://github.com/coderuse/memoirable/wiki)
 
 ## Release Notes
 
