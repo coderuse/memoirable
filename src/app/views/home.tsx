@@ -20,12 +20,26 @@ export class Home extends React.Component<{}, IHomeState> {
     this._isChrome = !!window['chrome'] && !!window['chrome']['webstore'];  
   }
 
+  /**
+   * @description
+   *
+   * Handles functionality when componentWillMount
+   * 
+   * @returns 
+   */
   componentWillMount() {
     this.state = {
       diveInPages: []
     };
   }
 
+  /**
+   * @description
+   *
+   * Handles functionality when componentDidMount
+   * 
+   * @returns 
+   */
   componentDidMount() {
     this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.AUTH_INITIALIZE, () => { 
       browserHistory.push('/dashboard');     
@@ -55,10 +69,25 @@ export class Home extends React.Component<{}, IHomeState> {
     });
   }
 
+  /**
+   * @description
+   *
+   * Handles functionality when componentWillUnmount
+   * 
+   * @returns 
+   */
   componentWillUnmount() {
     GAuthStore.removeChangeListener(this._listenerToken);
   }
 
+  /**
+   * @description
+   *
+   * Authenticates based on provider
+   * 
+   * @param provider: refers to the provider
+   * @returns 
+   */
   _authenticate(provider: string) {
     AuthActions.authorize({ provider: provider });
   } 

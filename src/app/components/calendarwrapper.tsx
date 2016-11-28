@@ -109,7 +109,7 @@ export default class CalendarWrapper extends React.Component<{}, { date?: Date, 
   /**
    * @description
    *
-   * Click handler for left and right buttons for the calendar wrapper
+   * Based on current 
    * 
    * @param key: refers to whether the left button is clicked or right
    * @returns 

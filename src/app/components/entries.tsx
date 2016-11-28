@@ -20,10 +20,27 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
     super();
   }
   selectedFile: any = {name : ''};
+
+  /**
+   * @description
+   *
+   * Handles functionality when the componentWillMount 
+   * 
+   * @returns 
+   */
   componentWillMount() {
     this.fetchFiles(false);
   }
-
+  
+  /**
+   * @description
+   *
+   * Fetches files for the selected date
+   * 
+   * @param trigger: refers whether we want to make the first file as selected or not
+   * @param dateGiven: refers to the given date
+   * @returns 
+   */
   fetchFiles(trigger, dateGiven?){
     let date = dateGiven ? dateGiven : new Date(); // if date is given use it otherwise use the current day
     let selectedDate = '' + date.getFullYear() + Utils.padString(date.getMonth()) + Utils.padString(date.getDate());
@@ -39,6 +56,13 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
     }})
   }
   
+  /**
+   * @description
+   *
+   * Handles the click of entries
+   * 
+   * @returns 
+   */
   handleClickEntries() {
     if(this._currentClass === 'hide-entries') {
       this._currentClass = 'show-entries';
@@ -53,6 +77,14 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
     })
   }
 
+  /**
+   * @description
+   *
+   * Handles the click of a particular entry
+   * 
+   * @param obj: refers to file object with id to be used as selected file
+   * @returns 
+   */
   entryClicked(obj) {
     if(obj && obj.id){
       GAuthStore.currentFileObj = obj;
@@ -62,6 +94,13 @@ export default class Entries extends React.Component<IEntries, IEntriesState> {
     GAuthStore.emitChange();
   }
 
+  /**
+   * @description
+   *
+   * Handles functionality when componentDidMount
+   * 
+   * @returns 
+   */
   componentDidMount(){
     this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.SAVE_FILE, function(){
       this.fetchFiles(true, GAuthStore.selectedDate);

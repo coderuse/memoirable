@@ -156,21 +156,25 @@ export class Utils {
     return { msg: msg, relatedObj: relatedObj };
   }
 
+  // gets the number of days in a particular month and year
   public static daysInMonth(month: number, year: number) {
     var isLeap = ((year % 4) == 0 && ((year % 100) != 0 || (year % 400) == 0));
     return [31, (isLeap ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
   }
 
+  // gets the month based on value in number(0-11)
   public static getMonth(month:number){
     return ['January','February','March','April','May','June','July','August','September','October','November','December'][month];
   }
 
+  // returns if the two dates are same or not
   public static compareDate(a,b){
     return a.getFullYear() === b.getFullYear()
     && a.getDate() === b.getDate()
     && a.getMonth() === b.getMonth();
   }
 
+  // pads the string if it is less than 10
   public static padString(x: number) : string{
     if(x < 10){
       return '0'+x;
