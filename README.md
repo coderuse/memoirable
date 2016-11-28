@@ -10,6 +10,7 @@
 
 - [Overview](#overview)
 - [Future Plan](#future-plan)
+- <a href="https://github.com/coderuse/memoirable/wiki" target="_blank">User Manual</a>
 - [Current Release](#release-notes)
 - [Support](#support)
 - [Use in your own site](#use-this-in-your-own-site)
