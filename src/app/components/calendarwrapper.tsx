@@ -20,6 +20,14 @@ export default class CalendarWrapper extends React.Component<{}, { date?: Date, 
     this.state = {date: dateFromStore, month: dateFromStore.getMonth(), year: dateFromStore.getFullYear()};
   }
 
+  /**
+   * @description
+   *
+   * Adds the listener for the calendar date changed event
+   * populates the three months array based on the current month and year in use
+   * 
+   * @returns 
+   */
   componentWillMount() {
     this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.CALENDAR_DATE_CHANGED, function(){
       this.setState({date: GAuthStore._getSelectedDate()});
@@ -27,10 +35,29 @@ export default class CalendarWrapper extends React.Component<{}, { date?: Date, 
     this.monthsArray = this.get3MonthsArray(this.state.date.getMonth(),this.state.date.getFullYear());
   }
 
+  /**
+   * @description
+   *
+   * Removes the listener while unmounting
+   * 
+   * @returns 
+   */
   componentWillUnmount() {
     GAuthStore.removeChangeListener(this._listenerToken);
   }
 
+  /**
+   * @description
+   *
+   * Checks whether the component should update or not
+   * based on date has changed or not
+   * current year and month have changed or not
+   * whether to show the calendar wrapper or not
+   * 
+   * @param nextProps : refers to the next set of values for props object
+   * @param nextState: refers to the next set of values for state object
+   * @returns 
+   */
   shouldComponentUpdate(nextProps: any, nextState: any) {
     if( this.state.date !== nextState.date){
       return true;
@@ -46,6 +73,14 @@ export default class CalendarWrapper extends React.Component<{}, { date?: Date, 
     }
   }
 
+  /**
+   * @description
+   *
+   * Click handler for left and right buttons for the calendar wrapper
+   * 
+   * @param key: refers to whether the left button is clicked or right
+   * @returns 
+   */
   arrowClickHandler(key){
    let month = this.state.month;
    let year = this.state.year;
@@ -71,6 +106,14 @@ export default class CalendarWrapper extends React.Component<{}, { date?: Date, 
     this.setState({month: month, year: year});
   }
 
+  /**
+   * @description
+   *
+   * Based on current 
+   * 
+   * @param key: refers to whether the left button is clicked or right
+   * @returns 
+   */
   get3MonthsArray(month,year){
     let monthsArray = [];
 

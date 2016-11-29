@@ -19,16 +19,37 @@ export class Dashboard extends React.Component<{}, IAuth> {
     this.state = GAuthStore.getState();    
   }
 
+  /**
+   * @description
+   *
+   * Handles functionality when componentDidMount
+   * 
+   * @returns 
+   */
   componentDidMount() {
     this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.AUTH_GET_PROFILE, this._setStateFromStores.bind(this));
 
     AuthActions.updateProfileInfo({ provider: ProviderTypes.GOOGLE });
   }
 
+  /**
+   * @description
+   *
+   * Handles functionality when componentWillUnmount 
+   * 
+   * @returns 
+   */
   componentWillUnmount() {
     GAuthStore.removeChangeListener(this._listenerToken);
   }
 
+  /**
+   * @description
+   *
+   * Sets state based on GAuthStore state
+   * 
+   * @returns 
+   */
   _setStateFromStores() {
     this.setState(GAuthStore.getState());
   }

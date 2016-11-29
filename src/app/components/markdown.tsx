@@ -32,10 +32,25 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
     this.state = { inputText: `# Diary, O' Diary!!!`};
  }
 
+  /**
+   * @description
+   *
+   * Handles the back functionality of browser
+   * 
+   * @returns 
+   */
   _navigateBack() {
     browserHistory.goBack();
   }
 
+  /**
+   * @description
+   *
+   * changes the selected text based on action such as BOLD, ITALICS, UNDERLINE
+   * 
+   * @param key: refers to whether the left button is clicked or right
+   * @returns 
+   */
   changeStyle(changeDelimiter: string, editor: ace.Editor) {
     let selectionRange = editor.getSelectionRange();
     editor.session.replace(selectionRange, changeDelimiter + editor.getCopyText() + changeDelimiter);
@@ -47,6 +62,7 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
     const editor = ace.edit('editor');
     editor.$blockScrolling = Infinity;
 
+    // listens to the editor actions
     Emitter.addListener('editor.actions', function(type: string) {
       switch(type) {
         case EditorActionTypes.BOLD:
@@ -96,7 +112,7 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
       
     }.bind(this));
 
-
+    // handles the focus of the editor
     editor.on("focus", function(){
       if(this.focusCount === 0 ){
         this.setState({ inputText : ''});
@@ -106,8 +122,9 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
     }.bind(this));
 
     var that = this;
+
+    // Add the listener for the selected file, whether it has changed or not
     this._listenerToken = GAuthStore.addChangeListener(AuthActionTypes.SELECTED_FILE, function(){
-      console.log("yeah yeah yeah ");
       if(GAuthStore.currentFileId !== ''){
         GAuthStore._getFileContents(GAuthStore.currentFileId).then( function(response){
             that.setState({inputText: response.body});
@@ -133,6 +150,14 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
     });
   }
 
+  /**
+   * @description
+   *
+   * Checks whether to save the current file or not
+   * 
+   * @param key: refers to whether the left button is clicked or right
+   * @returns 
+   */
   _checkTriggerShouldHappenOrNot(val){
     if(val && val.length >= 10 && this.state.inputText === val && this.valueWhileSaving !== val){
       this.valueWhileSaving = this.state.inputText;
@@ -140,6 +165,14 @@ export default class Markdown extends React.Component<{}, IMarkdowState> {
     }
   }
 
+  /**
+   * @description
+   *
+   * Adds a new entry: makes the editor blank and relevant changes
+   * 
+   * @param key: refers to whether the left button is clicked or right
+   * @returns 
+   */
   newEntry(){
     // Empty the editor
     const editor = ace.edit('editor');

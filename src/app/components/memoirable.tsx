@@ -11,6 +11,13 @@ export class MemoirableApp extends React.Component<{}, {}> {
     super();
   }
 
+  /**
+   * @description
+   *
+   * Handles the browser back functionality
+   * 
+   * @returns 
+   */
   _navigateBack() {
     browserHistory.goBack();
   }
