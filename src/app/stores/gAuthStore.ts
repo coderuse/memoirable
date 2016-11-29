@@ -54,6 +54,10 @@ class GoogleAuthStore extends BaseStore < IAuth > {
       this.emitChange();
     }.bind(this));
   }
+
+  _sign_out() {
+    gapi.auth.setToken(null);
+  }
   /**
    * @description
    *
@@ -246,8 +250,6 @@ class GoogleAuthStore extends BaseStore < IAuth > {
       });
 
       request.then(function(response) {
-        console.log("inside the insert or update function");
-        console.log(response);
         that.currentFileId = response.result.id;
         if(callback  && typeof callback === 'function'){
           callback(response.result.id);
