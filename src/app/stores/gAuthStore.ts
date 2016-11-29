@@ -3,6 +3,8 @@
 
 import AppDispatcher from '../dispatchers/appDispatcher';
 
+import AppConstants from '../constants';
+
 import { AuthActionTypes, ProviderTypes } from '../actions/types';
 import { BaseStore } from './baseStore';
 import { Server } from '../api/baseDAO';
@@ -14,8 +16,8 @@ import { Utils } from '../helpers';
 // https://console.developers.google.com/apis/credentials?project=memoirable
 // https://security.google.com/settings/security/permissions
 class GoogleAuthStore extends BaseStore < IAuth > {
-  _clientId = '797749045300-48asg0koqf5aa9npc40kmch9r754dl87.apps.googleusercontent.com';
-  _scopes = ['https://www.googleapis.com/auth/drive.appdata', 'https://www.googleapis.com/auth/plus.me'];
+  _clientId = AppConstants.gAuthDetails.clientId;
+  _scopes = AppConstants.gAuthDetails.scopes;
   callback: () => void;
   selectedDate = new Date();
   folderIds = {

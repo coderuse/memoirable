@@ -10,6 +10,7 @@ module.exports = function (grunt) {
       grunt.loadNpmTasks(taskName);
     }
   }
+  grunt.loadTasks('./modules/typedoc/tasks');
 
   var buildPaths = config.get('buildPaths');
   var portConfig = config.get('portConfig');
