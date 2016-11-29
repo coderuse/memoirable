@@ -6140,6 +6140,13 @@
 	    function MemoirableApp() {
 	        _super.call(this);
 	    }
+	    /**
+	     * @description
+	     *
+	     * Handles the browser back functionality
+	     *
+	     * @returns
+	     */
 	    MemoirableApp.prototype._navigateBack = function () {
 	        browserHistory_1.default.goBack();
 	    };
@@ -6174,11 +6181,25 @@
 	        _super.call(this);
 	        this._isChrome = !!window['chrome'] && !!window['chrome']['webstore'];
 	    }
+	    /**
+	     * @description
+	     *
+	     * Handles functionality when componentWillMount
+	     *
+	     * @returns
+	     */
 	    Home.prototype.componentWillMount = function () {
 	        this.state = {
 	            diveInPages: []
 	        };
 	    };
+	    /**
+	     * @description
+	     *
+	     * Handles functionality when componentDidMount
+	     *
+	     * @returns
+	     */
 	    Home.prototype.componentDidMount = function () {
 	        this._listenerToken = gAuthStore_1.default.addChangeListener(types_1.AuthActionTypes.AUTH_INITIALIZE, function () {
 	            browserHistory_1.default.push('/dashboard');
@@ -6206,9 +6227,24 @@
 	            ]
 	        });
 	    };
+	    /**
+	     * @description
+	     *
+	     * Handles functionality when componentWillUnmount
+	     *
+	     * @returns
+	     */
 	    Home.prototype.componentWillUnmount = function () {
 	        gAuthStore_1.default.removeChangeListener(this._listenerToken);
 	    };
+	    /**
+	     * @description
+	     *
+	     * Authenticates based on provider
+	     *
+	     * @param provider: refers to the provider
+	     * @returns
+	     */
 	    Home.prototype._authenticate = function (provider) {
 	        AuthActions.authorize({ provider: provider });
 	    };
@@ -7255,6 +7291,9 @@
 	            this.emitChange();
 	        }.bind(this));
 	    };
+	    GoogleAuthStore.prototype._sign_out = function () {
+	        gapi.auth.setToken(null);
+	    };
 	    /**
 	     * @description
 	     *
@@ -7433,8 +7472,6 @@
 	                'body': multipartRequestBody
 	            });
 	            request.then(function (response) {
-	                console.log("inside the insert or update function");
-	                console.log(response);
 	                that.currentFileId = response.result.id;
 	                if (callback && typeof callback === 'function') {
 	                    callback(response.result.id);
@@ -7721,18 +7758,22 @@
 	        }
 	        return { msg: msg, relatedObj: relatedObj };
 	    };
+	    // gets the number of days in a particular month and year
 	    Utils.daysInMonth = function (month, year) {
 	        var isLeap = ((year % 4) == 0 && ((year % 100) != 0 || (year % 400) == 0));
 	        return [31, (isLeap ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
 	    };
+	    // gets the month based on value in number(0-11)
 	    Utils.getMonth = function (month) {
 	        return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][month];
 	    };
+	    // returns if the two dates are same or not
 	    Utils.compareDate = function (a, b) {
 	        return a.getFullYear() === b.getFullYear()
 	            && a.getDate() === b.getDate()
 	            && a.getMonth() === b.getMonth();
 	    };
+	    // pads the string if it is less than 10
 	    Utils.padString = function (x) {
 	        if (x < 10) {
 	            return '0' + x;
@@ -7772,13 +7813,34 @@
 	        gAuthStore_1.default.cleanState();
 	        this.state = gAuthStore_1.default.getState();
 	    }
+	    /**
+	     * @description
+	     *
+	     * Handles functionality when componentDidMount
+	     *
+	     * @returns
+	     */
 	    Dashboard.prototype.componentDidMount = function () {
 	        this._listenerToken = gAuthStore_1.default.addChangeListener(types_1.AuthActionTypes.AUTH_GET_PROFILE, this._setStateFromStores.bind(this));
 	        AuthActions.updateProfileInfo({ provider: types_1.ProviderTypes.GOOGLE });
 	    };
+	    /**
+	     * @description
+	     *
+	     * Handles functionality when componentWillUnmount
+	     *
+	     * @returns
+	     */
 	    Dashboard.prototype.componentWillUnmount = function () {
 	        gAuthStore_1.default.removeChangeListener(this._listenerToken);
 	    };
+	    /**
+	     * @description
+	     *
+	     * Sets state based on GAuthStore state
+	     *
+	     * @returns
+	     */
 	    Dashboard.prototype._setStateFromStores = function () {
 	        this.setState(gAuthStore_1.default.getState());
 	    };
@@ -7820,9 +7882,24 @@
 	        this.focusCount = 0;
 	        this.state = { inputText: "# Diary, O' Diary!!!" };
 	    }
+	    /**
+	     * @description
+	     *
+	     * Handles the back functionality of browser
+	     *
+	     * @returns
+	     */
 	    Markdown.prototype._navigateBack = function () {
 	        browserHistory_1.default.goBack();
 	    };
+	    /**
+	     * @description
+	     *
+	     * changes the selected text based on action such as BOLD, ITALICS, UNDERLINE
+	     *
+	     * @param key: refers to whether the left button is clicked or right
+	     * @returns
+	     */
 	    Markdown.prototype.changeStyle = function (changeDelimiter, editor) {
 	        var selectionRange = editor.getSelectionRange();
 	        editor.session.replace(selectionRange, changeDelimiter + editor.getCopyText() + changeDelimiter);
@@ -7832,6 +7909,7 @@
 	    Markdown.prototype.componentDidMount = function () {
 	        var editor = ace.edit('editor');
 	        editor.$blockScrolling = Infinity;
+	        // listens to the editor actions
 	        appEvent_1.default.addListener('editor.actions', function (type) {
 	            switch (type) {
 	                case types_1.EditorActionTypes.BOLD:
@@ -7876,6 +7954,7 @@
 	                }.bind(this, val, this.fetchedFileState), 2000);
 	            }
 	        }.bind(this));
+	        // handles the focus of the editor
 	        editor.on("focus", function () {
 	            if (this.focusCount === 0) {
 	                this.setState({ inputText: '' });
@@ -7884,8 +7963,8 @@
 	            this.focusCount++;
 	        }.bind(this));
 	        var that = this;
+	        // Add the listener for the selected file, whether it has changed or not
 	        this._listenerToken = gAuthStore_1.default.addChangeListener(types_1.AuthActionTypes.SELECTED_FILE, function () {
-	            console.log("yeah yeah yeah ");
 	            if (gAuthStore_1.default.currentFileId !== '') {
 	                gAuthStore_1.default._getFileContents(gAuthStore_1.default.currentFileId).then(function (response) {
 	                    that.setState({ inputText: response.body });
@@ -7909,12 +7988,28 @@
 	            }
 	        });
 	    };
+	    /**
+	     * @description
+	     *
+	     * Checks whether to save the current file or not
+	     *
+	     * @param key: refers to whether the left button is clicked or right
+	     * @returns
+	     */
 	    Markdown.prototype._checkTriggerShouldHappenOrNot = function (val) {
 	        if (val && val.length >= 10 && this.state.inputText === val && this.valueWhileSaving !== val) {
 	            this.valueWhileSaving = this.state.inputText;
 	            gAuthStore_1.default._createOrUpdateFile(gAuthStore_1.default.currentFolderIdInUse, this.state.inputText, null, gAuthStore_1.default.selectedDate);
 	        }
 	    };
+	    /**
+	     * @description
+	     *
+	     * Adds a new entry: makes the editor blank and relevant changes
+	     *
+	     * @param key: refers to whether the left button is clicked or right
+	     * @returns
+	     */
 	    Markdown.prototype.newEntry = function () {
 	        // Empty the editor
 	        var editor = ace.edit('editor');
@@ -7959,9 +8054,25 @@
 	        this._stopPropagation = false;
 	        this.selectedFile = { name: '' };
 	    }
+	    /**
+	     * @description
+	     *
+	     * Handles functionality when the componentWillMount
+	     *
+	     * @returns
+	     */
 	    Entries.prototype.componentWillMount = function () {
 	        this.fetchFiles(false);
 	    };
+	    /**
+	     * @description
+	     *
+	     * Fetches files for the selected date
+	     *
+	     * @param trigger: refers whether we want to make the first file as selected or not
+	     * @param dateGiven: refers to the given date
+	     * @returns
+	     */
 	    Entries.prototype.fetchFiles = function (trigger, dateGiven) {
 	        var date = dateGiven ? dateGiven : new Date(); // if date is given use it otherwise use the current day
 	        var selectedDate = '' + date.getFullYear() + helpers_1.Utils.padString(date.getMonth()) + helpers_1.Utils.padString(date.getDate());
@@ -7973,6 +8084,13 @@
 	                }
 	            } });
 	    };
+	    /**
+	     * @description
+	     *
+	     * Handles the click of entries
+	     *
+	     * @returns
+	     */
 	    Entries.prototype.handleClickEntries = function () {
 	        if (this._currentClass === 'hide-entries') {
 	            this._currentClass = 'show-entries';
@@ -7986,6 +8104,14 @@
 	            currentClass: this._currentClass
 	        });
 	    };
+	    /**
+	     * @description
+	     *
+	     * Handles the click of a particular entry
+	     *
+	     * @param obj: refers to file object with id to be used as selected file
+	     * @returns
+	     */
 	    Entries.prototype.entryClicked = function (obj) {
 	        if (obj && obj.id) {
 	            gAuthStore_1.default.currentFileObj = obj;
@@ -7994,6 +8120,13 @@
 	        gAuthStore_1.default._changeToken = types_1.AuthActionTypes.SELECTED_FILE;
 	        gAuthStore_1.default.emitChange();
 	    };
+	    /**
+	     * @description
+	     *
+	     * Handles functionality when componentDidMount
+	     *
+	     * @returns
+	     */
 	    Entries.prototype.componentDidMount = function () {
 	        this._listenerToken = gAuthStore_1.default.addChangeListener(types_1.AuthActionTypes.SAVE_FILE, function () {
 	            this.fetchFiles(true, gAuthStore_1.default.selectedDate);
@@ -38123,6 +38256,7 @@
 	var AuthActions = __webpack_require__(75);
 	var appEvent_1 = __webpack_require__(76);
 	var gAuthStore_1 = __webpack_require__(88);
+	var browserHistory_1 = __webpack_require__(67);
 	var calendarwrapper_1 = __webpack_require__(131);
 	var AuthHeader = (function (_super) {
 	    __extends(AuthHeader, _super);
@@ -38132,30 +38266,69 @@
 	        gAuthStore_1.default.cleanState();
 	        this.state = gAuthStore_1.default.getState();
 	    }
+	    /**
+	     * @description
+	     *
+	     * Adds listener, updates profile info and creates initial folder structure in google drive
+	     *
+	     * @returns
+	     */
 	    AuthHeader.prototype.componentDidMount = function () {
 	        this._listenerToken = gAuthStore_1.default.addChangeListener(types_1.AuthActionTypes.AUTH_GET_PROFILE, this._setStateFromStores.bind(this));
 	        AuthActions.updateProfileInfo({ provider: types_1.ProviderTypes.GOOGLE });
 	        AuthActions.createInitialFolderStructure({ provider: types_1.ProviderTypes.GOOGLE });
 	    };
+	    /**
+	     * @description
+	     *
+	     * Removes listener while unmounting
+	     *
+	     * @returns
+	     */
 	    AuthHeader.prototype.componentWillUnmount = function () {
 	        gAuthStore_1.default.removeChangeListener(this._listenerToken);
 	    };
+	    /**
+	     * @description
+	     *
+	     * Sets state based on GAuthStore
+	     *
+	     * @returns
+	     */
 	    AuthHeader.prototype._setStateFromStores = function () {
 	        this.setState(gAuthStore_1.default.getState());
 	    };
-	    AuthHeader.prototype.saveToDrive = function (drive) {
-	        AuthActions.createInitialFolderStructure({ provider: types_1.ProviderTypes.GOOGLE });
-	    };
+	    /**
+	     * @description
+	     *
+	     * Emits the editor related actions
+	     *
+	     * @param type: refers to the type of editor action
+	     * @returns
+	     */
 	    AuthHeader.prototype.toggleClass = function () {
-	        this.toggledClass = this.toggledClass === 'hide-header-menu' ? 'show-header-menu' : 'hide-header-menu';
+	        this.toggledClass = this.toggledClass.indexOf('hide-header-menu') !== -1 ? 'show-header-menu' : 'hide-header-menu';
 	        this.setState({ 'name': 'button-state-changed' });
 	    };
+	    /**
+	     * @description
+	     *
+	     * Emits the editor related actions
+	     *
+	     * @param type: refers to the type of editor action
+	     * @returns
+	     */
 	    AuthHeader.prototype.editorAction = function (type) {
 	        appEvent_1.default.emit('editor.actions', type);
 	    };
+	    AuthHeader.prototype.logout = function () {
+	        gAuthStore_1.default._sign_out();
+	        browserHistory_1.default.replace('/');
+	        browserHistory_1.default.push('/');
+	    };
 	    AuthHeader.prototype.render = function () {
 	        var _this = this;
-	        return (React.createElement("div", {className: "auth-header row"}, React.createElement(calendarwrapper_1.default, null), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_bold", onClick: function () { return _this.editorAction(types_1.EditorActionTypes.BOLD); }})), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_italic", onClick: function () { return _this.editorAction(types_1.EditorActionTypes.ITALICS); }})), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_underlined", onClick: function () { return _this.editorAction(types_1.EditorActionTypes.UNDERLINE); }})), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_list_bulleted", onClick: function () { return _this.editorAction(types_1.EditorActionTypes.LIST); }})), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_quote", onClick: function () { return _this.editorAction(types_1.EditorActionTypes.QUOTE); }})), React.createElement("button", {className: "strip-button pull-right text-content"}, this.state.displayName)));
+	        return (React.createElement("div", {className: "auth-header row"}, React.createElement(calendarwrapper_1.default, null), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_bold", onClick: function () { return _this.editorAction(types_1.EditorActionTypes.BOLD); }})), React.createElement("button", {className: "strip-button pull-left"}, React.createElement("span", {className: "memocon-format_italic", onClick: function () { return _this.editorAction(types_1.EditorActionTypes.ITALICS); }})), React.createElement("div", {className: "dropdown pull-right"}, React.createElement("button", {className: "strip-button text-content", type: "button", onClick: this.toggleClass.bind(this)}, this.state.displayName), React.createElement("div", {className: this.toggledClass}, React.createElement("button", {className: "strip-button dropdown-button", onClick: this.logout}, "Sign Out")))));
 	    };
 	    return AuthHeader;
 	}(React.Component));
@@ -38187,15 +38360,42 @@
 	        var dateFromStore = gAuthStore_1.default._getSelectedDate();
 	        this.state = { date: dateFromStore, month: dateFromStore.getMonth(), year: dateFromStore.getFullYear() };
 	    }
+	    /**
+	     * @description
+	     *
+	     * Adds the listener for the calendar date changed event
+	     * populates the three months array based on the current month and year in use
+	     *
+	     * @returns
+	     */
 	    CalendarWrapper.prototype.componentWillMount = function () {
 	        this._listenerToken = gAuthStore_1.default.addChangeListener(types_1.AuthActionTypes.CALENDAR_DATE_CHANGED, function () {
 	            this.setState({ date: gAuthStore_1.default._getSelectedDate() });
 	        }.bind(this));
 	        this.monthsArray = this.get3MonthsArray(this.state.date.getMonth(), this.state.date.getFullYear());
 	    };
+	    /**
+	     * @description
+	     *
+	     * Removes the listener while unmounting
+	     *
+	     * @returns
+	     */
 	    CalendarWrapper.prototype.componentWillUnmount = function () {
 	        gAuthStore_1.default.removeChangeListener(this._listenerToken);
 	    };
+	    /**
+	     * @description
+	     *
+	     * Checks whether the component should update or not
+	     * based on date has changed or not
+	     * current year and month have changed or not
+	     * whether to show the calendar wrapper or not
+	     *
+	     * @param nextProps : refers to the next set of values for props object
+	     * @param nextState: refers to the next set of values for state object
+	     * @returns
+	     */
 	    CalendarWrapper.prototype.shouldComponentUpdate = function (nextProps, nextState) {
 	        if (this.state.date !== nextState.date) {
 	            return true;
@@ -38210,6 +38410,14 @@
 	            return false;
 	        }
 	    };
+	    /**
+	     * @description
+	     *
+	     * Click handler for left and right buttons for the calendar wrapper
+	     *
+	     * @param key: refers to whether the left button is clicked or right
+	     * @returns
+	     */
 	    CalendarWrapper.prototype.arrowClickHandler = function (key) {
 	        var month = this.state.month;
 	        var year = this.state.year;
@@ -38234,6 +38442,14 @@
 	        this.monthsArray = this.get3MonthsArray(month, year);
 	        this.setState({ month: month, year: year });
 	    };
+	    /**
+	     * @description
+	     *
+	     * Based on current
+	     *
+	     * @param key: refers to whether the left button is clicked or right
+	     * @returns
+	     */
 	    CalendarWrapper.prototype.get3MonthsArray = function (month, year) {
 	        var monthsArray = [];
 	        if (month === 0) {
@@ -38307,9 +38523,24 @@
 	        };
 	        this.selectedDate = gAuthStore_1.default._getSelectedDate();
 	    }
+	    /**
+	     * @description
+	     *
+	     * populate the month array using the month and year as input
+	     *
+	     * @returns
+	     */
 	    Calendar.prototype.componentWillMount = function () {
 	        this.populateValuesByMonth(this.props.month, this.props.year, this.monthArray);
 	    };
+	    /**
+	     * @description
+	     *
+	     * checks whether the calendar component should update on not based on the selected date
+	     * also based on the month and the year
+	     *
+	     * @returns
+	     */
 	    Calendar.prototype.shouldComponentUpdate = function (nextProps, nextState) {
 	        if (this.props.month !== nextProps.month || this.props.year !== nextProps.year) {
 	            this.resetMonthArray(this.monthArray);
@@ -38323,12 +38554,29 @@
 	            return false;
 	        }
 	    };
+	    /**
+	     * @description
+	     *
+	     * reset month array to initial values
+	     *
+	     * @returns
+	     */
 	    Calendar.prototype.resetMonthArray = function (month) {
 	        for (var i = 1; i <= 6; i++) {
 	            month['row' + i] = [];
 	        }
 	    };
-	    Calendar.prototype.populateValuesByMonth = function (monthNum, year, month) {
+	    /**
+	     * @description
+	     *
+	     * Creates the month array for the given month and year
+	     *
+	     * @param monthNum : given month number (0-11)
+	     * @param year : refers to the year value
+	     * @param monthArray : refers to the month Array
+	     * @returns
+	     */
+	    Calendar.prototype.populateValuesByMonth = function (monthNum, year, monthArray) {
 	        var firstDate = new Date(year, monthNum);
 	        var firstDay = firstDate.getDay();
 	        var count = 0;
@@ -38336,24 +38584,39 @@
 	        for (var i = 0; i < rowArray.length; i++) {
 	            for (var j = 0; j < 7; j++) {
 	                if (i == 0 && j < firstDay) {
-	                    month[rowArray[i]].push('');
+	                    monthArray[rowArray[i]].push('');
 	                }
 	                else {
 	                    count = count + 1;
 	                    if (count > helpers_1.Utils.daysInMonth(monthNum, year)) {
-	                        month[rowArray[i]].push('');
+	                        monthArray[rowArray[i]].push('');
 	                    }
 	                    else {
-	                        month[rowArray[i]].push(count);
+	                        monthArray[rowArray[i]].push(count);
 	                    }
 	                }
 	            }
 	        }
 	    };
+	    /**
+	     * @description
+	     *
+	     * Toggles the class and sets state
+	     *
+	     * @returns
+	     */
 	    Calendar.prototype.toggleClass = function () {
 	        this.toggledClass = this.toggledClass === 'hide-header-menu' ? 'show-header-menu' : 'hide-header-menu';
 	        this.setState({ 'name': 'button-state-changed' });
 	    };
+	    /**
+	     * @description
+	     *
+	     * Click handler for the selected date
+	     *
+	     * @param date: the clicked date
+	     * @returns
+	     */
 	    Calendar.prototype.handleClick = function (date) {
 	        AuthActions.calendarDateChanged({ provider: types_1.ProviderTypes.GOOGLE, date: date });
 	    };
