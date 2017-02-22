@@ -728,12 +728,12 @@ button.strip-button:focus {
   margin-right: 0;
   overflow: auto;
 }
-.markdown-right h1, .markdown-right h2, .markdown-right h3, .markdown-right h4, .markdown-right h5, .markdown-right h6 {
-  font-weight: 300;
-}
 .markdown-right .markdown-output-wrapper p {
   line-height: 34px;
   word-spacing: 3px;
+}
+.markdown-right h1, .markdown-right h2, .markdown-right h3, .markdown-right h4, .markdown-right h5, .markdown-right h6 {
+  font-weight: 300;
 }
 
 .footer-to-diary {
