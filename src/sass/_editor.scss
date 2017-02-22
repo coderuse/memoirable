@@ -46,4 +46,10 @@
   h1, h2, h3, h4, h5, h6 {
     font-weight: 300;
   }
+  .markdown-output-wrapper {
+    p {
+      line-height: 34px;
+      word-spacing: 3px;
+    }
+  }
 }
