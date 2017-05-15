@@ -1,8 +1,7 @@
 # Memoirable
 > Online diary for all
 
-[![Join the chat at https://gitter.im/coderuse/memoirable](https://badges.gitter.im/coderuse/memoirable.svg)](https://gitter.im/coderuse/memoirable?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://travis-ci.org/coderuse/memoirable.svg?branch=master)](https://travis-ci.org/coderuse/memoirable)
+[![CodeRuse Slack](http://slack.coderuse.com/badge.svg)](http://slack.coderuse.com "Let's discuss some interesting stuff!") [![Build Status](https://travis-ci.org/coderuse/memoirable.svg?branch=master)](https://travis-ci.org/coderuse/memoirable)
 
 ###### [Site](https://coderuse.github.io/memoirable)
 
