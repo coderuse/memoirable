@@ -13926,6 +13926,7 @@
 	function getCoreProps(props) {
 	    return {
 	        'key': props.nodeKey,
+	        'className': props.className,
 	        'data-sourcepos': props['data-sourcepos']
 	    };
 	}
@@ -13945,11 +13946,13 @@
 	}
 	
 	function HtmlRenderer(props) {
+	    var coreProps = getCoreProps(props);
 	    var nodeProps = props.escapeHtml ? {} : { dangerouslySetInnerHTML: { __html: props.literal } };
 	    var children = props.escapeHtml ? [props.literal] : null;
 	
 	    if (props.escapeHtml || !props.skipHtml) {
-	        return createElement(props.isBlock ? 'div' : 'span', nodeProps, children);
+	        var actualProps = assign(coreProps, nodeProps);
+	        return createElement(props.isBlock ? 'div' : 'span', actualProps, children);
 	    }
 	}
 	
@@ -14017,6 +14020,7 @@
 	            var codeInfo = node.info ? node.info.split(/ +/) : [];
 	            if (codeInfo.length > 0 && codeInfo[0].length > 0) {
 	                props.language = codeInfo[0];
+	                props.codeinfo = codeInfo;
 	            }
 	            break;
 	        case 'code':
