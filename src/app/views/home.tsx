@@ -167,7 +167,7 @@ export class Home extends React.Component<{}, IHomeState> {
         </div>
         <div className="footer-to-diary">
           <span className={this._isSupportedBrowser ? 'collapse' : 'not-supported'}>
-            Currently we only support Chrome with at-least 1024px x 768px resolution
+            Currently we only support Chrome, Firefox and IE Edge with at-least 1024px x 768px resolution
           </span>
           <button className={this._isSupportedBrowser ? 'strip-button' : 'collapse'}
             onClick={this._authenticate.bind(this, ProviderTypes.GOOGLE)}>
