@@ -38,7 +38,6 @@ module.exports = function (grunt) {
     sass: {
       dev: {
         options: {
-          sourcemap: 'none',
           style: 'expanded',
           trace: true,
           require: ['susy', 'normalize-scss']
@@ -111,9 +110,9 @@ module.exports = function (grunt) {
         options: {
           port: portConfig.build,
           base: buildPaths.buildLocation,
-          open: {
-            target: 'http://127.0.0.1:<%= connect.build.options.port %>/memoirable'
-          },
+          // open: {
+          //   target: 'http://127.0.0.1:<%= connect.build.options.port %>/memoirable'
+          // },
           middleware: function (connect, options) {
             var middlewares = [];
 

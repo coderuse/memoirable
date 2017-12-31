@@ -72,8 +72,8 @@ In this first release of this diary, we have tried our best to keep it bug free 
 
 ``` bash
 git clone https://github.com/coderuse/memoirable.git
-npm install -g grunt-cli typescript typings
-npm install
+npm install -g grunt-cli typescript typings bower
+npm install && bower install
 ```
 
 Follow the [steps](https://developers.google.com/drive/v2/web/auth/web-client#create_a_client_id_and_client_secret) to create a client id for the app and change the `clientId` in `src/app/constants.ts`.

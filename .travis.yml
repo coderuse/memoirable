@@ -5,7 +5,8 @@ before_install:
   - openssl aes-256-cbc -K $encrypted_442fce917811_key -iv $encrypted_442fce917811_iv
     -in id_rsa.enc -out id_rsa -d
   - gem update --system
-  - gem install sass susy normalize-scss
+  - gem install susy normalize-scss
+  - gem install sass -v 3.4
   - npm install -g typings@1.3.2 bower@1.7.9 grunt-cli@1.2.0
 script:
   - bash ./deploy.sh
